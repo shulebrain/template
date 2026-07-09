@@ -1,92 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My First Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShuleBrain - Smart School Management System</title>
 
-<style>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-body{
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(120deg,#4facfe,#00f2fe);
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.container{
-    background:white;
-    padding:40px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.2);
-    text-align:center;
-    max-width:500px;
-}
-
-h1{
-    color:#333;
-    margin-bottom:10px;
-}
-
-p{
-    color:#555;
-}
-
-button{
-    margin-top:20px;
-    padding:12px 25px;
-    border:none;
-    border-radius:25px;
-    background:#4facfe;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover{
-    background:#00c6ff;
-    transform:scale(1.05);
-}
-
-.footer{
-    margin-top:20px;
-    font-size:13px;
-    color:#888;
-}
-
-</style>
-
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body class="bg-slate-50 text-gray-800">
 
-<div class="container">
+<!-- Navbar -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-<h1>🚀 My First Website</h1>
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 text-white font-bold rounded-xl w-12 h-12 flex items-center justify-center text-xl">
+                S
+            </div>
+            <div>
+                <h1 class="font-bold text-xl text-blue-700">ShuleBrain</h1>
+                <p class="text-xs text-gray-500">Smart School Management</p>
+            </div>
+        </div>
 
-<p>This is a test website hosted online.</p>
+        <nav class="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#features" class="hover:text-blue-600">Features</a>
+            <a href="#about" class="hover:text-blue-600">About</a>
+            <a href="#contact" class="hover:text-blue-600">Contact</a>
+        </nav>
 
-<p>If you can see this page, your website is working perfectly.</p>
+        <a href="#contact"
+           class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700">
+            Get Started
+        </a>
 
-<button onclick="showMessage()">Click Me</button>
+    </div>
+</header>
 
-<div class="footer">
-Made with HTML ❤️
+
+<!-- Hero -->
+<section class="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white">
+
+<div class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-12 items-center">
+
+    <div>
+
+        <h2 class="text-5xl font-extrabold leading-tight">
+            Transform Your School Into A 
+            <span class="text-yellow-300">
+                Smart Digital Campus
+            </span>
+        </h2>
+
+        <p class="mt-6 text-lg text-blue-100">
+            ShuleBrain helps schools manage students, results, attendance,
+            fees, reports, SMS communication and daily operations in one powerful system.
+        </p>
+
+        <div class="mt-8 flex gap-4">
+
+            <a href="#features"
+               class="bg-white text-blue-700 px-7 py-3 rounded-full font-semibold hover:bg-gray-100">
+                Explore Features
+            </a>
+
+            <a href="#contact"
+               class="border border-white px-7 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-700">
+                Contact Us
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="bg-white/10 backdrop-blur rounded-3xl p-8 shadow-2xl">
+
+        <div class="bg-white rounded-2xl p-6 text-gray-800">
+
+            <h3 class="font-bold text-xl mb-4">
+                School Dashboard
+            </h3>
+
+            <div class="grid grid-cols-2 gap-4">
+
+                <div class="bg-blue-50 p-4 rounded-xl">
+                    <p class="text-3xl font-bold text-blue-700">5,000+</p>
+                    <p>Students</p>
+                </div>
+
+                <div class="bg-green-50 p-4 rounded-xl">
+                    <p class="text-3xl font-bold text-green-700">100%</p>
+                    <p>Reports Ready</p>
+                </div>
+
+                <div class="bg-purple-50 p-4 rounded-xl">
+                    <p class="text-3xl font-bold text-purple-700">24/7</p>
+                    <p>Access</p>
+                </div>
+
+                <div class="bg-yellow-50 p-4 rounded-xl">
+                    <p class="text-3xl font-bold text-yellow-700">SMS</p>
+                    <p>Parents</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
+</section>
+
+
+
+<!-- Features -->
+<section id="features" class="max-w-7xl mx-auto px-6 py-20">
+
+<h2 class="text-4xl font-bold text-center">
+Powerful Features For Modern Schools
+</h2>
+
+<p class="text-center mt-4 text-gray-500">
+Everything your school needs in one platform.
+</p>
+
+
+<div class="mt-12 grid md:grid-cols-3 gap-8">
+
+
+<div class="bg-white rounded-2xl shadow p-6 hover:shadow-xl">
+<h3 class="font-bold text-xl mb-3">📊 Results Processing</h3>
+<p>
+Generate school, zonal, mock and joint examination reports quickly with automatic calculations.
+</p>
 </div>
 
-<script>
 
-function showMessage(){
-    alert("Congratulations! Your website is working.");
-}
+<div class="bg-white rounded-2xl shadow p-6 hover:shadow-xl">
+<h3 class="font-bold text-xl mb-3">🕒 Smart Timetable</h3>
+<p>
+Automatically create conflict-free teacher and subject timetables.
+</p>
+</div>
 
-</script>
+
+<div class="bg-white rounded-2xl shadow p-6 hover:shadow-xl">
+<h3 class="font-bold text-xl mb-3">👨‍🎓 Student Management</h3>
+<p>
+Manage students, IDs, certificates, attendance and academic records.
+</p>
+</div>
+
+
+<div class="bg-white rounded-2xl shadow p-6 hover:shadow-xl">
+<h3 class="font-bold text-xl mb-3">💰 Fees Management</h3>
+<p>
+Track school payments, contributions and financial records easily.
+</p>
+</div>
+
+
+<div class="bg-white rounded-2xl shadow p-6 hover:shadow-xl">
+<h3 class="font-bold text-xl mb-3">📱 Parent Communication</h3>
+<p>
+Send SMS updates and share student progress with parents.
+</p>
+</div>
+
+
+<div class="bg-white rounded-2xl shadow p-6 hover:shadow-xl">
+<h3 class="font-bold text-xl mb-3">📚 Complete School System</h3>
+<p>
+Library, hostel, staff management and many more tools.
+</p>
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- About -->
+<section id="about" class="bg-blue-50 py-20">
+
+<div class="max-w-5xl mx-auto px-6 text-center">
+
+<h2 class="text-4xl font-bold">
+Built For African Schools
+</h2>
+
+<p class="mt-6 text-lg text-gray-600">
+ShuleBrain is designed to simplify school administration,
+reduce paperwork and help teachers, administrators and parents
+make better decisions using accurate information.
+</p>
+
+</div>
+
+</section>
+
+
+
+<!-- CTA -->
+<section id="contact" class="max-w-7xl mx-auto px-6 py-20">
+
+<div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-3xl p-12 text-center">
+
+<h2 class="text-4xl font-bold">
+Ready To Make Your School Smarter?
+</h2>
+
+<p class="mt-4 text-blue-100">
+Join schools using technology to improve education management.
+</p>
+
+<a href="tel:0656519591"
+class="inline-block mt-8 bg-white text-blue-700 px-8 py-3 rounded-full font-bold">
+Call 0656519591
+</a>
+
+</div>
+
+</section>
+
+
+
+<footer class="bg-gray-900 text-gray-300 py-8 text-center">
+
+<p>
+© 2026 ShuleBrain. All Rights Reserved.
+</p>
+
+<p class="mt-2 text-sm">
+Smart School Management System
+</p>
+
+</footer>
+
 
 </body>
 </html>
