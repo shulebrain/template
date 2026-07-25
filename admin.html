@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | ShuleBrain DSK</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230E7C66'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='800' font-size='26' fill='white' text-anchor='middle'%3ESB%3C/text%3E%3C/svg%3E">
+<style>
+  /* ============ BOOTSTRAP THEME OVERRIDE (ShuleBrain brand) ============ */
+  :root{
+    --bs-font-sans-serif:'Inter',system-ui,sans-serif;
+    --bs-primary:#12b89f;
+    --bs-primary-rgb:18,184,159;
+    --bs-primary-text-emphasis:#0e9a85;
+    --bs-border-radius:12px;
+    --bs-border-radius-lg:16px;
+    --bs-border-radius-sm:9px;
+    --bs-body-bg:#f6f8fb;
+    --bs-body-color:#0d1330;
+    --bs-link-color:#12b89f;
+    --bs-link-hover-color:#0e9a85;
+    --sb-topbar-h:64px;
+    --sb-sidebar-w:260px;
+  }
+  html,body{height:100%;}
+  body{font-family:'Inter',system-ui,sans-serif;}
+  h1,h2,h3,h4,h5,.font-display{font-family:'Plus Jakarta Sans',system-ui,sans-serif;}
+  .btn{font-weight:700;border-radius:999px;}
+  .btn-primary{--bs-btn-color:#fff;box-shadow:0 8px 20px -8px rgba(18,184,159,.5);}
+  .btn-primary:hover{--bs-btn-hover-bg:#0e9a85;--bs-btn-hover-border-color:#0e9a85;}
+  .form-control:focus,.form-select:focus{border-color:#12b89f;box-shadow:0 0 0 .2rem rgba(18,184,159,.15);}
+  .form-check-input:checked{background-color:#12b89f;border-color:#12b89f;}
+  .card{border-radius:var(--bs-border-radius-lg);}
+  .hidden{display:none !important;}
+  :focus-visible{outline:2px solid #12b89f;outline-offset:2px;}
+
+  /* ============ TOPBAR ============ */
+  .admin-topbar{
+    background:linear-gradient(120deg,#070c22,#0b1230 70%);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    height:var(--sb-topbar-h);
+    z-index:1050;
+  }
+  .admin-brand-word{font-weight:800;font-size:18px;letter-spacing:-.01em;color:#fff;}
+  .admin-brand-word span{color:#3fd4bd;}
+  .admin-brand-sub{font-size:11px;color:#a4acc6;font-weight:600;display:block;line-height:1.2;}
+  .sidebar-toggle-btn{
+    width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06);color:#fff;display:flex;align-items:center;justify-content:center;
+  }
+  .sidebar-toggle-btn:hover{background:rgba(255,255,255,.12);}
+
+  /* ============ LOGIN ============ */
+  .login-wrap{min-height:calc(100vh - var(--sb-topbar-h));}
+  .login-card{max-width:400px;width:100%;}
+  .login-card .card-body{padding:2.25rem;}
+
+  /* ============ APP SHELL ============ */
+  .admin-shell{align-items:stretch;}
+
+  /* ---- Sidebar ---- */
+  .admin-sidebar{
+    width:var(--sb-sidebar-w);flex:0 0 var(--sb-sidebar-w);
+    background:#fff;border-right:1px solid #e4e8f1;
+    padding:22px 14px 28px;
+    position:sticky;top:var(--sb-topbar-h);
+    height:calc(100vh - var(--sb-topbar-h));
+    overflow-y:auto;
+  }
+  .sidebar-group{margin-bottom:20px;}
+  .sidebar-group-title{
+    font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;
+    color:#9aa2bb;padding:0 12px;margin-bottom:8px;
+  }
+  .sidebar-link{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    border:none;background:transparent;color:#4b5470;font-weight:700;font-size:14px;
+    padding:10px 12px;border-radius:10px;margin-bottom:2px;transition:background .12s ease,color .12s ease;
+  }
+  .sidebar-link i{font-size:16px;width:18px;text-align:center;color:#9aa2bb;transition:color .12s ease;}
+  .sidebar-link:hover{background:#f6f8fb;color:#0d1330;}
+  .sidebar-link.active{background:rgba(18,184,159,.12);color:#0e9a85;}
+  .sidebar-link.active i{color:#0e9a85;}
+  .sidebar-badge{
+    margin-left:auto;font-size:10.5px;font-weight:800;background:#eef1f7;color:#7d859c;
+    border-radius:999px;padding:1px 7px;
+  }
+  .sidebar-link.active .sidebar-badge{background:rgba(18,184,159,.18);color:#0e9a85;}
+
+  .admin-sidebar-backdrop{display:none;}
+
+  /* ---- Main content ---- */
+  .admin-main{min-width:0;padding:28px 32px 60px;}
+  .panel-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;}
+  .panel-eyebrow{font-size:12px;font-weight:700;color:#0e9a85;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;}
+  .panel-title{font-size:22px;font-weight:800;margin:0;}
+  .panel-sub{color:#6b7392;font-size:13.5px;margin:2px 0 0;}
+
+  /* ============ TABS / PANELS ============ */
+  .admin-panel{display:none;}
+  .admin-panel.active{display:block;}
+
+  /* ============ LIST ITEMS (rendered by JS) ============ */
+  .admin-list{max-height:none;}
+  .list-item{
+    border:1px solid #e4e8f1;border-radius:14px;padding:14px 16px;margin-bottom:10px;
+    display:flex;justify-content:space-between;gap:12px;align-items:flex-start;background:#fff;
+    transition:box-shadow .15s ease;
+  }
+  .list-item.with-checkbox{align-items:center;}
+  .list-item.selected{border-color:#12b89f;background:rgba(18,184,159,.04);}
+  .list-item-checkbox{flex-shrink:0;padding-top:2px;}
+  .list-item-checkbox input{width:16px;height:16px;}
+  .list-item:hover{box-shadow:0 6px 18px -10px rgba(13,19,48,.25);}
+  .list-item-body h4{font-size:14.5px;font-weight:800;color:#0d1330;margin:0 0 4px;}
+  .list-item-body p{font-size:12.5px;color:#4b5470;margin:0 0 6px;line-height:1.5;}
+  .list-item-meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:#7d859c;}
+  .list-item-meta span{background:#f6f8fb;padding:3px 8px;border-radius:999px;}
+  .list-item-actions{display:flex;gap:6px;flex-shrink:0;}
+  .icon-btn{
+    width:32px;height:32px;border-radius:9px;border:1px solid #e4e8f1;background:#f6f8fb;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:#0d1330;
+  }
+  .icon-btn:hover{background:#eef1f7;}
+  .icon-btn.danger{color:#c0392b;}
+  .icon-btn.danger:hover{background:#fdecea;}
+  .icon-btn svg{width:15px;height:15px;}
+  .empty-list{text-align:center;padding:40px 16px;color:#7d859c;font-size:13.5px;}
+  .badge-mini{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(18,184,159,.12);color:#0e9a85;}
+
+  .stat-pill{
+    background:#f6f8fb;border:1px solid #e4e8f1;border-radius:999px;padding:5px 12px;
+    font-size:12px;font-weight:700;color:#4b5470;display:inline-flex;align-items:center;gap:6px;
+  }
+  .search-box{max-width:320px;}
+  .placeholder-card{border:1px dashed #d7dcea;border-radius:16px;padding:52px 24px;text-align:center;background:#fff;}
+  .placeholder-card i{font-size:34px;color:#12b89f;}
+
+  /* ============ RICH TEXT EDITOR (Quill) ============ */
+  #postContentEditor{background:#fff;}
+  .ql-toolbar.ql-snow{
+    border-color:#dee2e6;border-radius:.375rem .375rem 0 0;background:#f6f8fb;
+  }
+  .ql-container.ql-snow{
+    border-color:#dee2e6;border-radius:0 0 .375rem .375rem;
+    font-family:'Inter',system-ui,sans-serif;font-size:13.5px;min-height:220px;
+  }
+  .ql-editor{min-height:220px;}
+  .ql-editor.ql-blank::before{color:#9aa2bb;font-style:normal;}
+  .ql-snow .ql-picker.ql-expanded .ql-picker-options,
+  .ql-toolbar.ql-snow + .ql-container.ql-snow{border-color:#dee2e6;}
+  .ql-container.ql-snow:focus-within, #postContentEditor:focus-within .ql-toolbar{
+    border-color:#12b89f;
+  }
+  .ql-snow .ql-stroke{stroke:#4b5470;}
+  .ql-snow .ql-fill{fill:#4b5470;}
+  .ql-snow .ql-picker{color:#4b5470;}
+  .ql-snow.ql-toolbar button:hover .ql-stroke,
+  .ql-snow.ql-toolbar button.ql-active .ql-stroke{stroke:#12b89f;}
+  .ql-snow.ql-toolbar button:hover .ql-fill,
+  .ql-snow.ql-toolbar button.ql-active .ql-fill{fill:#12b89f;}
+  .ql-snow.ql-toolbar button.ql-active,
+  .ql-snow.ql-toolbar button:hover{color:#12b89f;}
+
+  /* ============ RESPONSIVE / MOBILE OFF-CANVAS SIDEBAR ============ */
+  @media (max-width:991.98px){
+    .admin-sidebar{
+      position:fixed;top:0;left:0;height:100vh;width:280px;z-index:1045;
+      transform:translateX(-100%);transition:transform .25s ease;
+      box-shadow:0 0 40px rgba(9,13,32,.25);padding-top:calc(var(--sb-topbar-h) + 16px);
+    }
+    .admin-sidebar.show{transform:translateX(0);}
+    .admin-sidebar-backdrop{
+      display:none;position:fixed;inset:0;background:rgba(9,13,32,.45);z-index:1040;
+    }
+    .admin-sidebar-backdrop.show{display:block;}
+    .admin-main{padding:20px 18px 48px;}
+  }
+  @media (min-width:992px){
+    .sidebar-toggle-btn{display:none;}
+  }
+  @media (max-width:575.98px){
+    .admin-main{padding:16px 12px 40px;}
+    .login-card .card-body{padding:1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ ADMIN TOPBAR ============ -->
+<nav class="navbar navbar-dark admin-topbar sticky-top py-0">
+  <div class="container-fluid px-3 px-lg-4 h-100 d-flex align-items-center">
+    <div class="d-flex align-items-center gap-2 gap-lg-3">
+      <button class="sidebar-toggle-btn hidden" id="sidebarToggleBtn" type="button" aria-label="Toggle menu" aria-expanded="false">
+        <i class="bi bi-list fs-5"></i>
+      </button>
+      <svg width="34" height="34" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="13" fill="url(#adminLogoGrad)"/>
+        <path d="M13 30.5c1.6 2.4 4.6 3.8 8 3.8 4.6 0 7.6-1.9 7.6-5 0-2.6-1.8-3.9-5.6-4.7l-3-.6c-1.6-.3-2.3-.8-2.3-1.7 0-1.1 1.2-1.9 3.1-1.9 2 0 3.4.8 4.2 2.3l3.6-1.9c-1.4-2.6-4.2-4.1-7.7-4.1-4.3 0-7.3 2.2-7.3 5.3 0 2.6 1.7 4 5.3 4.7l3 .6c1.8.4 2.5.9 2.5 1.8 0 1.2-1.3 1.9-3.4 1.9-2.3 0-4-1-4.9-2.7L13 30.5z" fill="#fff"/>
+        <defs><linearGradient id="adminLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#16C8AC"/><stop offset="1" stop-color="#0B6E5C"/></linearGradient></defs>
+      </svg>
+      <div>
+        <span class="admin-brand-word d-block">Shule<span>Brain</span> DSK</span>
+        <span class="admin-brand-sub">Admin panel</span>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 gap-sm-3 ms-auto hidden" id="adminUserBox">
+      <span class="text-light small d-none d-sm-inline" id="adminUserEmail"></span>
+      <button class="btn btn-outline-light btn-sm rounded-pill" id="logoutBtn" type="button">
+        <i class="bi bi-box-arrow-right me-1"></i><span class="d-none d-sm-inline">Sign out</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div class="login-wrap d-flex align-items-center justify-content-center px-3" id="loginScreen">
+  <div class="card login-card border-0 shadow-sm">
+    <div class="card-body">
+      <h2 class="h4 fw-bold mb-1">Admin sign in</h2>
+      <p class="text-secondary small mb-4">Sign in with the admin account created in Supabase Authentication.</p>
+      <form id="loginForm" autocomplete="off">
+        <div class="mb-3">
+          <label for="loginEmail" class="form-label small fw-bold">Email</label>
+          <input type="email" class="form-control" id="loginEmail" placeholder="you@shulebrain.co.tz" required>
+        </div>
+        <div class="mb-3">
+          <label for="loginPassword" class="form-label small fw-bold">Password</label>
+          <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 py-2" id="loginSubmitBtn">Sign in</button>
+      </form>
+      <p class="text-secondary text-center small mt-3 mb-0">Access is limited to the ShuleBrain admin account. Contact NewVemo Technology if you need access.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN DASHBOARD SHELL ============ -->
+<div class="hidden" id="adminDashboard">
+  <div class="d-flex admin-shell">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <nav class="sidebar-nav">
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">Releases</div>
+          <button type="button" class="sidebar-link active" data-panel="create-release">
+            <i class="bi bi-plus-circle"></i> Create Release
+          </button>
+          <button type="button" class="sidebar-link" data-panel="manage-releases">
+            <i class="bi bi-box-seam"></i> Manage Releases <span class="sidebar-badge hidden" id="releaseCountBadge">0</span>
+          </button>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">Blog Posts</div>
+          <button type="button" class="sidebar-link" data-panel="create-post">
+            <i class="bi bi-pencil-square"></i> Create Post
+          </button>
+          <button type="button" class="sidebar-link" data-panel="manage-posts">
+            <i class="bi bi-journal-richtext"></i> Manage Posts <span class="sidebar-badge hidden" id="postCountBadge">0</span>
+          </button>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">Examinations</div>
+          <button type="button" class="sidebar-link" data-panel="manage-examinations">
+            <i class="bi bi-clipboard-check"></i> Manage Examinations <span class="sidebar-badge hidden" id="examCountBadge">0</span>
+          </button>
+        </div>
+      </nav>
+    </aside>
+    <div class="admin-sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Main content -->
+    <main class="admin-main flex-grow-1">
+
+      <!-- ===================== CREATE RELEASE PANEL ===================== -->
+      <div class="admin-panel active" id="panel-create-release">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Releases</div>
+            <h1 class="panel-title" id="releaseFormTitle">Create Release</h1>
+            <p class="panel-sub">Publish a new downloadable version of ShuleBrain DSK.</p>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <form id="releaseForm" autocomplete="off">
+                  <input type="hidden" id="releaseId">
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="relVersion" class="form-label small fw-bold">Version</label>
+                      <input type="text" class="form-control form-control-sm" id="relVersion" placeholder="v1.4.0" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="relFileName" class="form-label small fw-bold">File name</label>
+                      <input type="text" class="form-control form-control-sm" id="relFileName" placeholder="ShuleBrain-DSK-v1.4.0.zip" required>
+                    </div>
+                  </div>
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                      <label for="relSizeMb" class="form-label small fw-bold">File size (MB)</label>
+                      <input type="number" step="0.01" class="form-control form-control-sm" id="relSizeMb" placeholder="214.60">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="relDate" class="form-label small fw-bold">Release date</label>
+                      <input type="date" class="form-control form-control-sm" id="relDate">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="relDownloadUrl" class="form-label small fw-bold">GitHub download URL</label>
+                      <input type="text" class="form-control form-control-sm" id="relDownloadUrl" placeholder="https://github.com/.../file.zip" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="relDescription" class="form-label small fw-bold">Short description</label>
+                    <textarea class="form-control form-control-sm" id="relDescription" rows="2" placeholder="What's new in this release..."></textarea>
+                  </div>
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="relFeatures" class="form-label small fw-bold">Features (one per line)</label>
+                      <textarea class="form-control form-control-sm" id="relFeatures" rows="4" placeholder="New: Hostel Management module&#10;Faster result calculation"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="relRequirements" class="form-label small fw-bold">Requirements (one per line)</label>
+                      <textarea class="form-control form-control-sm" id="relRequirements" rows="4" placeholder="Windows 10/11 (64-bit)&#10;XAMPP with PHP 8.1+"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="relIsLatest">
+                    <label class="form-check-label small" for="relIsLatest">Mark as the latest release</label>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary" id="releaseSaveBtn">Save release</button>
+                    <button type="button" class="btn btn-outline-secondary hidden" id="releaseCancelBtn">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== MANAGE RELEASES PANEL ===================== -->
+      <div class="admin-panel" id="panel-manage-releases">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Releases</div>
+            <h1 class="panel-title">Manage Releases</h1>
+            <p class="panel-sub">Every published version of ShuleBrain DSK.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" data-goto-panel="create-release">
+            <i class="bi bi-plus-lg me-1"></i>New release
+          </button>
+        </div>
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+              <span class="stat-pill"><i class="bi bi-box-seam"></i> <span id="releaseListCount">0</span> releases</span>
+              <input type="search" class="form-control form-control-sm search-box" id="releaseSearchInput" placeholder="Search by version or file name…">
+            </div>
+            <div class="admin-list" id="releaseList">
+              <div class="empty-list">Loading releases&hellip;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== CREATE BLOG POST PANEL ===================== -->
+      <div class="admin-panel" id="panel-create-post">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Blog Posts</div>
+            <h1 class="panel-title" id="postFormTitle">Create Post</h1>
+            <p class="panel-sub">Write and publish an article for the ShuleBrain blog.</p>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <form id="postForm" autocomplete="off">
+                  <input type="hidden" id="postId">
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                      <label for="postTitle" class="form-label small fw-bold">Title</label>
+                      <input type="text" class="form-control form-control-sm" id="postTitle" placeholder="Inside the new Hostel Management module" required>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="postSlug" class="form-label small fw-bold">Slug (used in the URL)</label>
+                      <input type="text" class="form-control form-control-sm" id="postSlug" placeholder="inside-the-new-hostel-management-module" required>
+                    </div>
+                  </div>
+                  <div class="form-text mt-n2 mb-3">Slug: letters, numbers and hyphens only. Becomes blog-post.html?slug=&hellip;</div>
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                      <label for="postCategory" class="form-label small fw-bold">Category</label>
+                      <select class="form-select form-select-sm" id="postCategory">
+                        <option value="product">Product Update</option>
+                        <option value="tips">School Management Tips</option>
+                        <option value="exams">Exams &amp; Results</option>
+                        <option value="company">Company News</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="postIcon" class="form-label small fw-bold">Cover icon</label>
+                      <select class="form-select form-select-sm" id="postIcon">
+                        <option value="package">Package</option>
+                        <option value="exam">Exam</option>
+                        <option value="wallet">Wallet</option>
+                        <option value="award">Award</option>
+                        <option value="message">Message</option>
+                        <option value="calendar">Calendar</option>
+                        <option value="chart">Chart</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="postAuthor" class="form-label small fw-bold">Author name</label>
+                      <input type="text" class="form-control form-control-sm" id="postAuthor" value="ShuleBrain Team">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="postReadTime" class="form-label small fw-bold">Read time (min)</label>
+                      <input type="number" class="form-control form-control-sm" id="postReadTime" value="4" min="1">
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="postExcerpt" class="form-label small fw-bold">Excerpt (shown on cards)</label>
+                    <textarea class="form-control form-control-sm" id="postExcerpt" rows="2" placeholder="A short 1-2 sentence teaser..." required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="postContentEditor" class="form-label small fw-bold">Full content</label>
+                    <div id="postContentEditor"></div>
+                    <textarea class="form-control form-control-sm d-none" id="postContent" rows="10" placeholder="&lt;p&gt;Full article body here...&lt;/p&gt;"></textarea>
+                    <div class="form-text" id="postContentHint">Write the article using the toolbar above — headings, bold, lists, links, and images are all supported.</div>
+                  </div>
+                  <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="postIsPublished" checked>
+                    <label class="form-check-label small" for="postIsPublished">Published (visible on the site)</label>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary" id="postSaveBtn">Save post</button>
+                    <button type="button" class="btn btn-outline-secondary hidden" id="postCancelBtn">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== MANAGE BLOG POSTS PANEL ===================== -->
+      <div class="admin-panel" id="panel-manage-posts">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Blog Posts</div>
+            <h1 class="panel-title">Manage Posts</h1>
+            <p class="panel-sub">All articles published on the ShuleBrain blog.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" data-goto-panel="create-post">
+            <i class="bi bi-plus-lg me-1"></i>New post
+          </button>
+        </div>
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+              <span class="stat-pill"><i class="bi bi-journal-richtext"></i> <span id="postListCount">0</span> posts</span>
+              <input type="search" class="form-control form-control-sm search-box" id="postSearchInput" placeholder="Search by title or category…">
+            </div>
+            <div class="admin-list" id="postList">
+              <div class="empty-list">Loading posts&hellip;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== MANAGE EXAMINATIONS PANEL ===================== -->
+      <div class="admin-panel" id="panel-manage-examinations">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Examinations</div>
+            <h1 class="panel-title">Manage Examinations</h1>
+            <p class="panel-sub">Examinations uploaded from ShuleBrain DSK by every school using the system.</p>
+          </div>
+        </div>
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+              <span class="stat-pill"><i class="bi bi-clipboard-check"></i> <span id="examListCount">0</span> examinations</span>
+              <input type="search" class="form-control form-control-sm search-box" id="examSearchInput" placeholder="Search by code, title, region, district…">
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" id="examSelectAll">
+                <label class="form-check-label small fw-bold" for="examSelectAll">Select all</label>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="small text-secondary" id="examSelectedCount">0 selected</span>
+                <button type="button" class="btn btn-outline-danger btn-sm" id="examBulkDeleteBtn" disabled>
+                  <i class="bi bi-trash3 me-1"></i>Delete selected
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-list" id="examList">
+              <div class="empty-list">Loading examinations&hellip;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script>
+/* =======================================================================
+   ShuleBrain admin panel.
+   Auth-gated CRUD for the "releases" and "blog_posts" Supabase tables.
+   Only a signed-in Supabase Auth user can reach the dashboard (see the
+   RLS policies in schema.sql). Every stage — auth, fetch, render, and
+   form submission — is wrapped in nested try/catch so a failure in one
+   part never breaks the rest of the panel.
+   ======================================================================= */
+(function shuleBrainAdmin(){
+  "use strict";
+
+  /* --------------------------- Configuration --------------------------- */
+  /* TODO: same Supabase project as download.html / blogs.html / blog-post.html */
+  var SUPABASE_URL = "https://rubxxzcrlgemwvqasdzl.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1Ynh4emNybGdlbXd2cWFzZHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4ODk3NjIsImV4cCI6MjEwMDQ2NTc2Mn0.AIExp7yoRnpVwuHl6Xi70wmKZDM960Q17mn9MU6p6M0";
+
+  var supabaseClient = null;
+
+  function isSupabaseConfigured(){
+    try{
+      return (
+        SUPABASE_URL && SUPABASE_ANON_KEY &&
+        SUPABASE_URL.indexOf("YOUR-PROJECT-REF") === -1 &&
+        SUPABASE_ANON_KEY.indexOf("YOUR-PUBLIC-ANON-KEY") === -1
+      );
+    }catch(e){
+      console.error("[ShuleBrain] isSupabaseConfigured check failed", e);
+      return false;
+    }
+  }
+
+  function buildClient(){
+    try{
+      try{
+        if(!isSupabaseConfigured()){
+          console.warn("[ShuleBrain] Admin: Supabase not configured yet.");
+          return null;
+        }
+        if(typeof window.supabase === "undefined" || !window.supabase || typeof window.supabase.createClient !== "function"){
+          console.warn("[ShuleBrain] Admin: Supabase JS library unavailable.");
+          return null;
+        }
+        return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }catch(innerErr){
+        console.error("[ShuleBrain] Admin buildClient inner failure", innerErr);
+        return null;
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] Admin buildClient fatal error", fatalErr);
+      return null;
+    }
+  }
+
+  /* ------------------------------- Helpers ------------------------------- */
+  function escapeHtml(value){
+    try{
+      try{
+        return String(value == null ? "" : value)
+          .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }catch(e){ return ""; }
+    }catch(e){ return ""; }
+  }
+
+  function linesToArray(text){
+    try{
+      try{
+        return String(text || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+      }catch(e){ return []; }
+    }catch(e){ return []; }
+  }
+
+  function notify(icon, title){
+    try{
+      try{
+        if(typeof Swal !== "undefined" && Swal && typeof Swal.fire === "function"){
+          Swal.fire({ icon:icon, title:title, toast:true, position:"top-end", showConfirmButton:false, timer:3200, timerProgressBar:true });
+        } else {
+          console.log("[ShuleBrain] " + icon.toUpperCase() + ": " + title);
+        }
+      }catch(swalErr){
+        console.error("[ShuleBrain] notify toast failed", swalErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] notify fatal error", fatalErr);
+    }
+  }
+
+  function confirmDelete(itemLabel){
+    try{
+      try{
+        if(typeof Swal !== "undefined" && Swal && typeof Swal.fire === "function"){
+          return Swal.fire({
+            icon:"warning",
+            title:"Delete " + itemLabel + "?",
+            text:"This cannot be undone.",
+            showCancelButton:true,
+            confirmButtonText:"Delete",
+            confirmButtonColor:"#c0392b",
+            cancelButtonText:"Cancel"
+          }).then(function(result){ return !!(result && result.isConfirmed); });
+        }
+        return Promise.resolve(window.confirm("Delete " + itemLabel + "? This cannot be undone."));
+      }catch(swalErr){
+        console.error("[ShuleBrain] confirmDelete SweetAlert2 failed, using window.confirm", swalErr);
+        try{ return Promise.resolve(window.confirm("Delete " + itemLabel + "?")); }
+        catch(confirmErr){ console.error("[ShuleBrain] window.confirm fallback failed", confirmErr); return Promise.resolve(false); }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] confirmDelete fatal error", fatalErr);
+      return Promise.resolve(false);
+    }
+  }
+
+  /* ------------------------------- Auth ------------------------------- */
+  function showLoggedOut(){
+    try{
+      try{
+        document.getElementById("loginScreen").classList.remove("hidden");
+        document.getElementById("adminDashboard").classList.add("hidden");
+        document.getElementById("adminUserBox").classList.add("hidden");
+        document.getElementById("sidebarToggleBtn").classList.add("hidden");
+      }catch(e){ console.error("[ShuleBrain] showLoggedOut DOM update failed", e); }
+    }catch(fatalErr){ console.error("[ShuleBrain] showLoggedOut fatal error", fatalErr); }
+  }
+
+  function showLoggedIn(user){
+    try{
+      try{
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("adminDashboard").classList.remove("hidden");
+        document.getElementById("adminUserBox").classList.remove("hidden");
+        document.getElementById("sidebarToggleBtn").classList.remove("hidden");
+        var emailEl = document.getElementById("adminUserEmail");
+        if(emailEl) emailEl.textContent = (user && user.email) ? user.email : "";
+      }catch(e){ console.error("[ShuleBrain] showLoggedIn DOM update failed", e); }
+
+      try{ loadReleases(); }catch(e){ console.error("[ShuleBrain] loading releases after login failed", e); }
+      try{ loadPosts(); }catch(e){ console.error("[ShuleBrain] loading posts after login failed", e); }
+      try{ loadExams(); }catch(e){ console.error("[ShuleBrain] loading exams after login failed", e); }
+    }catch(fatalErr){ console.error("[ShuleBrain] showLoggedIn fatal error", fatalErr); }
+  }
+
+  function initAuth(){
+    try{
+      supabaseClient = buildClient();
+
+      if(!supabaseClient){
+        notify("error", "Supabase isn't configured yet — edit SUPABASE_URL / SUPABASE_ANON_KEY in this page.");
+        showLoggedOut();
+        return;
+      }
+
+      try{
+        supabaseClient.auth.getSession().then(function(result){
+          try{
+            var session = result && result.data ? result.data.session : null;
+            if(session && session.user){ showLoggedIn(session.user); }
+            else { showLoggedOut(); }
+          }catch(sessionErr){
+            console.error("[ShuleBrain] processing getSession result failed", sessionErr);
+            showLoggedOut();
+          }
+        }).catch(function(err){
+          console.error("[ShuleBrain] getSession failed", err);
+          showLoggedOut();
+        });
+      }catch(sessionFatalErr){
+        console.error("[ShuleBrain] getSession call threw synchronously", sessionFatalErr);
+        showLoggedOut();
+      }
+
+      try{
+        supabaseClient.auth.onAuthStateChange(function(event, session){
+          try{
+            if(session && session.user){ showLoggedIn(session.user); }
+            else { showLoggedOut(); }
+          }catch(changeErr){
+            console.error("[ShuleBrain] onAuthStateChange handler failed", changeErr);
+          }
+        });
+      }catch(listenerErr){
+        console.error("[ShuleBrain] binding onAuthStateChange failed", listenerErr);
+      }
+
+      try{
+        var loginForm = document.getElementById("loginForm");
+        if(loginForm){
+          loginForm.addEventListener("submit", function(e){
+            try{
+              e.preventDefault();
+              try{
+                var email = document.getElementById("loginEmail").value.trim();
+                var password = document.getElementById("loginPassword").value;
+                var submitBtn = document.getElementById("loginSubmitBtn");
+
+                try{ if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = "Signing in..."; } }
+                catch(busyErr){ console.warn("[ShuleBrain] disabling login button failed", busyErr); }
+
+                supabaseClient.auth.signInWithPassword({ email:email, password:password })
+                  .then(function(result){
+                    try{
+                      var error = result ? result.error : null;
+                      if(error){
+                        console.error("[ShuleBrain] sign-in failed", error);
+                        notify("error", "Sign-in failed. Check your email and password.");
+                        return;
+                      }
+                      notify("success", "Signed in successfully.");
+                    }catch(thenErr){
+                      console.error("[ShuleBrain] processing sign-in result failed", thenErr);
+                    }finally{
+                      try{ if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = "Sign in"; } }
+                      catch(resetErr){ console.warn("[ShuleBrain] resetting login button failed", resetErr); }
+                    }
+                  })
+                  .catch(function(err){
+                    console.error("[ShuleBrain] signInWithPassword rejected", err);
+                    notify("error", "Sign-in failed. Please try again.");
+                    try{ if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = "Sign in"; } }
+                    catch(resetErr){ console.warn("[ShuleBrain] resetting login button after error failed", resetErr); }
+                  });
+              }catch(submitInnerErr){
+                console.error("[ShuleBrain] login submit handling failed", submitInnerErr);
+              }
+            }catch(submitFatalErr){
+              console.error("[ShuleBrain] login form submit fatal error", submitFatalErr);
+            }
+          });
+        }
+      }catch(formErr){
+        console.error("[ShuleBrain] binding login form failed", formErr);
+      }
+
+      try{
+        var logoutBtn = document.getElementById("logoutBtn");
+        if(logoutBtn){
+          logoutBtn.addEventListener("click", function(){
+            try{
+              supabaseClient.auth.signOut().then(function(){
+                try{ notify("success", "Signed out."); }
+                catch(e){ console.warn("[ShuleBrain] sign-out notify failed", e); }
+              }).catch(function(err){
+                console.error("[ShuleBrain] signOut failed", err);
+              });
+            }catch(clickErr){
+              console.error("[ShuleBrain] logout click handler failed", clickErr);
+            }
+          });
+        }
+      }catch(logoutBindErr){
+        console.error("[ShuleBrain] binding logout button failed", logoutBindErr);
+      }
+
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initAuth fatal error", fatalErr);
+    }
+  }
+
+  /* ------------------------------- Sidebar / Panels ------------------------------- */
+  function setActivePanel(panelKey){
+    try{
+      try{
+        document.querySelectorAll(".sidebar-link").forEach(function(l){
+          try{ l.classList.toggle("active", l.getAttribute("data-panel") === panelKey); }catch(e){}
+        });
+      }catch(navErr){ console.error("[ShuleBrain] updating active sidebar link failed", navErr); }
+
+      try{
+        document.querySelectorAll(".admin-panel").forEach(function(p){ try{ p.classList.remove("active"); }catch(e){} });
+        var target = document.getElementById("panel-" + panelKey);
+        if(target) target.classList.add("active");
+      }catch(panelErr){
+        console.error("[ShuleBrain] switching admin panel failed", panelErr);
+      }
+
+      try{ closeMobileSidebar(); }catch(e){}
+      try{ window.scrollTo({ top:0, behavior:"smooth" }); }catch(e){}
+    }catch(fatalErr){
+      console.error("[ShuleBrain] setActivePanel fatal error", fatalErr);
+    }
+  }
+
+  function openMobileSidebar(){
+    try{
+      var sidebar = document.getElementById("adminSidebar");
+      var backdrop = document.getElementById("sidebarBackdrop");
+      var btn = document.getElementById("sidebarToggleBtn");
+      if(sidebar) sidebar.classList.add("show");
+      if(backdrop) backdrop.classList.add("show");
+      if(btn) btn.setAttribute("aria-expanded", "true");
+    }catch(e){ console.error("[ShuleBrain] openMobileSidebar failed", e); }
+  }
+
+  function closeMobileSidebar(){
+    try{
+      var sidebar = document.getElementById("adminSidebar");
+      var backdrop = document.getElementById("sidebarBackdrop");
+      var btn = document.getElementById("sidebarToggleBtn");
+      if(sidebar) sidebar.classList.remove("show");
+      if(backdrop) backdrop.classList.remove("show");
+      if(btn) btn.setAttribute("aria-expanded", "false");
+    }catch(e){ console.error("[ShuleBrain] closeMobileSidebar failed", e); }
+  }
+
+  function initSidebar(){
+    try{
+      document.querySelectorAll(".sidebar-link").forEach(function(link){
+        try{
+          link.addEventListener("click", function(){
+            try{ setActivePanel(link.getAttribute("data-panel")); }
+            catch(e){ console.error("[ShuleBrain] sidebar link click handling failed", e); }
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding sidebar link failed", bindErr);
+        }
+      });
+
+      document.querySelectorAll("[data-goto-panel]").forEach(function(btn){
+        try{
+          btn.addEventListener("click", function(){
+            try{ setActivePanel(btn.getAttribute("data-goto-panel")); }
+            catch(e){ console.error("[ShuleBrain] goto-panel click handling failed", e); }
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding goto-panel button failed", bindErr);
+        }
+      });
+
+      try{
+        var toggleBtn = document.getElementById("sidebarToggleBtn");
+        if(toggleBtn) toggleBtn.addEventListener("click", openMobileSidebar);
+      }catch(e){ console.error("[ShuleBrain] binding sidebar toggle failed", e); }
+
+      try{
+        var backdrop = document.getElementById("sidebarBackdrop");
+        if(backdrop) backdrop.addEventListener("click", closeMobileSidebar);
+      }catch(e){ console.error("[ShuleBrain] binding sidebar backdrop failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initSidebar fatal error", fatalErr);
+    }
+  }
+
+  /* ============================ RELEASES CRUD ============================ */
+  var editingReleaseId = null;
+  var allReleases = [];
+
+  function loadReleases(){
+    try{
+      var listEl = document.getElementById("releaseList");
+      if(!listEl || !supabaseClient) return;
+
+      supabaseClient.from("releases").select("*").order("released_at", { ascending:false })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){ console.error("[ShuleBrain] loading releases failed", error); listEl.innerHTML = '<div class="empty-list">Could not load releases.</div>'; return; }
+            allReleases = data || [];
+            renderReleaseList(allReleases);
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing releases response failed", thenErr);
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] releases query rejected", err);
+          listEl.innerHTML = '<div class="empty-list">Could not load releases.</div>';
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] loadReleases fatal error", fatalErr);
+    }
+  }
+
+  function renderReleaseList(releases){
+    try{
+      var listEl = document.getElementById("releaseList");
+      if(!listEl) return;
+
+      try{
+        try{
+          var countEl = document.getElementById("releaseListCount");
+          var badgeEl = document.getElementById("releaseCountBadge");
+          if(countEl) countEl.textContent = String((allReleases || []).length);
+          if(badgeEl){
+            badgeEl.textContent = String((allReleases || []).length);
+            badgeEl.classList.toggle("hidden", !(allReleases || []).length);
+          }
+        }catch(countErr){ console.error("[ShuleBrain] updating release count failed", countErr); }
+
+        if(!releases.length){ listEl.innerHTML = '<div class="empty-list">No releases yet. Add your first one.</div>'; return; }
+
+        listEl.innerHTML = releases.map(function(r){
+          try{
+            var dateLabel = r.released_at ? new Date(r.released_at).toLocaleDateString() : "";
+            return '<div class="list-item">' +
+              '<div class="list-item-body">' +
+                '<h4>' + escapeHtml(r.version) + (r.is_latest ? ' <span class="badge-mini">Latest</span>' : '') + '</h4>' +
+                '<p>' + escapeHtml(r.file_name) + '</p>' +
+                '<div class="list-item-meta"><span>' + escapeHtml(dateLabel) + '</span><span>' + escapeHtml(r.file_size_mb || "?") + ' MB</span></div>' +
+              '</div>' +
+              '<div class="list-item-actions">' +
+                '<button type="button" class="icon-btn" data-edit-release="' + escapeHtml(r.id) + '" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>' +
+                '<button type="button" class="icon-btn danger" data-delete-release="' + escapeHtml(r.id) + '" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>' +
+              '</div>' +
+            '</div>';
+          }catch(itemErr){
+            console.error("[ShuleBrain] rendering a release list item failed", itemErr);
+            return "";
+          }
+        }).join("");
+
+        try{
+          listEl.querySelectorAll("[data-edit-release]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ startEditRelease(btn.getAttribute("data-edit-release"), allReleases); }
+              catch(e){ console.error("[ShuleBrain] starting release edit failed", e); }
+            });
+          });
+          listEl.querySelectorAll("[data-delete-release]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ handleDeleteRelease(btn.getAttribute("data-delete-release")); }
+              catch(e){ console.error("[ShuleBrain] handling release delete failed", e); }
+            });
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding release list actions failed", bindErr);
+        }
+      }catch(renderInnerErr){
+        console.error("[ShuleBrain] renderReleaseList inner failure", renderInnerErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderReleaseList fatal error", fatalErr);
+    }
+  }
+
+  function initReleaseSearch(){
+    try{
+      var input = document.getElementById("releaseSearchInput");
+      if(!input) return;
+      input.addEventListener("input", function(){
+        try{
+          var q = input.value.trim().toLowerCase();
+          if(!q){ renderReleaseList(allReleases); return; }
+          var filtered = allReleases.filter(function(r){
+            return (String(r.version||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(r.file_name||"").toLowerCase().indexOf(q) !== -1);
+          });
+          renderReleaseList(filtered);
+        }catch(e){ console.error("[ShuleBrain] release search filtering failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initReleaseSearch fatal error", fatalErr);
+    }
+  }
+
+  function startEditRelease(id, releases){
+    try{
+      var r = releases.filter(function(x){ return String(x.id) === String(id); })[0];
+      if(!r) return;
+
+      editingReleaseId = r.id;
+      document.getElementById("releaseId").value = r.id;
+      document.getElementById("relVersion").value = r.version || "";
+      document.getElementById("relFileName").value = r.file_name || "";
+      document.getElementById("relSizeMb").value = r.file_size_mb || "";
+      document.getElementById("relDate").value = r.released_at ? String(r.released_at).slice(0,10) : "";
+      document.getElementById("relDownloadUrl").value = r.download_url || "";
+      document.getElementById("relDescription").value = r.short_description || "";
+      document.getElementById("relFeatures").value = Array.isArray(r.features) ? r.features.join("\n") : "";
+      document.getElementById("relRequirements").value = Array.isArray(r.requirements) ? r.requirements.join("\n") : "";
+      document.getElementById("relIsLatest").checked = !!r.is_latest;
+      document.getElementById("releaseFormTitle").textContent = "Edit Release";
+      document.getElementById("releaseSaveBtn").textContent = "Update release";
+      document.getElementById("releaseCancelBtn").classList.remove("hidden");
+      setActivePanel("create-release");
+    }catch(fatalErr){
+      console.error("[ShuleBrain] startEditRelease fatal error", fatalErr);
+    }
+  }
+
+  function resetReleaseForm(){
+    try{
+      editingReleaseId = null;
+      var form = document.getElementById("releaseForm");
+      if(form) form.reset();
+      document.getElementById("releaseId").value = "";
+      document.getElementById("releaseFormTitle").textContent = "Create Release";
+      document.getElementById("releaseSaveBtn").textContent = "Save release";
+      document.getElementById("releaseCancelBtn").classList.add("hidden");
+    }catch(fatalErr){
+      console.error("[ShuleBrain] resetReleaseForm fatal error", fatalErr);
+    }
+  }
+
+  function handleDeleteRelease(id){
+    try{
+      confirmDelete("this release").then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("releases").delete().eq("id", id)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] deleting release failed", result.error); notify("error","Could not delete this release."); return; }
+                notify("success", "Release deleted.");
+                loadReleases();
+              }catch(e){ console.error("[ShuleBrain] processing release delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] release delete rejected", err); notify("error","Could not delete this release."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleDeleteRelease confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleDeleteRelease fatal error", fatalErr);
+    }
+  }
+
+  function initReleaseForm(){
+    try{
+      var form = document.getElementById("releaseForm");
+      var cancelBtn = document.getElementById("releaseCancelBtn");
+
+      if(cancelBtn){
+        cancelBtn.addEventListener("click", function(){
+          try{ resetReleaseForm(); }catch(e){ console.error("[ShuleBrain] release cancel edit failed", e); }
+        });
+      }
+
+      if(form){
+        form.addEventListener("submit", function(e){
+          try{
+            e.preventDefault();
+            if(!supabaseClient){ notify("error","Supabase isn't configured yet."); return; }
+
+            try{
+              var payload = {
+                version: document.getElementById("relVersion").value.trim(),
+                file_name: document.getElementById("relFileName").value.trim(),
+                file_size_mb: parseFloat(document.getElementById("relSizeMb").value) || null,
+                download_url: document.getElementById("relDownloadUrl").value.trim(),
+                short_description: document.getElementById("relDescription").value.trim(),
+                features: linesToArray(document.getElementById("relFeatures").value),
+                requirements: linesToArray(document.getElementById("relRequirements").value),
+                is_latest: document.getElementById("relIsLatest").checked
+              };
+              var dateVal = document.getElementById("relDate").value;
+              if(dateVal) payload.released_at = new Date(dateVal).toISOString();
+
+              var query = editingReleaseId
+                ? supabaseClient.from("releases").update(payload).eq("id", editingReleaseId)
+                : supabaseClient.from("releases").insert(payload);
+
+              query.then(function(result){
+                try{
+                  if(result && result.error){ console.error("[ShuleBrain] saving release failed", result.error); notify("error","Could not save this release."); return; }
+                  notify("success", editingReleaseId ? "Release updated." : "Release added.");
+                  resetReleaseForm();
+                  loadReleases();
+                  setActivePanel("manage-releases");
+                }catch(thenErr){
+                  console.error("[ShuleBrain] processing release save response failed", thenErr);
+                }
+              }).catch(function(err){
+                console.error("[ShuleBrain] release save rejected", err);
+                notify("error","Could not save this release.");
+              });
+            }catch(payloadErr){
+              console.error("[ShuleBrain] building release payload failed", payloadErr);
+              notify("error","Could not read the release form.");
+            }
+          }catch(submitFatalErr){
+            console.error("[ShuleBrain] release form submit fatal error", submitFatalErr);
+          }
+        });
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initReleaseForm fatal error", fatalErr);
+    }
+  }
+
+  /* ============================ BLOG POSTS CRUD ============================ */
+  var editingPostId = null;
+  var allPosts = [];
+  var quillEditor = null;
+
+  function initContentEditor(){
+    try{
+      var editorEl = document.getElementById("postContentEditor");
+      var textareaEl = document.getElementById("postContent");
+      var hintEl = document.getElementById("postContentHint");
+      if(!editorEl || !textareaEl) return;
+
+      try{
+        if(typeof Quill === "undefined"){
+          throw new Error("Quill library not available");
+        }
+
+        quillEditor = new Quill(editorEl, {
+          theme: "snow",
+          placeholder: "Write the full article here...",
+          modules: {
+            toolbar: [
+              [{ header: [2, 3, false] }],
+              ["bold", "italic", "underline", "strike"],
+              ["blockquote"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["link", "image"],
+              ["clean"]
+            ]
+          }
+        });
+
+        try{
+          quillEditor.on("text-change", function(){
+            try{
+              textareaEl.value = quillEditor.root.innerHTML;
+            }catch(syncErr){
+              console.error("[ShuleBrain] syncing Quill content to hidden textarea failed", syncErr);
+            }
+          });
+        }catch(listenerErr){
+          console.error("[ShuleBrain] binding Quill text-change listener failed", listenerErr);
+        }
+
+      }catch(quillErr){
+        console.warn("[ShuleBrain] Quill editor unavailable, falling back to plain HTML textarea", quillErr);
+        try{
+          quillEditor = null;
+          editorEl.classList.add("d-none");
+          textareaEl.classList.remove("d-none");
+          textareaEl.setAttribute("required", "required");
+          textareaEl.placeholder = "<p>Full article body here...</p>";
+          if(hintEl) hintEl.textContent = "The rich text editor couldn't load, so you can write raw HTML here instead.";
+        }catch(fallbackErr){
+          console.error("[ShuleBrain] activating plain textarea fallback failed", fallbackErr);
+        }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initContentEditor fatal error", fatalErr);
+    }
+  }
+
+  function getPostContentValue(){
+    try{
+      try{
+        if(quillEditor){
+          var text = quillEditor.getText() ? quillEditor.getText().trim() : "";
+          return { html: quillEditor.root.innerHTML, isEmpty: text.length === 0 };
+        }
+      }catch(quillReadErr){
+        console.error("[ShuleBrain] reading Quill content failed, falling back to textarea", quillReadErr);
+      }
+      try{
+        var val = document.getElementById("postContent").value || "";
+        return { html: val, isEmpty: val.trim().length === 0 };
+      }catch(textareaReadErr){
+        console.error("[ShuleBrain] reading textarea content failed", textareaReadErr);
+        return { html: "", isEmpty: true };
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] getPostContentValue fatal error", fatalErr);
+      return { html: "", isEmpty: true };
+    }
+  }
+
+  function setPostContentValue(html){
+    try{
+      try{
+        document.getElementById("postContent").value = html || "";
+      }catch(textareaSetErr){
+        console.error("[ShuleBrain] setting textarea content failed", textareaSetErr);
+      }
+      try{
+        if(quillEditor){
+          quillEditor.root.innerHTML = html || "";
+        }
+      }catch(quillSetErr){
+        console.error("[ShuleBrain] setting Quill content failed", quillSetErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] setPostContentValue fatal error", fatalErr);
+    }
+  }
+
+  function loadPosts(){
+    try{
+      var listEl = document.getElementById("postList");
+      if(!listEl || !supabaseClient) return;
+
+      supabaseClient.from("blog_posts").select("*").order("created_at", { ascending:false })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){ console.error("[ShuleBrain] loading posts failed", error); listEl.innerHTML = '<div class="empty-list">Could not load posts.</div>'; return; }
+            allPosts = data || [];
+            renderPostList(allPosts);
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing posts response failed", thenErr);
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] posts query rejected", err);
+          listEl.innerHTML = '<div class="empty-list">Could not load posts.</div>';
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] loadPosts fatal error", fatalErr);
+    }
+  }
+
+  function renderPostList(posts){
+    try{
+      var listEl = document.getElementById("postList");
+      if(!listEl) return;
+
+      try{
+        try{
+          var countEl = document.getElementById("postListCount");
+          var badgeEl = document.getElementById("postCountBadge");
+          if(countEl) countEl.textContent = String((allPosts || []).length);
+          if(badgeEl){
+            badgeEl.textContent = String((allPosts || []).length);
+            badgeEl.classList.toggle("hidden", !(allPosts || []).length);
+          }
+        }catch(countErr){ console.error("[ShuleBrain] updating post count failed", countErr); }
+
+        if(!posts.length){ listEl.innerHTML = '<div class="empty-list">No blog posts yet. Add your first one.</div>'; return; }
+
+        listEl.innerHTML = posts.map(function(p){
+          try{
+            return '<div class="list-item">' +
+              '<div class="list-item-body">' +
+                '<h4>' + escapeHtml(p.title) + (p.is_published ? '' : ' <span class="badge-mini" style="background:#eef1f7;color:#4b5470;">Draft</span>') + '</h4>' +
+                '<p>' + escapeHtml(p.excerpt || "") + '</p>' +
+                '<div class="list-item-meta"><span>' + escapeHtml(p.category) + '</span><span>/' + escapeHtml(p.slug) + '</span></div>' +
+              '</div>' +
+              '<div class="list-item-actions">' +
+                '<a class="icon-btn" href="blog-post.html?slug=' + encodeURIComponent(p.slug) + '" target="_blank" rel="noopener" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></a>' +
+                '<button type="button" class="icon-btn" data-edit-post="' + escapeHtml(p.id) + '" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>' +
+                '<button type="button" class="icon-btn danger" data-delete-post="' + escapeHtml(p.id) + '" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>' +
+              '</div>' +
+            '</div>';
+          }catch(itemErr){
+            console.error("[ShuleBrain] rendering a post list item failed", itemErr);
+            return "";
+          }
+        }).join("");
+
+        try{
+          listEl.querySelectorAll("[data-edit-post]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ startEditPost(btn.getAttribute("data-edit-post"), allPosts); }
+              catch(e){ console.error("[ShuleBrain] starting post edit failed", e); }
+            });
+          });
+          listEl.querySelectorAll("[data-delete-post]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ handleDeletePost(btn.getAttribute("data-delete-post")); }
+              catch(e){ console.error("[ShuleBrain] handling post delete failed", e); }
+            });
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding post list actions failed", bindErr);
+        }
+      }catch(renderInnerErr){
+        console.error("[ShuleBrain] renderPostList inner failure", renderInnerErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderPostList fatal error", fatalErr);
+    }
+  }
+
+  function initPostSearch(){
+    try{
+      var input = document.getElementById("postSearchInput");
+      if(!input) return;
+      input.addEventListener("input", function(){
+        try{
+          var q = input.value.trim().toLowerCase();
+          if(!q){ renderPostList(allPosts); return; }
+          var filtered = allPosts.filter(function(p){
+            return (String(p.title||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(p.category||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(p.slug||"").toLowerCase().indexOf(q) !== -1);
+          });
+          renderPostList(filtered);
+        }catch(e){ console.error("[ShuleBrain] post search filtering failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initPostSearch fatal error", fatalErr);
+    }
+  }
+
+  function startEditPost(id, posts){
+    try{
+      var p = posts.filter(function(x){ return String(x.id) === String(id); })[0];
+      if(!p) return;
+
+      editingPostId = p.id;
+      document.getElementById("postId").value = p.id;
+      document.getElementById("postTitle").value = p.title || "";
+      document.getElementById("postSlug").value = p.slug || "";
+      document.getElementById("postCategory").value = p.category || "product";
+      document.getElementById("postIcon").value = p.cover_icon || "package";
+      document.getElementById("postAuthor").value = p.author_name || "ShuleBrain Team";
+      document.getElementById("postReadTime").value = p.read_time_minutes || 4;
+      document.getElementById("postExcerpt").value = p.excerpt || "";
+      setPostContentValue(p.content || "");
+      document.getElementById("postIsPublished").checked = !!p.is_published;
+      document.getElementById("postFormTitle").textContent = "Edit Post";
+      document.getElementById("postSaveBtn").textContent = "Update post";
+      document.getElementById("postCancelBtn").classList.remove("hidden");
+      setActivePanel("create-post");
+    }catch(fatalErr){
+      console.error("[ShuleBrain] startEditPost fatal error", fatalErr);
+    }
+  }
+
+  function resetPostForm(){
+    try{
+      editingPostId = null;
+      var form = document.getElementById("postForm");
+      if(form) form.reset();
+      document.getElementById("postId").value = "";
+      document.getElementById("postAuthor").value = "ShuleBrain Team";
+      document.getElementById("postReadTime").value = 4;
+      document.getElementById("postIsPublished").checked = true;
+      setPostContentValue("");
+      document.getElementById("postFormTitle").textContent = "Create Post";
+      document.getElementById("postSaveBtn").textContent = "Save post";
+      document.getElementById("postCancelBtn").classList.add("hidden");
+    }catch(fatalErr){
+      console.error("[ShuleBrain] resetPostForm fatal error", fatalErr);
+    }
+  }
+
+  function handleDeletePost(id){
+    try{
+      confirmDelete("this post").then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("blog_posts").delete().eq("id", id)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] deleting post failed", result.error); notify("error","Could not delete this post."); return; }
+                notify("success", "Post deleted.");
+                loadPosts();
+              }catch(e){ console.error("[ShuleBrain] processing post delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] post delete rejected", err); notify("error","Could not delete this post."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleDeletePost confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleDeletePost fatal error", fatalErr);
+    }
+  }
+
+  function slugify(text){
+    try{
+      try{
+        return String(text || "").toLowerCase().trim()
+          .replace(/[^a-z0-9\s-]/g,"").replace(/\s+/g,"-").replace(/-+/g,"-");
+      }catch(e){ return ""; }
+    }catch(e){ return ""; }
+  }
+
+  function initPostForm(){
+    try{
+      var form = document.getElementById("postForm");
+      var cancelBtn = document.getElementById("postCancelBtn");
+      var titleInput = document.getElementById("postTitle");
+      var slugInput = document.getElementById("postSlug");
+
+      try{
+        if(titleInput && slugInput){
+          titleInput.addEventListener("blur", function(){
+            try{
+              if(!editingPostId && !slugInput.value.trim()){
+                slugInput.value = slugify(titleInput.value);
+              }
+            }catch(e){ console.warn("[ShuleBrain] auto-slug generation failed", e); }
+          });
+        }
+      }catch(slugBindErr){
+        console.error("[ShuleBrain] binding auto-slug failed", slugBindErr);
+      }
+
+      if(cancelBtn){
+        cancelBtn.addEventListener("click", function(){
+          try{ resetPostForm(); }catch(e){ console.error("[ShuleBrain] post cancel edit failed", e); }
+        });
+      }
+
+      if(form){
+        form.addEventListener("submit", function(e){
+          try{
+            e.preventDefault();
+            if(!supabaseClient){ notify("error","Supabase isn't configured yet."); return; }
+
+            try{
+              var contentState = getPostContentValue();
+              if(contentState.isEmpty){
+                notify("error", "Please write some content before saving.");
+                return;
+              }
+
+              var payload = {
+                title: document.getElementById("postTitle").value.trim(),
+                slug: slugify(document.getElementById("postSlug").value) || slugify(document.getElementById("postTitle").value),
+                category: document.getElementById("postCategory").value,
+                cover_icon: document.getElementById("postIcon").value,
+                author_name: document.getElementById("postAuthor").value.trim() || "ShuleBrain Team",
+                read_time_minutes: parseInt(document.getElementById("postReadTime").value, 10) || 4,
+                excerpt: document.getElementById("postExcerpt").value.trim(),
+                content: contentState.html,
+                is_published: document.getElementById("postIsPublished").checked
+              };
+              if(payload.is_published) payload.published_at = new Date().toISOString();
+
+              var query = editingPostId
+                ? supabaseClient.from("blog_posts").update(payload).eq("id", editingPostId)
+                : supabaseClient.from("blog_posts").insert(payload);
+
+              query.then(function(result){
+                try{
+                  if(result && result.error){ console.error("[ShuleBrain] saving post failed", result.error); notify("error","Could not save this post — check the slug is unique."); return; }
+                  notify("success", editingPostId ? "Post updated." : "Post added.");
+                  resetPostForm();
+                  loadPosts();
+                  setActivePanel("manage-posts");
+                }catch(thenErr){
+                  console.error("[ShuleBrain] processing post save response failed", thenErr);
+                }
+              }).catch(function(err){
+                console.error("[ShuleBrain] post save rejected", err);
+                notify("error","Could not save this post.");
+              });
+            }catch(payloadErr){
+              console.error("[ShuleBrain] building post payload failed", payloadErr);
+              notify("error","Could not read the post form.");
+            }
+          }catch(submitFatalErr){
+            console.error("[ShuleBrain] post form submit fatal error", submitFatalErr);
+          }
+        });
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initPostForm fatal error", fatalErr);
+    }
+  }
+
+  /* ============================ EXAMINATIONS (view + bulk delete) ============================ */
+  var allExams = [];
+  var selectedExamIds = {};
+
+  function loadExams(){
+    try{
+      var listEl = document.getElementById("examList");
+      if(!listEl || !supabaseClient) return;
+
+      supabaseClient.from("exams").select("*").order("created_at", { ascending:false })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){ console.error("[ShuleBrain] loading exams failed", error); listEl.innerHTML = '<div class="empty-list">Could not load examinations.</div>'; return; }
+            allExams = data || [];
+            selectedExamIds = {};
+            renderExamList(allExams);
+            updateExamSelectionUi();
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing exams response failed", thenErr);
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] exams query rejected", err);
+          listEl.innerHTML = '<div class="empty-list">Could not load examinations.</div>';
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] loadExams fatal error", fatalErr);
+    }
+  }
+
+  function renderExamList(exams){
+    try{
+      var listEl = document.getElementById("examList");
+      if(!listEl) return;
+
+      try{
+        try{
+          var countEl = document.getElementById("examListCount");
+          var badgeEl = document.getElementById("examCountBadge");
+          if(countEl) countEl.textContent = String((allExams || []).length);
+          if(badgeEl){
+            badgeEl.textContent = String((allExams || []).length);
+            badgeEl.classList.toggle("hidden", !(allExams || []).length);
+          }
+        }catch(countErr){ console.error("[ShuleBrain] updating exam count failed", countErr); }
+
+        if(!exams.length){ listEl.innerHTML = '<div class="empty-list">No examinations uploaded yet. These appear once a school uploads results via ShuleBrain DSK.</div>'; return; }
+
+        listEl.innerHTML = exams.map(function(x){
+          try{
+            var dateLabel = x.created_at ? new Date(x.created_at).toLocaleDateString() : "";
+            var checked = selectedExamIds[x.id] ? "checked" : "";
+            var isSelected = selectedExamIds[x.id] ? "selected" : "";
+            return '<div class="list-item with-checkbox ' + isSelected + '" data-exam-row="' + escapeHtml(x.id) + '">' +
+              '<div class="list-item-checkbox">' +
+                '<input type="checkbox" class="form-check-input" data-exam-checkbox="' + escapeHtml(x.id) + '" ' + checked + '>' +
+              '</div>' +
+              '<div class="list-item-body flex-grow-1">' +
+                '<h4>' + escapeHtml(x.exam_title) + (x.is_published ? '' : ' <span class="badge-mini" style="background:#eef1f7;color:#4b5470;">Unpublished</span>') + '</h4>' +
+                '<p>' + escapeHtml(x.code) + ' &middot; ' + escapeHtml(x.class_code || "") + ' &middot; ' + escapeHtml(x.exam_type || "") + '</p>' +
+                '<div class="list-item-meta">' +
+                  '<span>' + escapeHtml(x.region || "") + (x.district ? ", " + escapeHtml(x.district) : "") + '</span>' +
+                  '<span>Year ' + escapeHtml(x.year_conducted || "") + '</span>' +
+                  '<span>Uploaded ' + escapeHtml(dateLabel) + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="list-item-actions">' +
+                '<button type="button" class="icon-btn danger" data-delete-exam="' + escapeHtml(x.id) + '" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>' +
+              '</div>' +
+            '</div>';
+          }catch(itemErr){
+            console.error("[ShuleBrain] rendering an exam list item failed", itemErr);
+            return "";
+          }
+        }).join("");
+
+        try{
+          listEl.querySelectorAll("[data-exam-checkbox]").forEach(function(box){
+            box.addEventListener("change", function(){
+              try{
+                var id = box.getAttribute("data-exam-checkbox");
+                if(box.checked){ selectedExamIds[id] = true; } else { delete selectedExamIds[id]; }
+                try{
+                  var row = listEl.querySelector('[data-exam-row="' + id + '"]');
+                  if(row) row.classList.toggle("selected", !!box.checked);
+                }catch(rowErr){ console.warn("[ShuleBrain] toggling exam row highlight failed", rowErr); }
+                updateExamSelectionUi();
+              }catch(e){ console.error("[ShuleBrain] exam checkbox change handling failed", e); }
+            });
+          });
+        }catch(checkboxBindErr){
+          console.error("[ShuleBrain] binding exam checkboxes failed", checkboxBindErr);
+        }
+
+        try{
+          listEl.querySelectorAll("[data-delete-exam]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ handleDeleteExam(btn.getAttribute("data-delete-exam")); }
+              catch(e){ console.error("[ShuleBrain] handling exam delete failed", e); }
+            });
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding exam delete buttons failed", bindErr);
+        }
+      }catch(renderInnerErr){
+        console.error("[ShuleBrain] renderExamList inner failure", renderInnerErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderExamList fatal error", fatalErr);
+    }
+  }
+
+  function updateExamSelectionUi(){
+    try{
+      var ids = Object.keys(selectedExamIds);
+      var countEl = document.getElementById("examSelectedCount");
+      var bulkBtn = document.getElementById("examBulkDeleteBtn");
+      var selectAll = document.getElementById("examSelectAll");
+
+      try{ if(countEl) countEl.textContent = ids.length + " selected"; }
+      catch(e){ console.error("[ShuleBrain] updating exam selected count failed", e); }
+
+      try{ if(bulkBtn) bulkBtn.disabled = ids.length === 0; }
+      catch(e){ console.error("[ShuleBrain] updating exam bulk delete button failed", e); }
+
+      try{
+        if(selectAll){
+          var visibleCount = document.querySelectorAll("[data-exam-checkbox]").length;
+          selectAll.checked = visibleCount > 0 && ids.length >= visibleCount;
+          selectAll.indeterminate = ids.length > 0 && ids.length < visibleCount;
+        }
+      }catch(e){ console.error("[ShuleBrain] updating exam select-all state failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] updateExamSelectionUi fatal error", fatalErr);
+    }
+  }
+
+  function initExamSearch(){
+    try{
+      var input = document.getElementById("examSearchInput");
+      if(!input) return;
+      input.addEventListener("input", function(){
+        try{
+          var q = input.value.trim().toLowerCase();
+          if(!q){ renderExamList(allExams); updateExamSelectionUi(); return; }
+          var filtered = allExams.filter(function(x){
+            return (String(x.code||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(x.exam_title||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(x.region||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(x.district||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(x.class_code||"").toLowerCase().indexOf(q) !== -1);
+          });
+          renderExamList(filtered);
+          updateExamSelectionUi();
+        }catch(e){ console.error("[ShuleBrain] exam search filtering failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initExamSearch fatal error", fatalErr);
+    }
+  }
+
+  function handleDeleteExam(id){
+    try{
+      confirmDelete("this examination").then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("exams").delete().eq("id", id)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] deleting exam failed", result.error); notify("error","Could not delete this examination."); return; }
+                notify("success", "Examination deleted.");
+                delete selectedExamIds[id];
+                loadExams();
+              }catch(e){ console.error("[ShuleBrain] processing exam delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] exam delete rejected", err); notify("error","Could not delete this examination."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleDeleteExam confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleDeleteExam fatal error", fatalErr);
+    }
+  }
+
+  function handleBulkDeleteExams(){
+    try{
+      var ids = Object.keys(selectedExamIds);
+      if(!ids.length) return;
+
+      confirmDelete(ids.length + " selected examination" + (ids.length > 1 ? "s" : "")).then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("exams").delete().in("id", ids)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] bulk deleting exams failed", result.error); notify("error","Could not delete the selected examinations."); return; }
+                notify("success", ids.length + " examination" + (ids.length > 1 ? "s" : "") + " deleted.");
+                selectedExamIds = {};
+                loadExams();
+              }catch(e){ console.error("[ShuleBrain] processing exam bulk delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] exam bulk delete rejected", err); notify("error","Could not delete the selected examinations."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleBulkDeleteExams confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleBulkDeleteExams fatal error", fatalErr);
+    }
+  }
+
+  function initExamSelection(){
+    try{
+      var selectAll = document.getElementById("examSelectAll");
+      var bulkBtn = document.getElementById("examBulkDeleteBtn");
+
+      if(selectAll){
+        selectAll.addEventListener("change", function(){
+          try{
+            var boxes = document.querySelectorAll("[data-exam-checkbox]");
+            boxes.forEach(function(box){
+              try{
+                box.checked = selectAll.checked;
+                var id = box.getAttribute("data-exam-checkbox");
+                if(selectAll.checked){ selectedExamIds[id] = true; } else { delete selectedExamIds[id]; }
+                var row = document.querySelector('[data-exam-row="' + id + '"]');
+                if(row) row.classList.toggle("selected", selectAll.checked);
+              }catch(e){ console.error("[ShuleBrain] select-all applying to a checkbox failed", e); }
+            });
+            updateExamSelectionUi();
+          }catch(e){ console.error("[ShuleBrain] exam select-all change handling failed", e); }
+        });
+      }
+
+      if(bulkBtn){
+        bulkBtn.addEventListener("click", function(){
+          try{ handleBulkDeleteExams(); }
+          catch(e){ console.error("[ShuleBrain] bulk delete button click failed", e); }
+        });
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initExamSelection fatal error", fatalErr);
+    }
+  }
+
+  /* -------------------------------- Boot -------------------------------- */
+  function boot(){
+    try{
+      try{ initAuth(); }catch(e){ console.error("[ShuleBrain] boot: initAuth crashed", e); }
+      try{ initSidebar(); }catch(e){ console.error("[ShuleBrain] boot: initSidebar crashed", e); }
+      try{ initReleaseForm(); }catch(e){ console.error("[ShuleBrain] boot: initReleaseForm crashed", e); }
+      try{ initContentEditor(); }catch(e){ console.error("[ShuleBrain] boot: initContentEditor crashed", e); }
+      try{ initPostForm(); }catch(e){ console.error("[ShuleBrain] boot: initPostForm crashed", e); }
+      try{ initReleaseSearch(); }catch(e){ console.error("[ShuleBrain] boot: initReleaseSearch crashed", e); }
+      try{ initPostSearch(); }catch(e){ console.error("[ShuleBrain] boot: initPostSearch crashed", e); }
+      try{ initExamSearch(); }catch(e){ console.error("[ShuleBrain] boot: initExamSearch crashed", e); }
+      try{ initExamSelection(); }catch(e){ console.error("[ShuleBrain] boot: initExamSelection crashed", e); }
+    }catch(bootFatalErr){
+      try{ console.error("[ShuleBrain] boot fatal error", bootFatalErr); }
+      catch(consoleErr){ /* nothing more we can safely do */ }
+    }
+  }
+
+  try{
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", function(){
+        try{ boot(); }catch(e){ try{ console.error(e); }catch(f){} }
+      });
+    } else {
+      try{ boot(); }catch(e){ try{ console.error(e); }catch(f){} }
+    }
+  }catch(topLevelErr){
+    try{ console.error("[ShuleBrain] top-level admin init failed", topLevelErr); }catch(f){}
+  }
+
+})();
+</script>
+</body>
+</html>

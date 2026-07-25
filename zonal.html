@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zonal Examination Results | ShuleBrain DSK</title>
+<meta name="description" content="Browse Zonal examination results by class and year, then view a school's full results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230E7C66'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='800' font-size='26' fill='white' text-anchor='middle'%3ESB%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --navy-950:#070c22;
+    --navy-900:#0b1230;
+    --navy-800:#111a3d;
+    --navy-700:#182452;
+    --teal-500:#12b89f;
+    --teal-600:#0e9a85;
+    --teal-400:#3fd4bd;
+    --amber-500:#f5a524;
+    --amber-600:#e08e0f;
+    --ink-900:#0d1330;
+    --ink-600:#4b5470;
+    --ink-400:#7d859c;
+    --paper-0:#ffffff;
+    --paper-50:#f6f8fb;
+    --paper-100:#eef1f7;
+    --line-100:#e4e8f1;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:10px;
+    --shadow-card:0 10px 30px -12px rgba(13,19,48,.14);
+    --shadow-card-hover:0 20px 45px -14px rgba(13,19,48,.22);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink-900);
+    background:var(--paper-0);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4,.font-display{
+    font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  }
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;margin:0;padding:0;}
+  button{font-family:inherit;cursor:pointer;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 24px;}
+  :focus-visible{outline:2px solid var(--teal-500);outline-offset:3px;}
+
+  /* ============ NAVBAR ============ */
+  .navbar{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-100);
+  }
+  .nav-inner{
+    max-width:1240px;margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    height:76px;gap:20px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .brand-mark{width:42px;height:42px;flex-shrink:0;}
+  .brand-word{font-weight:800;font-size:20px;letter-spacing:-.02em;color:var(--navy-900);}
+  .brand-word span{color:var(--teal-600);}
+
+  .nav-menu{display:flex;align-items:center;gap:2px;}
+  .nav-item{position:relative;}
+  .nav-link{
+    display:flex;align-items:center;gap:6px;
+    padding:12px 14px;border-radius:10px;
+    font-size:15px;font-weight:600;color:var(--navy-900);
+    transition:background .15s ease, color .15s ease;
+    white-space:nowrap;
+    background:none;border:none;appearance:none;-webkit-appearance:none;
+    font-family:inherit;line-height:normal;
+  }
+  .nav-link:hover, .nav-item.open > .nav-link{background:var(--paper-100);color:var(--teal-600);}
+  .caret{width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .2s ease;margin-top:-3px;}
+  .nav-item.open .caret{transform:rotate(-135deg);margin-top:3px;}
+
+  .dropdown{
+    position:absolute;top:calc(100% + 8px);left:0;min-width:280px;
+    background:var(--paper-0);border-radius:var(--radius-md);
+    box-shadow:var(--shadow-card-hover);border:1px solid var(--line-100);
+    padding:8px;opacity:0;visibility:hidden;transform:translateY(6px);
+    transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  }
+  .nav-item.open .dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+  .dropdown-link{display:block;padding:12px 14px;border-radius:8px;font-size:14.5px;font-weight:600;color:var(--navy-900);}
+  .dropdown-link small{display:block;font-weight:500;font-size:12.5px;color:var(--ink-400);margin-top:2px;}
+  .dropdown-link:hover{background:var(--paper-50);color:var(--teal-600);}
+
+  .nav-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 22px;border-radius:999px;font-weight:700;font-size:14.5px;
+    border:1px solid transparent;transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--teal-500);color:#fff;box-shadow:0 8px 20px -6px rgba(18,184,159,.55);}
+  .btn-primary:hover{background:var(--teal-600);}
+  .btn-amber{background:var(--amber-500);color:#231400;box-shadow:0 8px 20px -6px rgba(245,165,36,.5);}
+  .btn-amber:hover{background:var(--amber-600);}
+  .btn-ghost{background:transparent;color:var(--navy-900);border-color:var(--line-100);}
+  .btn-ghost:hover{background:var(--paper-100);}
+  .btn-outline-invert{background:transparent;color:#fff;border-color:rgba(255,255,255,.35);}
+  .btn-outline-invert:hover{background:rgba(255,255,255,.1);}
+
+  .hamburger{display:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line-100);background:#fff;align-items:center;justify-content:center;flex-shrink:0;}
+  .hamburger span, .hamburger::before, .hamburger::after{content:'';display:block;width:20px;height:2px;background:var(--navy-900);border-radius:2px;}
+  .hamburger{flex-direction:column;gap:5px;}
+  .hamburger span{transition:transform .2s ease, opacity .2s ease;}
+
+  /* mobile drawer */
+  .mobile-drawer{
+    position:fixed;inset:0;z-index:200;background:var(--paper-0);
+    transform:translateX(100%);transition:transform .28s ease;
+    display:flex;flex-direction:column;
+  }
+  .mobile-drawer.active{transform:translateX(0);}
+  .mobile-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line-100);}
+  .mobile-drawer-body{padding:14px 12px;overflow-y:auto;flex:1;}
+  .m-accordion-btn{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    padding:16px 14px;font-weight:700;font-size:16px;color:var(--navy-900);
+    background:none;border:none;border-bottom:1px solid var(--line-100);
+  }
+  .m-accordion-panel{max-height:0;overflow:hidden;transition:max-height .25s ease;background:var(--paper-50);border-radius:0 0 12px 12px;}
+  .m-accordion-panel a{display:block;padding:13px 24px;font-weight:600;font-size:14.5px;color:var(--ink-600);}
+  .m-accordion-panel a:hover{color:var(--teal-600);}
+  .m-plain-link{display:block;padding:16px 14px;font-weight:700;font-size:16px;color:var(--navy-900);border-bottom:1px solid var(--line-100);}
+  .drawer-cta{padding:18px 14px;}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;overflow:hidden;
+    background:radial-gradient(1100px 520px at 15% -10%, #16305f 0%, transparent 60%),
+               radial-gradient(900px 500px at 100% 0%, #0f6b5c 0%, transparent 55%),
+               linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 60%, var(--navy-800) 100%);
+    color:#fff;padding:64px 0 90px;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;
+    background:rgba(63,212,189,.12);border:1px solid rgba(63,212,189,.35);
+    font-size:13px;font-weight:700;color:var(--teal-400);letter-spacing:.02em;margin-bottom:22px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal-400);box-shadow:0 0 0 4px rgba(63,212,189,.2);}
+  .hero h1{font-size:clamp(32px,4.6vw,54px);line-height:1.08;font-weight:800;letter-spacing:-.02em;margin:0 0 18px;}
+  .hero h1 .accent{color:var(--teal-400);}
+  .hero p.lead{font-size:18px;line-height:1.65;color:#c4cbe0;max-width:560px;margin:0 0 32px;}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:46px;}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid rgba(255,255,255,.12);padding-top:26px;}
+  .hero-stat{flex:1;min-width:130px;padding-right:22px;}
+  .hero-stat b{display:block;font-size:26px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;}
+  .hero-stat span{font-size:13px;color:#a4acc6;}
+
+  .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;min-height:380px;}
+  .swing-rig{position:relative;width:100%;max-width:340px;}
+  .swing-line{position:absolute;top:-30px;left:50%;width:2px;height:60px;background:linear-gradient(#3fd4bd,transparent);transform:translateX(-50%);}
+  .swing-anchor{position:absolute;top:-36px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:var(--teal-400);box-shadow:0 0 0 6px rgba(63,212,189,.18);}
+  .swing-badge{
+    transform-origin:top center;
+    animation:swing 4.2s ease-in-out infinite;
+    width:230px;height:230px;margin:24px auto 0;
+    border-radius:32px;
+    background:linear-gradient(155deg,var(--teal-500),#0a6e5e 78%);
+    box-shadow:0 30px 60px -18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .swing-badge::after{
+    content:"";position:absolute;inset:10px;border-radius:24px;border:1px solid rgba(255,255,255,.18);
+  }
+  .swing-badge b{font-family:'Plus Jakarta Sans',sans-serif;font-size:84px;font-weight:800;color:#fff;letter-spacing:-.03em;}
+  @keyframes swing{
+    0%,100%{transform:rotate(-7deg);}
+    50%{transform:rotate(7deg);}
+  }
+  .float-chip{
+    position:absolute;background:#fff;color:var(--navy-900);padding:10px 14px;border-radius:12px;
+    font-size:13px;font-weight:700;box-shadow:var(--shadow-card-hover);display:flex;align-items:center;gap:8px;
+    animation:float 5s ease-in-out infinite;
+  }
+  .float-chip svg{width:16px;height:16px;color:var(--teal-600);}
+  .chip-1{top:6%;left:-4%;animation-delay:.2s;}
+  .chip-2{bottom:10%;right:-6%;animation-delay:1.1s;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  @media (prefers-reduced-motion: reduce){
+    .swing-badge, .float-chip{animation:none;}
+  }
+
+  /* ============ SECTION GENERIC ============ */
+  section{padding:88px 0;}
+  .section-tight{padding:70px 0;}
+  .section-head{max-width:720px;margin:0 0 48px;}
+  .section-head.center{margin:0 auto 48px;text-align:center;}
+  .kicker{
+    display:inline-block;font-size:13px;font-weight:800;color:var(--teal-600);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;
+  }
+  .section-head h2{font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;margin:0 0 14px;color:var(--navy-900);}
+  .section-head p{font-size:16.5px;color:var(--ink-600);line-height:1.7;margin:0;}
+  .bg-alt{background:var(--paper-50);}
+
+  /* ============ WHO WE SERVE ============ */
+  .serve-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .serve-card{
+    background:#fff;border:1px solid var(--line-100);border-radius:var(--radius-lg);
+    padding:34px;box-shadow:var(--shadow-card);transition:box-shadow .2s ease, transform .2s ease;
+  }
+  .serve-card:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-3px);}
+  .serve-icon{
+    width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(155deg,#12b89f22,#12b89f0d);color:var(--teal-600);margin-bottom:18px;
+  }
+  .serve-icon svg{width:28px;height:28px;}
+  .serve-card h3{font-size:21px;font-weight:800;margin:0 0 6px;color:var(--navy-900);}
+  .serve-card p.desc{font-size:15px;color:var(--ink-600);line-height:1.7;margin:0 0 14px;}
+  .serve-toggle{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:var(--teal-600);background:none;border:none;padding:0;}
+  .serve-toggle svg{width:14px;height:14px;transition:transform .2s ease;}
+  .serve-card.open .serve-toggle svg{transform:rotate(180deg);}
+  .serve-more{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .serve-card.open .serve-more{max-height:220px;}
+  .serve-more-inner{padding-top:14px;border-top:1px solid var(--line-100);margin-top:14px;}
+  .serve-more-inner li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-600);padding:5px 0;}
+  .serve-more-inner li svg{width:16px;height:16px;color:var(--teal-600);flex-shrink:0;margin-top:2px;}
+  .serve-learn{display:inline-block;margin-top:16px;font-weight:700;font-size:14px;color:var(--navy-900);border-bottom:2px solid var(--amber-500);padding-bottom:2px;}
+
+  /* ============ ABOUT / GROWTH ============ */
+  .about-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:52px;align-items:center;}
+  .about-copy p{font-size:16.5px;line-height:1.8;color:var(--ink-600);margin:0 0 26px;}
+  .about-visual{
+    position:relative;border-radius:24px;overflow:hidden;
+    background:linear-gradient(155deg,var(--navy-900),var(--navy-700));
+    aspect-ratio:4/3;padding:26px;color:#fff;
+  }
+  .about-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;height:100%;}
+  .about-stat-card{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .about-stat-card b{font-size:28px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;}
+  .about-stat-card span{font-size:12.5px;color:#b7bfda;}
+
+  /* ============ FEATURES (14 reasons) ============ */
+  .feat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;}
+  .feat-card{
+    grid-column:span 2;
+    background:#fff;border:1px solid var(--line-100);border-radius:var(--radius-md);
+    padding:26px 22px;position:relative;box-shadow:var(--shadow-card);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  /* last row: 2 cards, each takes half the full width */
+  .feat-card:nth-last-child(-n+2){grid-column:span 3;}
+  .feat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-card-hover);border-color:#cfe9e3;}
+  .feat-num{position:absolute;top:18px;right:20px;font-size:12px;font-weight:800;color:var(--ink-400);}
+  .feat-icon{
+    width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    background:var(--paper-50);color:var(--teal-600);margin-bottom:14px;
+  }
+  .feat-icon svg{width:24px;height:24px;}
+  .feat-card h4{font-size:15.5px;font-weight:800;margin:0 0 8px;color:var(--navy-900);line-height:1.35;}
+  .feat-card p{font-size:13.5px;line-height:1.6;color:var(--ink-600);margin:0;}
+
+  /* ============ CTA BANNER ============ */
+  .cta-banner{
+    background:linear-gradient(120deg,var(--navy-950),var(--navy-800) 60%, #0e6a5b);
+    border-radius:28px;padding:60px 50px;color:#fff;text-align:center;position:relative;overflow:hidden;
+  }
+  .cta-banner::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(500px 260px at 85% 20%, rgba(63,212,189,.25), transparent 60%);
+  }
+  .cta-banner h2{position:relative;font-size:clamp(24px,3vw,32px);font-weight:800;margin:0 0 12px;}
+  .cta-banner p{position:relative;color:#c4cbe0;max-width:560px;margin:0 auto 30px;font-size:16px;line-height:1.7;}
+  .cta-actions{position:relative;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* ============ TRUST STRIP ============ */
+  .trust-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 34px;}
+  .trust-chip{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink-600);font-size:14px;opacity:.85;}
+  .trust-chip svg{width:22px;height:22px;color:var(--teal-600);}
+
+  /* ============ FAQ ============ */
+  .faq-list{max-width:800px;margin:0 auto;}
+  .faq-item{border-bottom:1px solid var(--line-100);}
+  .faq-q{
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:22px 4px;background:none;border:none;text-align:left;
+    font-size:16.5px;font-weight:700;color:var(--navy-900);
+  }
+  .faq-q .plus{width:22px;height:22px;flex-shrink:0;position:relative;}
+  .faq-q .plus::before,.faq-q .plus::after{content:"";position:absolute;background:var(--teal-600);border-radius:2px;}
+  .faq-q .plus::before{width:14px;height:2px;top:10px;left:4px;}
+  .faq-q .plus::after{width:2px;height:14px;left:10px;top:4px;transition:transform .2s ease;}
+  .faq-item.open .faq-q .plus::after{transform:rotate(90deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .faq-a-inner{padding:0 4px 22px;color:var(--ink-600);font-size:15px;line-height:1.75;}
+
+  /* ============ MAINTAINER STRIP ============ */
+  .maintainer{
+    display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+    background:var(--paper-50);border:1px dashed var(--line-100);border-radius:16px;
+    padding:22px 26px;text-align:center;
+  }
+  .maintainer b{color:var(--navy-900);}
+  .maintainer-badge{
+    display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line-100);
+    padding:8px 14px;border-radius:999px;font-weight:800;font-size:13.5px;color:var(--teal-600);
+    box-shadow:var(--shadow-card);
+  }
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--navy-950);color:#c4cbe0;padding-top:70px;}
+  .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:40px;padding-bottom:50px;border-bottom:1px solid rgba(255,255,255,.1);}
+  .footer-brand .brand-word{color:#fff;}
+  .footer-brand p{font-size:14.5px;line-height:1.7;color:#a4acc6;margin:16px 0 22px;max-width:280px;}
+  .footer-contact{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#a4acc6;margin-bottom:10px;}
+  .footer-contact svg{width:17px;height:17px;flex-shrink:0;margin-top:2px;color:var(--teal-400);}
+  .social-row{display:flex;gap:10px;margin-top:20px;}
+  .social-btn{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1);transition:background .2s ease;}
+  .social-btn:hover{background:var(--teal-500);}
+  .social-btn svg{width:17px;height:17px;color:#fff;}
+  .footer-col h5{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin:0 0 18px;}
+  .footer-col a{display:block;font-size:14.5px;color:#a4acc6;padding:7px 0;transition:color .15s ease;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding:26px 0 30px;font-size:13.5px;color:#8189a6;}
+  .footer-bottom .legal-links{display:flex;gap:22px;flex-wrap:wrap;}
+  .footer-bottom a:hover{color:#fff;}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1080px){
+    .feat-grid{grid-template-columns:repeat(2,1fr);}
+    .feat-card, .feat-card:nth-last-child(-n+2){grid-column:span 1;}
+    .footer-top{grid-template-columns:1.2fr 1fr 1fr;}
+    .footer-top .footer-col:nth-child(4),.footer-top .footer-col:nth-child(5){grid-column:span 1;}
+  }
+  @media (max-width:900px){
+    .nav-menu, .nav-actions .btn-ghost{display:none;}
+    .hamburger{display:flex;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1;min-height:260px;}
+    .swing-rig{max-width:220px;}
+    .swing-badge{width:170px;height:170px;}
+    .swing-badge b{font-size:60px;}
+    .serve-grid{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr;}
+    .footer-top{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    section{padding:60px 0;}
+    .cta-banner{padding:42px 22px;}
+    .footer-top{grid-template-columns:1fr 1fr;gap:30px;}
+    .hero{padding:40px 0 60px;}
+    .nav-inner{height:68px;}
+  }
+</style><style>
+  /* ============ EXAM BROWSER HERO ============ */
+  .exam-hero{
+    position:relative;overflow:hidden;padding:52px 0 40px;
+    background:radial-gradient(900px 460px at 10% -20%, #16305f 0%, transparent 60%),
+               radial-gradient(800px 460px at 100% 0%, #0f6b5c 0%, transparent 55%),
+               linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 70%, var(--navy-800) 100%);
+    color:#fff;
+  }
+  .exam-hero h1{font-size:clamp(26px,3.6vw,38px);font-weight:800;letter-spacing:-.02em;margin:0 0 12px;}
+  .exam-hero p{font-size:15.5px;color:#c4cbe0;max-width:600px;margin:0;line-height:1.7;}
+
+  /* ============ SCREEN SWITCHING ============ */
+  .exam-screen{display:none;}
+  .exam-screen.active{display:block;}
+  .hidden{display:none !important;}
+
+  /* ============ FILTER BAR ============ */
+  .filter-panel{
+    background:#fff;border:1px solid var(--line-100);border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);padding:22px;margin:-46px 0 34px;position:relative;z-index:2;
+  }
+  .filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;align-items:end;}
+  .filter-field label{display:block;font-size:12px;font-weight:800;color:var(--ink-600);margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em;}
+  .filter-field select, .filter-field input{
+    width:100%;padding:11px 13px;border:1.5px solid var(--line-100);border-radius:11px;
+    font-size:13.5px;background:var(--paper-50);font-family:'Inter',sans-serif;color:var(--ink-900);
+  }
+  .filter-field select:focus, .filter-field input:focus{
+    outline:none;border-color:var(--teal-500);background:#fff;box-shadow:0 0 0 4px rgba(18,184,159,.14);
+  }
+  .filter-search-field{position:relative;}
+  .filter-search-field svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-400);}
+  .filter-search-field input{padding-left:36px;}
+  .filter-reset{
+    display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ink-600);
+    background:none;border:none;padding:11px 4px;cursor:pointer;white-space:nowrap;
+  }
+  .filter-reset:hover{color:var(--teal-600);}
+  .filter-reset svg{width:14px;height:14px;}
+
+  /* ============ RESULT COUNT / STATE ============ */
+  .result-count{font-size:13.5px;color:var(--ink-600);margin-bottom:18px;}
+  .result-count b{color:var(--navy-900);}
+  .state-box{
+    text-align:center;padding:60px 24px;border:1px dashed var(--line-100);border-radius:var(--radius-md);
+    color:var(--ink-600);background:var(--paper-50);font-size:14.5px;
+  }
+  .state-box svg{width:34px;height:34px;color:var(--ink-400);margin-bottom:14px;}
+
+  /* ============ EXAM / SCHOOL CARD GRID ============ */
+  .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:980px){ .card-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:640px){ .card-grid{grid-template-columns:1fr;} }
+
+  .browse-card{
+    background:#fff;border:1px solid var(--line-100);border-radius:var(--radius-md);
+    padding:22px;text-align:left;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    box-shadow:var(--shadow-card);width:100%;font-family:inherit;
+  }
+  .browse-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-card-hover);border-color:#cfe9e3;}
+  .browse-card-icon{
+    width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:var(--paper-50);color:var(--teal-600);margin-bottom:14px;
+  }
+  .browse-card-icon svg{width:22px;height:22px;}
+  .browse-card h3{font-size:15.5px;font-weight:800;color:var(--navy-900);margin:0 0 8px;line-height:1.4;}
+  .browse-card-meta{display:flex;flex-wrap:wrap;gap:6px;}
+  .meta-chip{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--paper-100);color:var(--ink-600);}
+  .meta-chip.accent{background:rgba(18,184,159,.1);color:var(--teal-600);}
+
+  /* ============ LOADING STATE ============ */
+  .loading-block{text-align:center;padding:80px 24px;}
+  .spinner-ring{width:44px;height:44px;margin:0 auto 18px;border:5px solid var(--paper-100);border-top-color:var(--teal-500);border-radius:50%;animation:eb-spin .8s linear infinite;}
+  @keyframes eb-spin{ to{transform:rotate(360deg);} }
+  .loading-block p{font-weight:700;color:var(--navy-900);margin:0;font-size:14.5px;}
+
+  /* ============ BACK BAR ============ */
+  .back-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:26px;}
+  .back-btn{
+    display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;
+    color:var(--navy-900);background:var(--paper-50);border:1px solid var(--line-100);
+    padding:10px 18px;border-radius:999px;cursor:pointer;font-family:inherit;
+  }
+  .back-btn:hover{background:var(--paper-100);}
+  .back-btn svg{width:16px;height:16px;}
+  .screen-title{font-size:19px;font-weight:800;color:var(--navy-900);margin:0;}
+  .screen-title small{display:block;font-size:12.5px;font-weight:600;color:var(--ink-400);margin-top:3px;}
+
+  /* ============ RESULTS OVERLAY (Stage 3) ============ */
+  .results-overlay{
+    position:fixed;inset:0;z-index:500;background:#fff;
+    display:flex;flex-direction:column;
+    transform:translateY(16px);opacity:0;visibility:hidden;
+    transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .results-overlay.active{opacity:1;transform:translateY(0);visibility:visible;}
+  .results-topbar{
+    flex-shrink:0;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:14px 20px;border-bottom:1px solid var(--line-100);background:#fff;
+  }
+  .results-topbar .back-btn{flex-shrink:0;}
+  .results-titles{min-width:0;flex:1;}
+  .results-titles .exam-name{font-size:12.5px;font-weight:800;color:var(--teal-600);text-transform:uppercase;letter-spacing:.03em;}
+  .results-titles .school-name{font-size:16px;font-weight:800;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .results-titles .centre-no{font-size:12.5px;color:var(--ink-400);}
+  .results-frame-wrap{flex:1;min-height:0;}
+  .results-frame-wrap iframe{width:100%;height:100%;border:none;display:block;}
+  .results-error{padding:60px 24px;text-align:center;color:var(--ink-600);}
+
+  /* ============ PDF DOWNLOAD FAB ============ */
+  .pdf-download-fab{
+    position:fixed;right:22px;bottom:22px;z-index:600;
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 20px;border-radius:999px;border:none;
+    background:var(--teal-500);color:#fff;font-weight:700;font-size:14px;font-family:inherit;
+    box-shadow:0 12px 26px -10px rgba(18,184,159,.55);cursor:pointer;
+    transition:background .2s ease, transform .15s ease;
+  }
+  .pdf-download-fab:hover{background:var(--teal-600);}
+  .pdf-download-fab:active{transform:scale(.97);}
+  .pdf-download-fab:disabled{background:#9fb0c9;cursor:not-allowed;}
+  .pdf-download-fab svg{width:17px;height:17px;flex-shrink:0;}
+  .pdf-spinner-ring{
+    width:15px;height:15px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;
+    border-radius:50%;display:inline-block;animation:pdf-fab-spin .7s linear infinite;flex-shrink:0;
+  }
+  @keyframes pdf-fab-spin{ to{transform:rotate(360deg);} }
+  @media (max-width:480px){
+    .pdf-download-fab{right:14px;bottom:14px;padding:11px 16px;font-size:13px;}
+    .pdf-download-fab .pdf-btn-label{display:none;}
+  }
+
+  @media (max-width:640px){
+    .filter-panel{margin-top:-30px;padding:16px;}
+    .results-titles .school-name{white-space:normal;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand" aria-label="ShuleBrain home">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="13" fill="url(#navLogoGrad)"/>
+        <path d="M13 30.5c1.6 2.4 4.6 3.8 8 3.8 4.6 0 7.6-1.9 7.6-5 0-2.6-1.8-3.9-5.6-4.7l-3-.6c-1.6-.3-2.3-.8-2.3-1.7 0-1.1 1.2-1.9 3.1-1.9 2 0 3.4.8 4.2 2.3l3.6-1.9c-1.4-2.6-4.2-4.1-7.7-4.1-4.3 0-7.3 2.2-7.3 5.3 0 2.6 1.7 4 5.3 4.7l3 .6c1.8.4 2.5.9 2.5 1.8 0 1.2-1.3 1.9-3.4 1.9-2.3 0-4-1-4.9-2.7L13 30.5z" fill="#fff"/>
+        <path d="M31.5 15v18.5" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".0"/>
+        <defs>
+          <linearGradient id="navLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#16C8AC"/>
+            <stop offset="1" stop-color="#0B6E5C"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-word">Shule<span>Brain</span></span>
+    </a>
+
+    <nav class="nav-menu" aria-label="Primary">
+      <div class="nav-item" data-dropdown>
+        <button class="nav-link" type="button" aria-expanded="false">Results <span class="caret"></span></button>
+        <div class="dropdown" role="menu">
+          <a class="dropdown-link" href="joint.html" role="menuitem">Joint Examination<small>Combined school results processing</small></a>
+          <a class="dropdown-link" href="mock.html" role="menuitem">MOCK Examination<small>Trial exam results & rankings</small></a>
+          <a class="dropdown-link" href="zonal.html" role="menuitem">Zonal Examination<small>Zonal-level result analysis</small></a>
+        </div>
+      </div>
+
+      <div class="nav-item" data-dropdown>
+        <button class="nav-link" type="button" aria-expanded="false">Other Services <span class="caret"></span></button>
+        <div class="dropdown" role="menu">
+          <a class="dropdown-link" href="contact.html" role="menuitem">Web Design And Development<small>Custom school & business websites</small></a>
+          <a class="dropdown-link" href="contact.html" role="menuitem">Desktop Software Development<small>Tailor-made desktop systems</small></a>
+          <a class="dropdown-link" href="contact.html" role="menuitem">Hybrid Android App Development<small>Cross-platform mobile apps</small></a>
+        </div>
+      </div>
+
+      <a class="nav-link" href="template.html">Template</a>
+      <a class="nav-link" href="blogs.html">Blogs</a>
+      <a class="nav-link" href="contact.html">Contacts</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="contact.html" class="btn btn-ghost">Contacts</a>
+      <a href="download.html" class="btn btn-amber">Download</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MOBILE DRAWER ============ -->
+<div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Mobile menu">
+  <div class="mobile-drawer-head">
+    <span class="brand-word">Shule<span style="color:var(--teal-600)">Brain</span></span>
+    <button class="hamburger" id="drawerCloseBtn" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-body">
+    <button class="m-accordion-btn" data-m-toggle="m-results" aria-expanded="false">Results <span class="caret"></span></button>
+    <div class="m-accordion-panel" id="m-results">
+      <a href="joint.html">Joint Examination</a>
+      <a href="mock.html">MOCK Examination</a>
+      <a href="zonal.html">Zonal Examination</a>
+    </div>
+
+    <button class="m-accordion-btn" data-m-toggle="m-services" aria-expanded="false">Other Services <span class="caret"></span></button>
+    <div class="m-accordion-panel" id="m-services">
+      <a href="contact.html">Web Design And Development</a>
+      <a href="contact.html">Desktop Software Development</a>
+      <a href="contact.html">Hybrid Android App Development</a>
+    </div>
+
+    <a class="m-plain-link" href="template.html">Template</a>
+    <a class="m-plain-link" href="blogs.html">Blogs</a>
+    <a class="m-plain-link" href="contact.html">Contacts</a>
+
+    <div class="drawer-cta">
+      <a href="download.html" class="btn btn-amber" style="width:100%;">Download</a>
+    </div>
+  </div>
+</div>
+<div id="drawerOverlay" style="position:fixed;inset:0;background:rgba(7,12,34,.5);z-index:150;opacity:0;visibility:hidden;transition:opacity .25s ease;"></div>
+
+<!-- ============ EXAM BROWSER HERO ============ -->
+<section class="exam-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span style="color:#fff;">Zonal Examination</span></div>
+    <h1>Zonal Examination Results</h1>
+    <p>Browse every published Zonal examination &mdash; filter by class and year, then drill down to a school&rsquo;s results.</p>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ===================== SCREEN 1 : EXAM LIST ===================== -->
+  <section class="exam-screen active" id="screen-exams">
+    <div class="filter-panel">
+      <div class="filter-grid">
+        
+        <div class="filter-field">
+          <label for="filterClass">Class</label>
+          <select id="filterClass">
+            <option value="">All classes</option>
+            <option value="F1">Form 1</option>
+            <option value="F2">Form 2</option>
+            <option value="F3">Form 3</option>
+            <option value="F4">Form 4</option>
+            <option value="F5">Form 5</option>
+            <option value="F6">Form 6</option>
+            <option value="STD1">Standard 1</option>
+            <option value="STD2">Standard 2</option>
+            <option value="STD3">Standard 3</option>
+            <option value="STD4">Standard 4</option>
+            <option value="STD5">Standard 5</option>
+            <option value="STD6">Standard 6</option>
+            <option value="STD7">Standard 7</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="filterYear">Year conducted</label>
+          <select id="filterYear"><option value="">All years</option></select>
+        </div>
+        <div class="filter-field filter-search-field" style="grid-column:span 2;">
+          <label for="filterSearch">Search</label>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="search" id="filterSearch" placeholder="Search by exam title or code&hellip;">
+        </div>
+        <div class="filter-field">
+          <button type="button" class="filter-reset" id="filterResetBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            Reset filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-count" id="examResultCount"></div>
+    <div id="examGrid" class="card-grid" aria-busy="true">
+      <div class="loading-block" style="grid-column:1/-1;">
+        <div class="spinner-ring"></div>
+        <p>Loading examinations&hellip;</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 2 : SCHOOL LIST ===================== -->
+  <section class="exam-screen" id="screen-schools">
+    <div class="back-bar">
+      <button type="button" class="back-btn" id="backToExamsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Back to examinations
+      </button>
+      <h2 class="screen-title" id="schoolsScreenTitle">Schools<small id="schoolsScreenSub"></small></h2>
+    </div>
+
+    <div id="schoolsLoading" class="loading-block">
+      <div class="spinner-ring"></div>
+      <p>Loading schools for this examination&hellip;</p>
+    </div>
+
+    <div id="schoolsContent" class="hidden">
+      <div class="filter-panel" style="margin-top:0;">
+        <div class="filter-grid">
+          <div class="filter-field">
+            <label for="schoolFilterRegion">Region</label>
+            <select id="schoolFilterRegion"><option value="">All regions</option></select>
+          </div>
+          <div class="filter-field">
+            <label for="schoolFilterDistrict">District</label>
+            <select id="schoolFilterDistrict"><option value="">All districts</option></select>
+          </div>
+          <div class="filter-field filter-search-field" style="grid-column:span 2;">
+            <label for="schoolFilterSearch">Search</label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" id="schoolFilterSearch" placeholder="Search by school name or centre number&hellip;">
+          </div>
+          <div class="filter-field">
+            <button type="button" class="filter-reset" id="schoolFilterResetBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+              Reset filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-count" id="schoolResultCount"></div>
+      <div id="schoolGrid" class="card-grid"></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===================== SCREEN 3 : RESULTS OVERLAY ===================== -->
+<div class="results-overlay" id="resultsOverlay">
+  <div class="results-topbar">
+    <button type="button" class="back-btn" id="backToSchoolsBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      Back
+    </button>
+    <div class="results-titles">
+      <div class="exam-name" id="resultsExamName"></div>
+      <div class="school-name" id="resultsSchoolName"></div>
+      <div class="centre-no" id="resultsCentreNo"></div>
+    </div>
+  </div>
+  <div class="results-frame-wrap" id="resultsFrameWrap"></div>
+
+  <button type="button" class="pdf-download-fab" id="downloadPdfBtn" title="Download these results as a PDF">
+    <svg class="pdf-icon-default" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+    <span class="pdf-spinner-ring hidden"></span>
+    <span class="pdf-btn-label">Download PDF</span>
+  </button>
+</div>
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="13" fill="url(#footLogoGrad)"/>
+            <path d="M13 30.5c1.6 2.4 4.6 3.8 8 3.8 4.6 0 7.6-1.9 7.6-5 0-2.6-1.8-3.9-5.6-4.7l-3-.6c-1.6-.3-2.3-.8-2.3-1.7 0-1.1 1.2-1.9 3.1-1.9 2 0 3.4.8 4.2 2.3l3.6-1.9c-1.4-2.6-4.2-4.1-7.7-4.1-4.3 0-7.3 2.2-7.3 5.3 0 2.6 1.7 4 5.3 4.7l3 .6c1.8.4 2.5.9 2.5 1.8 0 1.2-1.3 1.9-3.4 1.9-2.3 0-4-1-4.9-2.7L13 30.5z" fill="#fff"/>
+            <defs>
+              <linearGradient id="footLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#16C8AC"/><stop offset="1" stop-color="#0B6E5C"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="brand-word">Shule<span style="color:var(--teal-400)">Brain</span></span>
+        </a>
+        <p>Advanced School And Result Management System with a unique 24/7 friendly support approach — built for schools that want one dependable system.</p>
+        <div class="footer-contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .8 3a2 2 0 01-.5 2.1L8 10.1a16 16 0 006 6l1.3-1.4a2 2 0 012.1-.5c1 .4 2 .7 3 .8a2 2 0 011.6 2z"/></svg>
+          <span>+255 700 000 000</span>
+        </div>
+        <div class="footer-contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.7-7-11a7 7 0 0114 0c0 5.3-7 11-7 11z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Dar es Salaam, Tanzania</span>
+        </div>
+        <div class="social-row">
+          <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V9c0-.9.2-1.5 1.6-1.5h1.6V4.7c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.2H7.3V14h2.7v8z"/></svg></a>
+          <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg></a>
+          <a class="social-btn" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM3 9h4v12H3zM9 9h3.8v1.7h.05C13.4 9.6 14.9 9 16.7 9c3.9 0 4.6 2.6 4.6 5.9V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h5>Results</h5>
+        <a href="joint.html">Joint Examination</a>
+        <a href="mock.html">MOCK Examination</a>
+        <a href="zonal.html">Zonal Examination</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Other Services</h5>
+        <a href="contact.html">Web Design And Development</a>
+        <a href="contact.html">Desktop Software Development</a>
+        <a href="contact.html">Hybrid Android App Development</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">About ShuleBrain</a>
+        <a href="contact.html">Contacts</a>
+        <a href="download.html">Download</a>
+        <a href="admin.html">Admin Dashboard</a>
+      </div>
+
+      <div class="footer-col">
+        <h5>Maintainer</h5>
+        <a href="#">NewVemo Technology</a>
+        <a href="contact.html">Support</a>
+        <a href="contact.html">Report an issue</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2024–2026 ShuleBrain DSK. Maintained by NewVemo Technology.</span>
+      <div class="legal-links">
+        <a href="#">Terms of Use</a>
+        <a href="#">Privacy Policy</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+/* =======================================================================
+   ShuleBrain front-end interactions.
+   Heavily defensive: every feature initializer and every event handler
+   is wrapped in nested try/catch so a failure in one widget can never
+   take down the rest of the page.
+   ======================================================================= */
+(function shuleBrainApp(){
+  "use strict";
+
+  function safeQuery(selector, root){
+    try{
+      try{
+        return (root || document).querySelectorAll(selector);
+      }catch(innerQueryErr){
+        console.warn("[ShuleBrain] inner query failed for", selector, innerQueryErr);
+        return [];
+      }
+    }catch(outerQueryErr){
+      console.error("[ShuleBrain] safeQuery fatal error", outerQueryErr);
+      return [];
+    }
+  }
+
+  /* ---------------------- Desktop dropdown menus ---------------------- */
+  function initDesktopDropdowns(){
+    try{
+      var items = safeQuery("[data-dropdown]");
+      items.forEach(function(item){
+        try{
+          var btn = item.querySelector(".nav-link");
+          try{
+            function openItem(){
+              try{ item.classList.add("open"); btn.setAttribute("aria-expanded","true"); }
+              catch(e){ console.warn("[ShuleBrain] could not open dropdown", e); }
+            }
+            function closeItem(){
+              try{ item.classList.remove("open"); btn.setAttribute("aria-expanded","false"); }
+              catch(e){ console.warn("[ShuleBrain] could not close dropdown", e); }
+            }
+            item.addEventListener("mouseenter", function(){
+              try{ openItem(); }catch(e){ try{ console.error(e);}catch(f){} }
+            });
+            item.addEventListener("mouseleave", function(){
+              try{ closeItem(); }catch(e){ try{ console.error(e);}catch(f){} }
+            });
+            btn.addEventListener("click", function(evt){
+              try{
+                evt.preventDefault();
+                try{
+                  var isOpen = item.classList.contains("open");
+                  if(isOpen){ closeItem(); } else { openItem(); }
+                }catch(toggleErr){
+                  console.error("[ShuleBrain] dropdown toggle failed", toggleErr);
+                }
+              }catch(clickErr){
+                console.error("[ShuleBrain] dropdown click handler failed", clickErr);
+              }
+            });
+          }catch(bindErr){
+            console.error("[ShuleBrain] failed binding dropdown events", bindErr);
+          }
+        }catch(itemErr){
+          console.error("[ShuleBrain] dropdown item setup failed", itemErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initDesktopDropdowns fatal error", fatalErr);
+    }
+  }
+
+  /* --------------------------- Mobile drawer --------------------------- */
+  function initMobileDrawer(){
+    try{
+      var hamburger = document.getElementById("hamburgerBtn");
+      var closeBtn = document.getElementById("drawerCloseBtn");
+      var drawer = document.getElementById("mobileDrawer");
+      var overlay = document.getElementById("drawerOverlay");
+
+      function showDrawer(){
+        try{
+          try{
+            drawer.classList.add("active");
+            overlay.style.visibility = "visible";
+            overlay.style.opacity = "1";
+            hamburger.setAttribute("aria-expanded","true");
+            document.body.style.overflow = "hidden";
+          }catch(innerShowErr){
+            console.warn("[ShuleBrain] partial failure while showing drawer", innerShowErr);
+          }
+        }catch(showErr){
+          console.error("[ShuleBrain] showDrawer failed", showErr);
+        }
+      }
+
+      function hideDrawer(){
+        try{
+          try{
+            drawer.classList.remove("active");
+            overlay.style.opacity = "0";
+            overlay.style.visibility = "hidden";
+            hamburger.setAttribute("aria-expanded","false");
+            document.body.style.overflow = "";
+          }catch(innerHideErr){
+            console.warn("[ShuleBrain] partial failure while hiding drawer", innerHideErr);
+          }
+        }catch(hideErr){
+          console.error("[ShuleBrain] hideDrawer failed", hideErr);
+        }
+      }
+
+      if(hamburger){
+        hamburger.addEventListener("click", function(){
+          try{ showDrawer(); }
+          catch(e){ try{ console.error("[ShuleBrain] hamburger click failed", e); }catch(f){} }
+        });
+      }
+      if(closeBtn){
+        closeBtn.addEventListener("click", function(){
+          try{ hideDrawer(); }
+          catch(e){ try{ console.error("[ShuleBrain] close click failed", e); }catch(f){} }
+        });
+      }
+      if(overlay){
+        overlay.addEventListener("click", function(){
+          try{ hideDrawer(); }
+          catch(e){ try{ console.error("[ShuleBrain] overlay click failed", e); }catch(f){} }
+        });
+      }
+
+      /* mobile accordion inside drawer */
+      var mToggles = safeQuery("[data-m-toggle]");
+      mToggles.forEach(function(toggle){
+        try{
+          toggle.addEventListener("click", function(){
+            try{
+              var targetId = toggle.getAttribute("data-m-toggle");
+              try{
+                var panel = document.getElementById(targetId);
+                var isOpen = toggle.getAttribute("aria-expanded") === "true";
+                try{
+                  if(isOpen){
+                    panel.style.maxHeight = "0px";
+                    toggle.setAttribute("aria-expanded","false");
+                  } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                    toggle.setAttribute("aria-expanded","true");
+                  }
+                }catch(applyErr){
+                  console.error("[ShuleBrain] applying accordion state failed", applyErr);
+                }
+              }catch(panelErr){
+                console.error("[ShuleBrain] could not resolve accordion panel", panelErr);
+              }
+            }catch(toggleClickErr){
+              console.error("[ShuleBrain] mobile accordion click failed", toggleClickErr);
+            }
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] failed to bind mobile accordion", bindErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initMobileDrawer fatal error", fatalErr);
+    }
+  }
+
+  /* ------------------------ "Who we serve" cards ------------------------ */
+  function initServeCards(){
+    try{
+      var toggles = safeQuery("[data-serve-toggle]");
+      toggles.forEach(function(toggle){
+        try{
+          toggle.addEventListener("click", function(){
+            try{
+              var card = toggle.closest("[data-serve]");
+              try{
+                var willOpen = !card.classList.contains("open");
+                if(willOpen){
+                  card.classList.add("open");
+                  toggle.setAttribute("aria-expanded","true");
+                } else {
+                  card.classList.remove("open");
+                  toggle.setAttribute("aria-expanded","false");
+                }
+              }catch(stateErr){
+                console.error("[ShuleBrain] serve card state change failed", stateErr);
+              }
+            }catch(clickErr){
+              console.error("[ShuleBrain] serve toggle click failed", clickErr);
+            }
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] serve toggle bind failed", bindErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initServeCards fatal error", fatalErr);
+    }
+  }
+
+  /* --------------------------------- FAQ --------------------------------- */
+  function initFaq(){
+    try{
+      var faqItems = safeQuery("[data-faq-toggle]");
+      faqItems.forEach(function(btn){
+        try{
+          var item = btn.closest(".faq-item");
+          var panel = item ? item.querySelector(".faq-a") : null;
+
+          try{
+            if(item && item.classList.contains("open") && panel){
+              panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+          }catch(initStateErr){
+            console.warn("[ShuleBrain] FAQ initial state failed", initStateErr);
+          }
+
+          btn.addEventListener("click", function(){
+            try{
+              try{
+                var isOpen = item.classList.contains("open");
+                if(isOpen){
+                  item.classList.remove("open");
+                  btn.setAttribute("aria-expanded","false");
+                  panel.style.maxHeight = "0px";
+                } else {
+                  item.classList.add("open");
+                  btn.setAttribute("aria-expanded","true");
+                  panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+              }catch(toggleErr){
+                console.error("[ShuleBrain] FAQ toggle failed", toggleErr);
+              }
+            }catch(clickErr){
+              console.error("[ShuleBrain] FAQ click handler failed", clickErr);
+            }
+          });
+        }catch(itemErr){
+          console.error("[ShuleBrain] FAQ item setup failed", itemErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initFaq fatal error", fatalErr);
+    }
+  }
+
+  /* --------------------------- Smooth in-page nav --------------------------- */
+  function initSmoothAnchors(){
+    try{
+      var anchors = safeQuery('a[href^="#"]');
+      anchors.forEach(function(anchor){
+        try{
+          anchor.addEventListener("click", function(evt){
+            try{
+              var hash = anchor.getAttribute("href");
+              try{
+                if(hash && hash.length > 1){
+                  var target = document.querySelector(hash);
+                  if(target){
+                    evt.preventDefault();
+                    try{
+                      target.scrollIntoView({behavior:"smooth", block:"start"});
+                    }catch(scrollErr){
+                      console.warn("[ShuleBrain] smooth scroll unsupported, using fallback", scrollErr);
+                      try{ window.location.hash = hash; }
+                      catch(fallbackErr){ console.error("[ShuleBrain] anchor fallback failed", fallbackErr); }
+                    }
+                  }
+                }
+              }catch(resolveErr){
+                console.error("[ShuleBrain] resolving anchor target failed", resolveErr);
+              }
+            }catch(clickErr){
+              console.error("[ShuleBrain] anchor click handler failed", clickErr);
+            }
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] anchor bind failed", bindErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initSmoothAnchors fatal error", fatalErr);
+    }
+  }
+
+  /* ------------------------- Sticky navbar shadow ------------------------- */
+  function initNavbarShadow(){
+    try{
+      var nav = document.querySelector(".navbar");
+      if(!nav) return;
+      window.addEventListener("scroll", function(){
+        try{
+          try{
+            if(window.scrollY > 8){
+              nav.style.boxShadow = "0 8px 24px -12px rgba(13,19,48,.18)";
+            } else {
+              nav.style.boxShadow = "none";
+            }
+          }catch(styleErr){
+            console.warn("[ShuleBrain] navbar shadow style update failed", styleErr);
+          }
+        }catch(scrollHandlerErr){
+          console.error("[ShuleBrain] scroll handler failed", scrollHandlerErr);
+        }
+      }, {passive:true});
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initNavbarShadow fatal error", fatalErr);
+    }
+  }
+
+  /* Recalculate open accordion heights on resize (keeps layout correct) */
+  function initResizeRecalc(){
+    try{
+      window.addEventListener("resize", function(){
+        try{
+          try{
+            safeQuery(".faq-item.open .faq-a").forEach(function(panel){
+              try{ panel.style.maxHeight = panel.scrollHeight + "px"; }
+              catch(e){ console.warn("[ShuleBrain] faq resize recalculation failed", e); }
+            });
+            safeQuery(".m-accordion-panel").forEach(function(panel){
+              try{
+                var relatedBtn = document.querySelector('[data-m-toggle="'+panel.id+'"]');
+                if(relatedBtn && relatedBtn.getAttribute("aria-expanded") === "true"){
+                  panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+              }catch(e){ console.warn("[ShuleBrain] mobile accordion resize recalculation failed", e); }
+            });
+          }catch(innerResizeErr){
+            console.error("[ShuleBrain] resize recalculation inner failure", innerResizeErr);
+          }
+        }catch(resizeErr){
+          console.error("[ShuleBrain] resize handler failed", resizeErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initResizeRecalc fatal error", fatalErr);
+    }
+  }
+
+  /* ------------------------------ Boot sequence ------------------------------ */
+  function boot(){
+    try{
+      try{ initDesktopDropdowns(); }
+      catch(e){ console.error("[ShuleBrain] boot: initDesktopDropdowns crashed", e); }
+
+      try{ initMobileDrawer(); }
+      catch(e){ console.error("[ShuleBrain] boot: initMobileDrawer crashed", e); }
+
+      try{ initServeCards(); }
+      catch(e){ console.error("[ShuleBrain] boot: initServeCards crashed", e); }
+
+      try{ initFaq(); }
+      catch(e){ console.error("[ShuleBrain] boot: initFaq crashed", e); }
+
+      try{ initSmoothAnchors(); }
+      catch(e){ console.error("[ShuleBrain] boot: initSmoothAnchors crashed", e); }
+
+      try{ initNavbarShadow(); }
+      catch(e){ console.error("[ShuleBrain] boot: initNavbarShadow crashed", e); }
+
+      try{ initResizeRecalc(); }
+      catch(e){ console.error("[ShuleBrain] boot: initResizeRecalc crashed", e); }
+
+    }catch(bootFatalErr){
+      try{
+        console.error("[ShuleBrain] boot sequence fatal error", bootFatalErr);
+      }catch(consoleErr){
+        /* even console failed - nothing more we can safely do */
+      }
+    }
+  }
+
+  try{
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", function(){
+        try{ boot(); }catch(e){ try{ console.error(e); }catch(f){} }
+      });
+    } else {
+      try{ boot(); }catch(e){ try{ console.error(e); }catch(f){} }
+    }
+  }catch(topLevelErr){
+    try{ console.error("[ShuleBrain] top-level init failed", topLevelErr); }catch(f){}
+  }
+
+})();
+</script>
+<script>
+  window.SHULEBRAIN_PAGE_CONFIG = { examType: "ZONAL", showLocationFilters: false };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
+<script>
+/* =======================================================================
+   ShuleBrain examination results browser (shared engine).
+   Three stages: exam list (filtered) -> schools within an exam (filtered)
+   -> a school's results (rendered from a full standalone HTML document
+   stored in results.centre_results.results, shown in a sandboxed iframe).
+   Every stage is wrapped in nested try/catch so a failure in one part
+   never breaks the rest of the page. PAGE_CONFIG (set just above this
+   script) controls exam_type and whether region/district filters show.
+   ======================================================================= */
+(function shuleBrainExamBrowser(){
+  "use strict";
+
+  var CFG = (window.SHULEBRAIN_PAGE_CONFIG || {});
+  var EXAM_TYPE = CFG.examType || "MOCK";
+  var SHOW_LOCATION_FILTERS = !!CFG.showLocationFilters;
+
+  /* --------------------------- Configuration --------------------------- */
+  var SUPABASE_URL = "https://rubxxzcrlgemwvqasdzl.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1Ynh4emNybGdlbXd2cWFzZHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4ODk3NjIsImV4cCI6MjEwMDQ2NTc2Mn0.AIExp7yoRnpVwuHl6Xi70wmKZDM960Q17mn9MU6p6M0";
+  var supabaseClient = null;
+
+  /* --------------------------- Region/district data --------------------------- */
+  /* Same code -> name mapping used by ShuleBrain DSK's Template Creator,
+     so filter labels always match what schools selected when uploading. */
+  const TANZANIA_DATA = {
+
+				regions: {
+					"dodoma":"DODOMA","arusha":"ARUSHA","kilimanjaro":"KILIMANJARO","tanga":"TANGA","morogoro":"MOROGORO",
+					"pwani":"PWANI","dar-es-salaam":"DAR ES SALAAM","lindi":"LINDI","mtwara":"MTWARA","ruvuma":"RUVUMA",
+					"iringa":"IRINGA","mbeya":"MBEYA","singida":"SINGIDA","tabora":"TABORA","rukwa":"RUKWA","kigoma":"KIGOMA",
+					"shinyanga":"SHINYANGA","kagera":"KAGERA","mwanza":"MWANZA","mara":"MARA","manyara":"MANYARA",
+					"njombe":"NJOMBE","katavi":"KATAVI","simiyu":"SIMIYU","geita":"GEITA","songwe":"SONGWE",
+					"kaskazini-unguja":"KASKAZINI UNGUJA","kusini-unguja":"KUSINI UNGUJA","mjini-magharibi":"MJINI MAGHARIBI",
+					"kaskazini-pemba":"KASKAZINI PEMBA","kusini-pemba":"KUSINI PEMBA"
+				},
+
+districts: {
+
+					"dodoma":{
+					"kondoa-dc":"KONDOA DC","mpwapwa-dc":"MPWAPWA DC","kongwa-dc":"KONGWA DC","dodoma-mc":"DODOMA MC",
+					"bahi-dc":"BAHI DC","chemba-dc":"CHEMBA DC","kondoa-tc":"KONDOA TC","chamwino-dc":"CHAMWINO DC"
+					},
+
+					"arusha":{
+					"monduli-dc":"MONDULI DC","meru-dc":"MERU DC","arusha-city":"ARUSHA CITY","karatu-dc":"KARATU DC",
+					"ngorongoro-dc":"NGORONGORO DC","arusha-dc":"ARUSHA DC","longido-dc":"LONGIDO DC"
+					},
+
+					"kilimanjaro":{
+					"rombo-dc":"ROMBO DC","mwanga-dc":"MWANGA DC","same-dc":"SAME DC","moshi-dc":"MOSHI DC",
+					"hai-dc":"HAI DC","moshi-mc":"MOSHI MC","siha-dc":"SIHA DC"
+					},
+
+					"tanga":{
+					"lushoto-dc":"LUSHOTO DC","korogwe-dc":"KOROGWE DC","muheza-dc":"MUHEZA DC","tanga-city":"TANGA CITY",
+					"pangani-dc":"PANGANI DC","handeni-dc":"HANDENI DC","kilindi-dc":"KILINDI DC","mkinga-dc":"MKINGA DC",
+					"korogwe-tc":"KOROGWE TC","handeni-tc":"HANDENI TC","bumbuli-dc":"BUMBULI DC"
+					},
+
+					"morogoro":{
+					"kilosa-dc":"KILOSA DC","morogoro-dc":"MOROGORO DC","kilombero-dc":"KILOMBERO DC","ulanga-dc":"ULANGA DC",
+					"morogoro-mc":"MOROGORO MC","mvomero-dc":"MVOMERO DC","gairo-dc":"GAIRO DC","ifakara-tc":"IFAKARA TC",
+					"malinyi-dc":"MALINYI DC"
+					},
+
+					"pwani":{
+					"bagamoyo-dc":"BAGAMOYO DC","kibaha-dc":"KIBAHA DC","kisarawe-dc":"KISARAWE DC","mkuranga-dc":"MKURANGA DC",
+					"rufiji-dc":"RUFIJI DC","mafia-dc":"MAFIA DC","kibaha-tc":"KIBAHA TC","chalinze-dc":"CHALINZE DC",
+					"kibiti-tc":"KIBITI TC"
+					},
+
+					"dar-es-salaam":{
+					"kinondoni-mc":"KINONDONI MC","ilala-mc":"ILALA MC","temeke-mc":"TEMEKE MC",
+					"ubungo-mc":"UBUNGO MC","kigamboni-mc":"KIGAMBONI MC"
+					},
+
+					"lindi":{
+					"kilwa-dc":"KILWA DC","lindi-dc":"LINDI DC","nachingwea-dc":"NACHINGWEA DC",
+					"liwale-dc":"LIWALE DC","ruangwa-dc":"RUANGWA DC","lindi-mc":"LINDI MC"
+					},
+
+					"mtwara":{
+					"mtwara-dc":"MTWARA DC","newala-dc":"NEWALA DC","masasi-dc":"MASASI DC","tandahimba-dc":"TANDAHIMBA DC",
+					"mtwara-mc":"MTWARA MC","nanyumbu-dc":"NANYUMBU DC","masasi-tc":"MASASI TC",
+					"newala-tc":"NEWALA TC","nanyamba-dc":"NANYAMBA DC"
+					},
+
+					"ruvuma":{
+					"tunduru-dc":"TUNDURU DC","songea-dc":"SONGEA DC","mbinga-dc":"MBINGA DC","songea-mc":"SONGEA MC",
+					"namtumbo-dc":"NAMTUMBO DC","nyasa-dc":"NYASA DC","madaba-dc":"MADABA DC","mbinga-tc":"MBINGA TC"
+					},
+
+					"iringa":{
+					"iringa-dc":"IRINGA DC","mufindi-dc":"MUFINDI DC","iringa-mc":"IRINGA MC",
+					"kilolo-dc":"KILOLO DC","mafinga-tc":"MAFINGA TC"
+					},
+
+					"mbeya":{
+					"chunya-dc":"CHUNYA DC","mbeya-dc":"MBEYA DC","kyela-dc":"KYELA DC","rungwe-dc":"RUNGWE DC",
+					"busokelo-dc":"BUSOKELO DC","mbarali-dc":"MBARALI DC","mbeya-cc":"MBEYA CC"
+					},
+
+					"singida":{
+					"iramba-dc":"IRAMBA DC","singida-dc":"SINGIDA DC","manyoni-dc":"MANYONI DC",
+					"singida-mc":"SINGIDA MC","ikungi-dc":"IKUNGI DC","mkalama-dc":"MKALAMA DC",
+					"itigi-dc":"ITIGI DC","manyoni-tc":"MANYONI TC"
+					},
+
+					"tabora":{
+					"nzega-dc":"NZEGA DC","igunga-dc":"IGUNGA DC","uyui-dc":"UYUI DC","urambo-dc":"URAMBO DC",
+					"sikonge-dc":"SIKONGE DC","tabora-mc":"TABORA MC","kaliua-dc":"KALIUA DC","nzega-tc":"NZEGA TC"
+					},
+
+					"rukwa":{
+					"kalambo-dc":"KALAMBO DC","sumbawanga-dc":"SUMBAWANGA DC",
+					"nkasi-dc":"NKASI DC","sumbawanga-mc":"SUMBAWANGA MC"
+					},
+
+					"kigoma":{
+					"kibondo-dc":"KIBONDO DC","kasulu-dc":"KASULU DC","kigoma-dc":"KIGOMA DC",
+					"kigoma-ujiji-dc":"KIGOMA UJIJI DC","uvinza-dc":"UVINZA DC","buhingwe-dc":"BUHINGWE DC",
+					"kakonko-dc":"KAKONKO DC","kasulu-mjini-dc":"KASULU MJINI DC"
+					},
+
+					"shinyanga":{
+					"shinyanga-mc":"SHINYANGA MC","kishapu-dc":"KISHAPU DC","shinyanga-dc":"SHINYANGA DC",
+					"ushetu-dc":"USHETU DC","kahama-tc":"KAHAMA TC","msalala-dc":"MSALALA DC"
+					},
+
+					"kagera":{
+					"karagwe-dc":"KARAGWE DC","bukoba-dc":"BUKOBA DC","muleba-dc":"MULEBA DC","biharamulo-dc":"BIHARAMULO DC",
+					"ngara-dc":"NGARA DC","bukoba-mc":"BUKOBA MC","missenyi-dc":"MISSENYI DC","kyerwa-dc":"KYERWA DC"
+					},
+
+					"mwanza":{
+					"ukerewe-dc":"UKEREWE DC","magu-dc":"MAGU DC","nyamagana-mc":"NYAMAGANA MC","kwimba-dc":"KWIMBA DC",
+					"sengerema-dc":"SENGEREMA DC","ilemela-mc":"ILEMELA MC","misungwi-dc":"MISUNGWI DC","buchosa-dc":"BUCHOSA DC"
+					},
+
+					"mara":{
+					"tarime-dc":"TARIME DC","serengeti-dc":"SERENGETI DC","musoma-dc":"MUSOMA DC","bunda-dc":"BUNDA DC",
+					"musoma-mc":"MUSOMA MC","rorya-dc":"RORYA DC","butiama-dc":"BUTIAMA DC",
+					"tarime-tc":"TARIME TC","bunda-tc":"BUNDA TC"
+					},
+
+					"manyara":{
+					"babati-dc":"BABATI DC","hanang-dc":"HANANG DC","mbulu-dc":"MBULU DC","simanjiro-dc":"SIMANJIRO DC",
+					"kiteto-dc":"KITETO DC","babati-tc":"BABATI TC","mbulu-tc":"MBULU TC"
+					},
+
+					"njombe":{
+					"njombe-tc":"NJOMBE TC","wangingombe-dc":"WANGINGOMBE DC","makete-dc":"MAKETE DC",
+					"njombe-dc":"NJOMBE DC","ludewa-dc":"LUDEWA DC","makambako-tc":"MAKAMBAKO TC"
+					},
+
+					"katavi":{
+					"mpanda-mc":"MPANDA MC","mpanda-dc":"MPANDA DC","mlele-dc":"MLELE DC",
+					"mpimbwe-dc":"MPIMBWE DC","nsimbo-dc":"NSIMBO DC"
+					},
+
+					"simiyu":{
+					"bariadi-dc":"BARIADI DC","itilima-dc":"ITILIMA DC","meatu-dc":"MEATU DC",
+					"maswa-dc":"MASWA DC","busega-dc":"BUSEGA DC","bariadi-tc":"BARIADI TC"
+					},
+
+					"geita":{
+					"geita-dc":"GEITA DC","nyanghwale":"NYANGHWALE","mbogwe-dc":"MBOGWE DC",
+					"bukombe-dc":"BUKOMBE DC","chato-dc":"CHATO DC","geita-tc":"GEITA TC"
+					},
+
+					"songwe":{
+					"songwe-dc":"SONGWE DC","ileje-dc":"ILEJE DC","mbozi-dc":"MBOZI DC",
+					"momba-dc":"MOMBA DC","tunduma-tc":"TUNDUMA TC"
+					},
+
+					"kaskazini-unguja":{
+					"kaskazini-a":"KASKAZINI A","kaskazini-b":"KASKAZINI B"
+					},
+
+					"kusini-unguja":{
+					"kati":"KATI","kusini":"KUSINI"
+					},
+
+					"mjini-magharibi":{
+					"magharibi-a":"MAGHARIBI A","mjini":"MJINI","magharibi-b":"MAGHARIBI B"
+					},
+
+					"kaskazini-pemba":{
+					"wete":"WETE","micheweni":"MICHEWENI"
+					},
+
+					"kusini-pemba":{
+					"chake-chake":"CHAKE CHAKE","mkoani":"MKOANI"
+					}
+
+				}
+
+			};
+
+  /* ------------------------------- Helpers ------------------------------- */
+  function escapeHtml(value){
+    try{
+      try{
+        return String(value == null ? "" : value)
+          .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }catch(e){ return ""; }
+    }catch(e){ return ""; }
+  }
+
+  function regionName(code){
+    try{ return (TANZANIA_DATA.regions && TANZANIA_DATA.regions[code]) || code || ""; }
+    catch(e){ return code || ""; }
+  }
+
+  function districtName(regionCode, districtCode){
+    try{
+      var group = TANZANIA_DATA.districts && TANZANIA_DATA.districts[regionCode];
+      return (group && group[districtCode]) || districtCode || "";
+    }catch(e){ return districtCode || ""; }
+  }
+
+  function classLabel(code){
+    try{
+      var map = { F1:"Form 1", F2:"Form 2", F3:"Form 3", F4:"Form 4", F5:"Form 5", F6:"Form 6",
+        STD1:"Standard 1", STD2:"Standard 2", STD3:"Standard 3", STD4:"Standard 4",
+        STD5:"Standard 5", STD6:"Standard 6", STD7:"Standard 7" };
+      return map[code] || code || "";
+    }catch(e){ return code || ""; }
+  }
+
+  function safeQuery(selector, root){
+    try{ return (root || document).querySelectorAll(selector); }
+    catch(e){ console.error("[ShuleBrain] safeQuery failed", e); return []; }
+  }
+
+  function showScreen(id){
+    try{
+      safeQuery(".exam-screen").forEach(function(s){
+        try{ s.classList.toggle("active", s.id === id); }
+        catch(e){ console.error("[ShuleBrain] toggling screen visibility failed", e); }
+      });
+      try{ window.scrollTo({ top:0, behavior:"smooth" }); }
+      catch(e){ /* non-critical */ }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] showScreen fatal error", fatalErr);
+    }
+  }
+
+  /* ------------------------------ Data layer ------------------------------ */
+  function buildSupabaseClient(){
+    try{
+      try{
+        if(typeof window.supabase === "undefined" || !window.supabase || typeof window.supabase.createClient !== "function"){
+          console.warn("[ShuleBrain] Supabase JS library unavailable.");
+          return null;
+        }
+        return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: { persistSession:false, autoRefreshToken:false, detectSessionInUrl:false }
+        });
+      }catch(innerErr){
+        console.error("[ShuleBrain] buildSupabaseClient inner failure", innerErr);
+        return null;
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] buildSupabaseClient fatal error", fatalErr);
+      return null;
+    }
+  }
+
+  /* ============================ STAGE 1 : EXAM LIST ============================ */
+  var allExams = [];
+
+  function loadExams(){
+    try{
+      supabaseClient = supabaseClient || buildSupabaseClient();
+      var gridEl = document.getElementById("examGrid");
+      if(!gridEl) return;
+
+      if(!supabaseClient){
+        gridEl.innerHTML = examStateBox("Could not connect to the results service. Please try again later.");
+        return;
+      }
+
+      supabaseClient.from("exams").select("*").eq("exam_type", EXAM_TYPE).eq("is_published", true)
+        .order("year_conducted", { ascending:false })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){
+              console.error("[ShuleBrain] loading exams failed", error);
+              gridEl.innerHTML = examStateBox("Could not load examinations right now.");
+              return;
+            }
+            allExams = data || [];
+            try{ populateExamFilterOptions(allExams); }
+            catch(e){ console.error("[ShuleBrain] populating exam filter options failed", e); }
+            applyExamFilters();
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing exams response failed", thenErr);
+            gridEl.innerHTML = examStateBox("Could not load examinations right now.");
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] exams query rejected", err);
+          gridEl.innerHTML = examStateBox("Could not load examinations right now.");
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] loadExams fatal error", fatalErr);
+    }
+  }
+
+  function examStateBox(message){
+    try{
+      return '<div class="state-box" style="grid-column:1/-1;">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4H9z"/><path d="M6 7h12v14H6z"/><path d="M9 12h6M9 16h6"/></svg>' +
+        '<div>' + escapeHtml(message) + '</div></div>';
+    }catch(e){ return '<div class="state-box">' + escapeHtml(message) + '</div>'; }
+  }
+
+  function populateExamFilterOptions(exams){
+    try{
+      try{
+        if(SHOW_LOCATION_FILTERS){
+          var regionSelect = document.getElementById("filterRegion");
+          if(regionSelect && regionSelect.options.length <= 1){
+            for(var code in TANZANIA_DATA.regions){
+              if(!TANZANIA_DATA.regions.hasOwnProperty(code)) continue;
+              var opt = document.createElement("option");
+              opt.value = code; opt.textContent = TANZANIA_DATA.regions[code];
+              regionSelect.appendChild(opt);
+            }
+          }
+        }
+      }catch(regionErr){
+        console.error("[ShuleBrain] populating region filter failed", regionErr);
+      }
+
+      try{
+        var yearSelect = document.getElementById("filterYear");
+        if(yearSelect){
+          var currentYear = new Date().getFullYear();
+          var startYear = 2019;
+          var years = [];
+          for(var y = currentYear; y >= startYear; y--){ years.push(y); }
+
+          try{
+            var dataYears = Array.from(new Set(exams.map(function(x){ return x.year_conducted; }).filter(Boolean)));
+            dataYears.forEach(function(dy){
+              if(years.indexOf(dy) === -1) years.push(dy);
+            });
+            years.sort(function(a,b){ return b - a; });
+          }catch(mergeErr){
+            console.error("[ShuleBrain] merging data-derived years failed", mergeErr);
+          }
+
+          var existing = Array.from(yearSelect.options).map(function(o){ return o.value; });
+          years.forEach(function(yr){
+            try{
+              if(existing.indexOf(String(yr)) === -1){
+                var opt = document.createElement("option");
+                opt.value = String(yr); opt.textContent = String(yr);
+                yearSelect.appendChild(opt);
+              }
+            }catch(yErr){ console.error("[ShuleBrain] adding a year option failed", yErr); }
+          });
+        }
+      }catch(yearErr){
+        console.error("[ShuleBrain] populating year filter failed", yearErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] populateExamFilterOptions fatal error", fatalErr);
+    }
+  }
+
+  function updateExamDistrictOptions(){
+    try{
+      var regionSelect = document.getElementById("filterRegion");
+      var districtSelect = document.getElementById("filterDistrict");
+      if(!regionSelect || !districtSelect) return;
+
+      districtSelect.innerHTML = '<option value="">All districts</option>';
+      var regionCode = regionSelect.value;
+      var group = regionCode ? TANZANIA_DATA.districts[regionCode] : null;
+      if(!group) return;
+
+      for(var code in group){
+        if(!group.hasOwnProperty(code)) continue;
+        var opt = document.createElement("option");
+        opt.value = code; opt.textContent = group[code];
+        districtSelect.appendChild(opt);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] updateExamDistrictOptions fatal error", fatalErr);
+    }
+  }
+
+  function applyExamFilters(){
+    try{
+      var region = SHOW_LOCATION_FILTERS ? (document.getElementById("filterRegion")||{}).value : "";
+      var district = SHOW_LOCATION_FILTERS ? (document.getElementById("filterDistrict")||{}).value : "";
+      var klass = (document.getElementById("filterClass")||{}).value || "";
+      var year = (document.getElementById("filterYear")||{}).value || "";
+      var q = ((document.getElementById("filterSearch")||{}).value || "").trim().toLowerCase();
+
+      var filtered = allExams.filter(function(x){
+        try{
+          if(region && x.region !== region) return false;
+          if(district && x.district !== district) return false;
+          if(klass && x.class_code !== klass) return false;
+          if(year && String(x.year_conducted) !== year) return false;
+          if(q){
+            var hay = (String(x.exam_title||"") + " " + String(x.code||"")).toLowerCase();
+            if(hay.indexOf(q) === -1) return false;
+          }
+          return true;
+        }catch(filterErr){
+          console.error("[ShuleBrain] exam filter predicate failed", filterErr);
+          return true;
+        }
+      });
+
+      renderExamGrid(filtered);
+    }catch(fatalErr){
+      console.error("[ShuleBrain] applyExamFilters fatal error", fatalErr);
+    }
+  }
+
+  function renderExamGrid(exams){
+    try{
+      var gridEl = document.getElementById("examGrid");
+      var countEl = document.getElementById("examResultCount");
+      if(!gridEl) return;
+
+      try{
+        gridEl.setAttribute("aria-busy","false");
+        if(countEl) countEl.innerHTML = 'Showing <b>' + exams.length + '</b> of <b>' + allExams.length + '</b> examinations';
+
+        if(!exams.length){
+          gridEl.innerHTML = examStateBox("No examinations match these filters yet.");
+          return;
+        }
+
+        gridEl.innerHTML = exams.map(function(x){
+          try{
+            var locChip = (x.region ? escapeHtml(regionName(x.region)) : "");
+            return '<button type="button" class="browse-card" data-exam-id="' + escapeHtml(x.id) + '">' +
+              '<div class="browse-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4H9z"/><path d="M6 7h12v14H6z"/><path d="M9 12h6M9 16h6"/></svg></div>' +
+              '<h3>' + escapeHtml(x.exam_title) + '</h3>' +
+              '<div class="browse-card-meta">' +
+                '<span class="meta-chip accent">' + escapeHtml(x.code) + '</span>' +
+                '<span class="meta-chip">' + escapeHtml(classLabel(x.class_code)) + '</span>' +
+                '<span class="meta-chip">' + escapeHtml(x.year_conducted) + '</span>' +
+                (locChip ? '<span class="meta-chip">' + locChip + '</span>' : '') +
+              '</div>' +
+            '</button>';
+          }catch(cardErr){
+            console.error("[ShuleBrain] rendering an exam card failed", cardErr);
+            return "";
+          }
+        }).join("");
+
+        try{
+          gridEl.querySelectorAll("[data-exam-id]").forEach(function(card){
+            card.addEventListener("click", function(){
+              try{
+                var id = card.getAttribute("data-exam-id");
+                var exam = allExams.filter(function(x){ return String(x.id) === String(id); })[0];
+                if(exam) selectExam(exam);
+              }catch(e){ console.error("[ShuleBrain] exam card click handling failed", e); }
+            });
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding exam cards failed", bindErr);
+        }
+      }catch(renderInnerErr){
+        console.error("[ShuleBrain] renderExamGrid inner failure", renderInnerErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderExamGrid fatal error", fatalErr);
+    }
+  }
+
+  /* ============================ STAGE 2 : SCHOOL LIST ============================ */
+  var currentExam = null;
+  var allSchools = [];
+
+  function selectExam(exam){
+    try{
+      currentExam = exam;
+      allSchools = [];
+
+      try{
+        document.getElementById("schoolsScreenTitle").firstChild.nodeValue = "Schools in this examination";
+        var sub = document.getElementById("schoolsScreenSub");
+        if(sub) sub.textContent = exam.exam_title + " (" + exam.code + ")";
+      }catch(titleErr){
+        console.error("[ShuleBrain] setting schools screen title failed", titleErr);
+      }
+
+      showScreen("screen-schools");
+
+      try{
+        document.getElementById("schoolsLoading").classList.remove("hidden");
+        document.getElementById("schoolsContent").classList.add("hidden");
+      }catch(toggleErr){
+        console.error("[ShuleBrain] toggling schools loading state failed", toggleErr);
+      }
+
+      if(!supabaseClient){
+        renderSchoolsError("Could not connect to the results service.");
+        return;
+      }
+
+      supabaseClient.from("results").select("*").eq("exam_code", exam.code)
+        .order("centre_name", { ascending:true })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){
+              console.error("[ShuleBrain] loading schools failed", error);
+              renderSchoolsError("Could not load schools for this examination.");
+              return;
+            }
+            allSchools = data || [];
+            try{ populateSchoolFilterOptions(allSchools); }
+            catch(e){ console.error("[ShuleBrain] populating school filter options failed", e); }
+
+            try{
+              document.getElementById("schoolsLoading").classList.add("hidden");
+              document.getElementById("schoolsContent").classList.remove("hidden");
+            }catch(e){ console.error("[ShuleBrain] revealing schools content failed", e); }
+
+            applySchoolFilters();
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing schools response failed", thenErr);
+            renderSchoolsError("Could not load schools for this examination.");
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] schools query rejected", err);
+          renderSchoolsError("Could not load schools for this examination.");
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] selectExam fatal error", fatalErr);
+    }
+  }
+
+  function renderSchoolsError(message){
+    try{
+      document.getElementById("schoolsLoading").classList.add("hidden");
+      var content = document.getElementById("schoolsContent");
+      content.classList.remove("hidden");
+      content.innerHTML = examStateBox(message).replace('grid-column:1/-1;','');
+    }catch(e){
+      console.error("[ShuleBrain] renderSchoolsError failed", e);
+    }
+  }
+
+  function populateSchoolFilterOptions(schools){
+    try{
+      var regionSelect = document.getElementById("schoolFilterRegion");
+      if(regionSelect){
+        regionSelect.innerHTML = '<option value="">All regions</option>';
+        var regionCodes = Array.from(new Set(schools.map(function(s){ return s.region; }).filter(Boolean)));
+        regionCodes.sort(function(a,b){ return regionName(a).localeCompare(regionName(b)); });
+        regionCodes.forEach(function(code){
+          try{
+            var opt = document.createElement("option");
+            opt.value = code; opt.textContent = regionName(code);
+            regionSelect.appendChild(opt);
+          }catch(e){ console.error("[ShuleBrain] adding a school region option failed", e); }
+        });
+      }
+      var districtSelect = document.getElementById("schoolFilterDistrict");
+      if(districtSelect){ districtSelect.innerHTML = '<option value="">All districts</option>'; }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] populateSchoolFilterOptions fatal error", fatalErr);
+    }
+  }
+
+  function updateSchoolDistrictOptions(){
+    try{
+      var regionSelect = document.getElementById("schoolFilterRegion");
+      var districtSelect = document.getElementById("schoolFilterDistrict");
+      if(!regionSelect || !districtSelect) return;
+
+      var regionCode = regionSelect.value;
+      var districtCodes = Array.from(new Set(
+        allSchools.filter(function(s){ return !regionCode || s.region === regionCode; })
+                  .map(function(s){ return s.district; }).filter(Boolean)
+      ));
+      districtCodes.sort(function(a,b){ return districtName(regionCode,a).localeCompare(districtName(regionCode,b)); });
+
+      districtSelect.innerHTML = '<option value="">All districts</option>';
+      districtCodes.forEach(function(code){
+        try{
+          var opt = document.createElement("option");
+          opt.value = code; opt.textContent = districtName(regionCode, code);
+          districtSelect.appendChild(opt);
+        }catch(e){ console.error("[ShuleBrain] adding a school district option failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] updateSchoolDistrictOptions fatal error", fatalErr);
+    }
+  }
+
+  function applySchoolFilters(){
+    try{
+      var region = (document.getElementById("schoolFilterRegion")||{}).value || "";
+      var district = (document.getElementById("schoolFilterDistrict")||{}).value || "";
+      var q = ((document.getElementById("schoolFilterSearch")||{}).value || "").trim().toLowerCase();
+
+      var filtered = allSchools.filter(function(s){
+        try{
+          if(region && s.region !== region) return false;
+          if(district && s.district !== district) return false;
+          if(q){
+            var hay = (String(s.centre_name||"") + " " + String(s.centre_number||"")).toLowerCase();
+            if(hay.indexOf(q) === -1) return false;
+          }
+          return true;
+        }catch(e){
+          console.error("[ShuleBrain] school filter predicate failed", e);
+          return true;
+        }
+      });
+
+      renderSchoolGrid(filtered);
+    }catch(fatalErr){
+      console.error("[ShuleBrain] applySchoolFilters fatal error", fatalErr);
+    }
+  }
+
+  function renderSchoolGrid(schools){
+    try{
+      var gridEl = document.getElementById("schoolGrid");
+      var countEl = document.getElementById("schoolResultCount");
+      if(!gridEl) return;
+
+      if(countEl) countEl.innerHTML = 'Showing <b>' + schools.length + '</b> of <b>' + allSchools.length + '</b> schools';
+
+      if(!schools.length){
+        gridEl.innerHTML = examStateBox("No schools match these filters yet.");
+        return;
+      }
+
+      gridEl.innerHTML = schools.map(function(s){
+        try{
+          return '<button type="button" class="browse-card" data-school-id="' + escapeHtml(s.id) + '">' +
+            '<div class="browse-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div>' +
+            '<h3>' + escapeHtml(s.centre_name) + '</h3>' +
+            '<div class="browse-card-meta">' +
+              '<span class="meta-chip accent">' + escapeHtml(s.centre_number) + '</span>' +
+              '<span class="meta-chip">' + escapeHtml(regionName(s.region)) + '</span>' +
+              '<span class="meta-chip">' + escapeHtml(districtName(s.region, s.district)) + '</span>' +
+            '</div>' +
+          '</button>';
+        }catch(cardErr){
+          console.error("[ShuleBrain] rendering a school card failed", cardErr);
+          return "";
+        }
+      }).join("");
+
+      try{
+        gridEl.querySelectorAll("[data-school-id]").forEach(function(card){
+          card.addEventListener("click", function(){
+            try{
+              var id = card.getAttribute("data-school-id");
+              var school = allSchools.filter(function(s){ return String(s.id) === String(id); })[0];
+              if(school) openResults(school);
+            }catch(e){ console.error("[ShuleBrain] school card click handling failed", e); }
+          });
+        });
+      }catch(bindErr){
+        console.error("[ShuleBrain] binding school cards failed", bindErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderSchoolGrid fatal error", fatalErr);
+    }
+  }
+
+  /* ============================ STAGE 3 : RESULTS VIEWER ============================ */
+  var currentSchool = null;
+
+  function openResults(school){
+    try{
+      currentSchool = school;
+      var overlay = document.getElementById("resultsOverlay");
+      var frameWrap = document.getElementById("resultsFrameWrap");
+      if(!overlay || !frameWrap) return;
+
+      try{
+        document.getElementById("resultsExamName").textContent = currentExam ? (currentExam.exam_title + " · " + currentExam.code) : "";
+        document.getElementById("resultsSchoolName").textContent = school.centre_name || "";
+        document.getElementById("resultsCentreNo").textContent = school.centre_number ? ("Centre No. " + school.centre_number) : "";
+      }catch(titleErr){
+        console.error("[ShuleBrain] setting results titles failed", titleErr);
+      }
+
+      try{
+        var payload = school.centre_results;
+        var html = "";
+        try{
+          if(payload && typeof payload === "object" && typeof payload.results === "string"){
+            html = payload.results;
+          } else if(typeof payload === "string"){
+            try{
+              var parsed = JSON.parse(payload);
+              html = (parsed && parsed.results) ? parsed.results : payload;
+            }catch(parseErr){
+              html = payload;
+            }
+          }
+        }catch(extractErr){
+          console.error("[ShuleBrain] extracting results HTML failed", extractErr);
+        }
+
+        if(!html){
+          frameWrap.innerHTML = '<div class="results-error">No results document was found for this school yet.</div>';
+        } else {
+          frameWrap.innerHTML = "";
+          var iframe = document.createElement("iframe");
+          iframe.setAttribute("sandbox", "allow-same-origin allow-popups");
+          iframe.setAttribute("title", "Results for " + (school.centre_name || "school"));
+          frameWrap.appendChild(iframe);
+          try{
+            iframe.srcdoc = html;
+          }catch(srcdocErr){
+            console.error("[ShuleBrain] setting iframe srcdoc failed", srcdocErr);
+            frameWrap.innerHTML = '<div class="results-error">Could not display these results in this browser.</div>';
+          }
+        }
+      }catch(frameErr){
+        console.error("[ShuleBrain] building results iframe failed", frameErr);
+        frameWrap.innerHTML = '<div class="results-error">Could not display these results.</div>';
+      }
+
+      try{ overlay.classList.add("active"); document.body.style.overflow = "hidden"; }
+      catch(e){ console.error("[ShuleBrain] showing results overlay failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] openResults fatal error", fatalErr);
+    }
+  }
+
+  function closeResults(){
+    try{
+      var overlay = document.getElementById("resultsOverlay");
+      var frameWrap = document.getElementById("resultsFrameWrap");
+      try{ if(overlay) overlay.classList.remove("active"); document.body.style.overflow = ""; }
+      catch(e){ console.error("[ShuleBrain] hiding results overlay failed", e); }
+      try{ if(frameWrap) frameWrap.innerHTML = ""; }
+      catch(e){ console.error("[ShuleBrain] clearing results iframe failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] closeResults fatal error", fatalErr);
+    }
+  }
+
+  /* ------------------------------ PDF download ------------------------------ */
+  function slugForFilename(text){
+    try{
+      try{
+        return String(text || "results").trim().toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "results";
+      }catch(e){ return "results"; }
+    }catch(e){ return "results"; }
+  }
+
+  function buildPdfFilename(){
+    try{
+      var examPart = currentExam ? (currentExam.code || currentExam.exam_title) : "exam";
+      var schoolPart = currentSchool ? (currentSchool.centre_number || currentSchool.centre_name) : "school";
+      return slugForFilename(examPart) + "-" + slugForFilename(schoolPart) + "-results.pdf";
+    }catch(fatalErr){
+      console.error("[ShuleBrain] buildPdfFilename fatal error", fatalErr);
+      return "results.pdf";
+    }
+  }
+
+  function setPdfBtnBusy(btn, busy){
+    try{
+      try{
+        if(!btn) return;
+        btn.disabled = !!busy;
+        var icon = btn.querySelector(".pdf-icon-default");
+        var spinner = btn.querySelector(".pdf-spinner-ring");
+        var label = btn.querySelector(".pdf-btn-label");
+        if(icon) icon.classList.toggle("hidden", !!busy);
+        if(spinner) spinner.classList.toggle("hidden", !busy);
+        if(label) label.textContent = busy ? "Generating PDF..." : "Download PDF";
+      }catch(applyErr){
+        console.error("[ShuleBrain] setPdfBtnBusy failed to apply", applyErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] setPdfBtnBusy fatal error", fatalErr);
+    }
+  }
+
+  function notifyPdf(icon, title){
+    try{
+      try{
+        if(typeof Swal !== "undefined" && Swal && typeof Swal.fire === "function"){
+          Swal.fire({ icon:icon, title:title, toast:true, position:"top-end", showConfirmButton:false, timer:3200, timerProgressBar:true });
+          return;
+        }
+      }catch(swalErr){
+        console.error("[ShuleBrain] PDF toast via SweetAlert2 failed", swalErr);
+      }
+      try{ window.alert(title); }
+      catch(alertErr){ console.error("[ShuleBrain] PDF alert fallback failed", alertErr); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] notifyPdf fatal error", fatalErr);
+    }
+  }
+
+  function handleDownloadPdf(){
+    try{
+      var btn = document.getElementById("downloadPdfBtn");
+
+      try{
+        if(typeof window.html2pdf === "undefined"){
+          console.error("[ShuleBrain] html2pdf library unavailable");
+          notifyPdf("error", "The PDF tool didn't load. Please check your connection and try again.");
+          return;
+        }
+      }catch(libErr){
+        console.error("[ShuleBrain] checking html2pdf availability failed", libErr);
+        notifyPdf("error", "Could not start PDF generation.");
+        return;
+      }
+
+      var iframe = null;
+      try{
+        iframe = document.querySelector("#resultsFrameWrap iframe");
+      }catch(queryErr){
+        console.error("[ShuleBrain] locating results iframe failed", queryErr);
+      }
+
+      if(!iframe){
+        notifyPdf("error", "There are no results loaded to download yet.");
+        return;
+      }
+
+      var doc = null;
+      try{
+        doc = iframe.contentDocument || (iframe.contentWindow ? iframe.contentWindow.document : null);
+      }catch(accessErr){
+        console.error("[ShuleBrain] accessing results iframe document failed", accessErr);
+      }
+
+      if(!doc || !doc.body){
+        notifyPdf("error", "The results document isn't ready yet — please wait a moment and try again.");
+        return;
+      }
+
+      try{
+        setPdfBtnBusy(btn, true);
+
+        var opt = {
+          margin: [8, 8, 8, 8],
+          filename: buildPdfFilename(),
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+          jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+          pagebreak: { mode: ["css", "legacy"] }
+        };
+
+        try{
+          window.html2pdf().set(opt).from(doc.body).save()
+            .then(function(){
+              try{ setPdfBtnBusy(btn, false); }
+              catch(e){ console.error("[ShuleBrain] resetting PDF button after success failed", e); }
+            })
+            .catch(function(genErr){
+              try{
+                console.error("[ShuleBrain] html2pdf generation failed", genErr);
+                notifyPdf("error", "Could not generate the PDF. Please try again.");
+              }catch(e){ console.error("[ShuleBrain] handling html2pdf error failed", e); }
+              try{ setPdfBtnBusy(btn, false); }
+              catch(e){ console.error("[ShuleBrain] resetting PDF button after failure failed", e); }
+            });
+        }catch(genSyncErr){
+          console.error("[ShuleBrain] html2pdf threw synchronously", genSyncErr);
+          notifyPdf("error", "Could not generate the PDF. Please try again.");
+          try{ setPdfBtnBusy(btn, false); }
+          catch(e){ console.error("[ShuleBrain] resetting PDF button after sync error failed", e); }
+        }
+      }catch(setupErr){
+        console.error("[ShuleBrain] setting up PDF generation failed", setupErr);
+        notifyPdf("error", "Could not generate the PDF. Please try again.");
+        try{ setPdfBtnBusy(btn, false); }
+        catch(e){ console.error("[ShuleBrain] resetting PDF button after setup error failed", e); }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleDownloadPdf fatal error", fatalErr);
+    }
+  }
+
+  function initPdfDownload(){
+    try{
+      var btn = document.getElementById("downloadPdfBtn");
+      if(!btn) return;
+      btn.addEventListener("click", function(){
+        try{ handleDownloadPdf(); }
+        catch(e){ console.error("[ShuleBrain] PDF button click handling failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initPdfDownload fatal error", fatalErr);
+    }
+  }
+
+  /* -------------------------------- Wiring -------------------------------- */
+  function initFilterEvents(){
+    try{
+      ["filterClass","filterYear","filterSearch"].forEach(function(id){
+        try{
+          var el = document.getElementById(id);
+          if(el) el.addEventListener(id === "filterSearch" ? "input" : "change", applyExamFilters);
+        }catch(e){ console.error("[ShuleBrain] binding exam filter " + id + " failed", e); }
+      });
+
+      if(SHOW_LOCATION_FILTERS){
+        try{
+          var regionEl = document.getElementById("filterRegion");
+          if(regionEl){
+            regionEl.addEventListener("change", function(){
+              try{ updateExamDistrictOptions(); applyExamFilters(); }
+              catch(e){ console.error("[ShuleBrain] exam region change handling failed", e); }
+            });
+          }
+          var districtEl = document.getElementById("filterDistrict");
+          if(districtEl) districtEl.addEventListener("change", applyExamFilters);
+        }catch(e){ console.error("[ShuleBrain] binding exam location filters failed", e); }
+      }
+
+      try{
+        var resetBtn = document.getElementById("filterResetBtn");
+        if(resetBtn){
+          resetBtn.addEventListener("click", function(){
+            try{
+              ["filterRegion","filterDistrict","filterClass","filterYear"].forEach(function(id){
+                var el = document.getElementById(id); if(el) el.value = "";
+              });
+              var s = document.getElementById("filterSearch"); if(s) s.value = "";
+              if(SHOW_LOCATION_FILTERS) updateExamDistrictOptions();
+              applyExamFilters();
+            }catch(e){ console.error("[ShuleBrain] exam filter reset failed", e); }
+          });
+        }
+      }catch(e){ console.error("[ShuleBrain] binding exam filter reset failed", e); }
+
+      ["schoolFilterSearch"].forEach(function(id){
+        try{
+          var el = document.getElementById(id);
+          if(el) el.addEventListener("input", applySchoolFilters);
+        }catch(e){ console.error("[ShuleBrain] binding school filter " + id + " failed", e); }
+      });
+
+      try{
+        var sRegion = document.getElementById("schoolFilterRegion");
+        if(sRegion){
+          sRegion.addEventListener("change", function(){
+            try{ updateSchoolDistrictOptions(); applySchoolFilters(); }
+            catch(e){ console.error("[ShuleBrain] school region change handling failed", e); }
+          });
+        }
+        var sDistrict = document.getElementById("schoolFilterDistrict");
+        if(sDistrict) sDistrict.addEventListener("change", applySchoolFilters);
+      }catch(e){ console.error("[ShuleBrain] binding school location filters failed", e); }
+
+      try{
+        var sReset = document.getElementById("schoolFilterResetBtn");
+        if(sReset){
+          sReset.addEventListener("click", function(){
+            try{
+              ["schoolFilterRegion","schoolFilterDistrict"].forEach(function(id){
+                var el = document.getElementById(id); if(el) el.value = "";
+              });
+              var s = document.getElementById("schoolFilterSearch"); if(s) s.value = "";
+              applySchoolFilters();
+            }catch(e){ console.error("[ShuleBrain] school filter reset failed", e); }
+          });
+        }
+      }catch(e){ console.error("[ShuleBrain] binding school filter reset failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initFilterEvents fatal error", fatalErr);
+    }
+  }
+
+  function initNavButtons(){
+    try{
+      try{
+        var backToExams = document.getElementById("backToExamsBtn");
+        if(backToExams) backToExams.addEventListener("click", function(){
+          try{ showScreen("screen-exams"); }catch(e){ console.error("[ShuleBrain] back-to-exams click failed", e); }
+        });
+      }catch(e){ console.error("[ShuleBrain] binding back-to-exams failed", e); }
+
+      try{
+        var backToSchools = document.getElementById("backToSchoolsBtn");
+        if(backToSchools) backToSchools.addEventListener("click", function(){
+          try{ closeResults(); }catch(e){ console.error("[ShuleBrain] back-to-schools click failed", e); }
+        });
+      }catch(e){ console.error("[ShuleBrain] binding back-to-schools failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initNavButtons fatal error", fatalErr);
+    }
+  }
+
+  function boot(){
+    try{
+      try{ initFilterEvents(); }catch(e){ console.error("[ShuleBrain] boot: initFilterEvents crashed", e); }
+      try{ initNavButtons(); }catch(e){ console.error("[ShuleBrain] boot: initNavButtons crashed", e); }
+      try{ initPdfDownload(); }catch(e){ console.error("[ShuleBrain] boot: initPdfDownload crashed", e); }
+      try{ loadExams(); }catch(e){ console.error("[ShuleBrain] boot: loadExams crashed", e); }
+    }catch(bootFatalErr){
+      try{ console.error("[ShuleBrain] boot fatal error", bootFatalErr); }
+      catch(consoleErr){ /* nothing more we can safely do */ }
+    }
+  }
+
+  try{
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", function(){
+        try{ boot(); }catch(e){ try{ console.error(e); }catch(f){} }
+      });
+    } else {
+      try{ boot(); }catch(e){ try{ console.error(e); }catch(f){} }
+    }
+  }catch(topLevelErr){
+    try{ console.error("[ShuleBrain] top-level exam browser init failed", topLevelErr); }catch(f){}
+  }
+
+})();
+</script>
+</body>
+</html>
