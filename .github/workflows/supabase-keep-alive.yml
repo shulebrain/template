@@ -1,0 +1,54 @@
+name: Supabase Keep-Alive
+
+# Pings the Supabase REST API on a schedule so the free-tier project never
+# sits idle for 7 days (which triggers Supabase's auto-pause). Runs every
+# 2 days, giving a comfortable safety margin even if a scheduled run gets
+# delayed or skipped (GitHub's cron scheduler is best-effort, not exact).
+#
+# One-time setup required — see the two repo secrets referenced below:
+#   Settings -> Secrets and variables -> Actions -> New repository secret
+#     SUPABASE_URL        e.g. https://rubxxzcrlgemwvqasdzl.supabase.co
+#     SUPABASE_ANON_KEY    the same public anon key already used in the site's pages
+#
+# Both values are already public (they're embedded in your site's client-side
+# JS), so this isn't exposing anything new — using secrets here just keeps
+# them out of the workflow file itself and makes them easy to update in one
+# place if the project's URL/key ever changes.
+
+on:
+  schedule:
+    - cron: "0 6 */2 * *"   # 06:00 UTC, every 2 days
+  workflow_dispatch: {}      # lets you trigger it manually from the Actions tab to test
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          set -e
+
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "::error::SUPABASE_URL or SUPABASE_ANON_KEY repo secret is missing. Add both under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+          echo "Pinging Supabase project to keep it active..."
+
+          http_status=$(curl -s -o /tmp/response.txt -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/releases?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+
+          echo "Response status: $http_status"
+          cat /tmp/response.txt
+
+          # 2xx = success. 401/403 would mean bad/rotated key; 404 would mean
+          # a wrong URL or the table name changed — surface those as failures
+          # so a broken ping doesn't fail silently for months.
+          if [ "$http_status" -lt 200 ] || [ "$http_status" -ge 300 ]; then
+            echo "::error::Supabase ping failed with status $http_status — check SUPABASE_URL/SUPABASE_ANON_KEY are still correct."
+            exit 1
+          fi
+
+          echo "Supabase project pinged successfully."
