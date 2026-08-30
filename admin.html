@@ -123,6 +123,13 @@
   .list-item-body p{font-size:12.5px;color:#4b5470;margin:0 0 6px;line-height:1.5;}
   .list-item-meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:#7d859c;}
   .list-item-meta span{background:#f6f8fb;padding:3px 8px;border-radius:999px;}
+  .ref-chip{
+    font-family:'Courier New',monospace;font-weight:700;letter-spacing:.02em;
+    background:rgba(18,184,159,.1) !important;color:#0e9a85 !important;cursor:pointer;
+    display:inline-flex;align-items:center;gap:5px;transition:background .15s ease;
+  }
+  .ref-chip:hover{background:rgba(18,184,159,.2) !important;}
+  .ref-chip i{font-size:11px;}
   .list-item-actions{display:flex;gap:6px;flex-shrink:0;}
   .icon-btn{
     width:32px;height:32px;border-radius:9px;border:1px solid #e4e8f1;background:#f6f8fb;
@@ -142,6 +149,20 @@
   .search-box{max-width:320px;}
   .placeholder-card{border:1px dashed #d7dcea;border-radius:16px;padding:52px 24px;text-align:center;background:#fff;}
   .placeholder-card i{font-size:34px;color:#12b89f;}
+
+  /* ============ STAT CARDS ============ */
+  .stat-card{
+    background:#fff;border:1px solid #e4e8f1;border-radius:14px;padding:18px 20px;
+    display:flex;align-items:center;gap:14px;box-shadow:0 1px 2px rgba(13,19,48,.04);height:100%;
+  }
+  .stat-card-icon{
+    width:44px;height:44px;border-radius:12px;flex-shrink:0;
+    background:#f6f8fb;color:#4b5470;display:flex;align-items:center;justify-content:center;font-size:19px;
+  }
+  .stat-card-icon.success{background:rgba(18,184,159,.12);color:#0e9a85;}
+  .stat-card-icon.accent{background:rgba(245,165,36,.14);color:#c17a0e;}
+  .stat-card-value{font-size:22px;font-weight:800;color:#0d1330;line-height:1.2;}
+  .stat-card-label{font-size:12.5px;color:#7d859c;font-weight:600;}
 
   /* ============ RICH TEXT EDITOR (Quill) ============ */
   #postContentEditor{background:#fff;}
@@ -274,6 +295,18 @@
             <i class="bi bi-clipboard-check"></i> Manage Examinations <span class="sidebar-badge hidden" id="examCountBadge">0</span>
           </button>
         </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">Schools</div>
+          <button type="button" class="sidebar-link" data-panel="add-school">
+            <i class="bi bi-plus-circle"></i> Add School
+          </button>
+          <button type="button" class="sidebar-link" data-panel="manage-schools">
+            <i class="bi bi-building"></i> Manage Schools <span class="sidebar-badge hidden" id="schoolCountBadge">0</span>
+          </button>
+          <button type="button" class="sidebar-link" data-panel="paid-exams">
+            <i class="bi bi-cash-coin"></i> Paid Exams <span class="sidebar-badge hidden" id="paidExamCountBadge">0</span>
+          </button>
+        </div>
       </nav>
     </aside>
     <div class="admin-sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -318,6 +351,7 @@
                     <div class="col-md-4">
                       <label for="relDownloadUrl" class="form-label small fw-bold">GitHub download URL</label>
                       <input type="text" class="form-control form-control-sm" id="relDownloadUrl" placeholder="https://github.com/.../file.zip" required>
+                      <div class="form-text">A GitHub Release asset link works best. A regular "blob" file-preview link is auto-converted to a direct download link when you save.</div>
                     </div>
                   </div>
                   <div class="mb-3">
@@ -517,6 +551,204 @@
         </div>
       </div>
 
+      <!-- ===================== MANAGE SCHOOLS PANEL ===================== -->
+      <div class="admin-panel" id="panel-manage-schools">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Schools</div>
+            <h1 class="panel-title">Manage Schools</h1>
+            <p class="panel-sub">Every school registered through ShuleBrain DSK, with their payment status.</p>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="stat-card-icon"><i class="bi bi-building"></i></div>
+              <div><div class="stat-card-value" id="statTotalSchools">0</div><div class="stat-card-label">Total schools joined</div></div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="stat-card-icon success"><i class="bi bi-credit-card"></i></div>
+              <div><div class="stat-card-value" id="statPaidSchools">0</div><div class="stat-card-label">With a successful payment</div></div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="stat-card-icon accent"><i class="bi bi-graph-up-arrow"></i></div>
+              <div><div class="stat-card-value" id="statNewSchools">0</div><div class="stat-card-label">New in the last 30 days</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+              <span class="stat-pill"><i class="bi bi-building"></i> <span id="schoolListCount">0</span> schools</span>
+              <input type="search" class="form-control form-control-sm search-box" id="schoolSearchInput" placeholder="Search by centre number, name, region, district, phone, email…">
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" id="schoolSelectAll">
+                <label class="form-check-label small fw-bold" for="schoolSelectAll">Select all</label>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="small text-secondary" id="schoolSelectedCount">0 selected</span>
+                <button type="button" class="btn btn-outline-danger btn-sm" id="schoolBulkDeleteBtn" disabled>
+                  <i class="bi bi-trash3 me-1"></i>Delete selected
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-list" id="schoolList">
+              <div class="empty-list">Loading schools&hellip;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== PAID EXAMS PANEL ===================== -->
+      <div class="admin-panel" id="panel-paid-exams">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Schools</div>
+            <h1 class="panel-title">Paid Exams</h1>
+            <p class="panel-sub">Exam-class registrations (category = EXAM) with their payment status.</p>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="stat-card-icon"><i class="bi bi-cash-coin"></i></div>
+              <div><div class="stat-card-value" id="statTotalPaidExams">0</div><div class="stat-card-label">Total exam registrations</div></div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="stat-card-icon success"><i class="bi bi-credit-card"></i></div>
+              <div><div class="stat-card-value" id="statPaidPaidExams">0</div><div class="stat-card-label">With a successful payment</div></div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-card">
+              <div class="stat-card-icon accent"><i class="bi bi-graph-up-arrow"></i></div>
+              <div><div class="stat-card-value" id="statNewPaidExams">0</div><div class="stat-card-label">New in the last 30 days</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+              <span class="stat-pill"><i class="bi bi-cash-coin"></i> <span id="paidExamListCount">0</span> registrations</span>
+              <input type="search" class="form-control form-control-sm search-box" id="paidExamSearchInput" placeholder="Search by exam class code, name, region, district, phone, email…">
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" id="paidExamSelectAll">
+                <label class="form-check-label small fw-bold" for="paidExamSelectAll">Select all</label>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="small text-secondary" id="paidExamSelectedCount">0 selected</span>
+                <button type="button" class="btn btn-outline-danger btn-sm" id="paidExamBulkDeleteBtn" disabled>
+                  <i class="bi bi-trash3 me-1"></i>Delete selected
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-list" id="paidExamList">
+              <div class="empty-list">Loading paid exam registrations&hellip;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== ADD SCHOOL PANEL ===================== -->
+      <div class="admin-panel" id="panel-add-school">
+        <div class="panel-header">
+          <div>
+            <div class="panel-eyebrow">Schools</div>
+            <h1 class="panel-title">Add School</h1>
+            <p class="panel-sub">Manually add a school or exam-class registration to the schools table.</p>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <form id="addSchoolForm" autocomplete="off">
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="asCentreNumber" class="form-label small fw-bold">Centre number</label>
+                      <input type="text" class="form-control form-control-sm" id="asCentreNumber" placeholder="e.g. S1234" required>
+                      <div class="form-text">For EXAM rows this holds the exam_class_code instead.</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="asCentreName" class="form-label small fw-bold">Centre / school name</label>
+                      <input type="text" class="form-control form-control-sm" id="asCentreName" placeholder="e.g. EXAMPLE SEC. SCHOOL" required>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                      <label for="asRegion" class="form-label small fw-bold">Region</label>
+                      <select class="form-select form-select-sm" id="asRegion" required>
+                        <option value="">Select region</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="asDistrict" class="form-label small fw-bold">District</label>
+                      <select class="form-select form-select-sm" id="asDistrict" required>
+                        <option value="">Select region first</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="asCategory" class="form-label small fw-bold">Category</label>
+                      <select class="form-select form-select-sm" id="asCategory">
+                        <option value="FACILITY">FACILITY</option>
+                        <option value="EXAM">EXAM</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="asPhone" class="form-label small fw-bold">Phone number</label>
+                      <input type="tel" class="form-control form-control-sm" id="asPhone" placeholder="e.g. 0656 519 591">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="asEmail" class="form-label small fw-bold">Email address</label>
+                      <input type="email" class="form-control form-control-sm" id="asEmail" placeholder="e.g. school@example.com">
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="asPaymentRef" class="form-label small fw-bold">Last payment ref</label>
+                      <input type="text" class="form-control form-control-sm" id="asPaymentRef" placeholder="e.g. TXN-2026-00123">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="asPaymentDate" class="form-label small fw-bold">Last successful payment date</label>
+                      <input type="date" class="form-control form-control-sm" id="asPaymentDate">
+                    </div>
+                  </div>
+
+                  <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary" id="addSchoolSaveBtn">Add school</button>
+                    <button type="button" class="btn btn-outline-secondary" id="addSchoolResetBtn">Clear form</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -596,6 +828,29 @@
     }catch(e){ return []; }
   }
 
+  function normalizeGithubDownloadUrl(url){
+    try{
+      try{
+        if(!url) return { url: url, wasConverted: false };
+        // "blob" URLs are GitHub's file *preview* page, not the file itself — rewrite
+        // them to the raw content host so the stored link is always a real direct download.
+        var blobPattern = /^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^\/]+)\/(.+)$/i;
+        var match = url.match(blobPattern);
+        if(match){
+          var rawUrl = "https://raw.githubusercontent.com/" + match[1] + "/" + match[2] + "/" + match[3] + "/" + match[4];
+          return { url: rawUrl, wasConverted: true };
+        }
+        return { url: url, wasConverted: false };
+      }catch(innerErr){
+        console.error("[ShuleBrain] normalizeGithubDownloadUrl inner failure", innerErr);
+        return { url: url, wasConverted: false };
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] normalizeGithubDownloadUrl fatal error", fatalErr);
+      return { url: url, wasConverted: false };
+    }
+  }
+
   function notify(icon, title){
     try{
       try{
@@ -650,6 +905,8 @@
     }catch(fatalErr){ console.error("[ShuleBrain] showLoggedOut fatal error", fatalErr); }
   }
 
+  var isCurrentlyLoggedIn = false;
+
   function showLoggedIn(user){
     try{
       try{
@@ -664,6 +921,8 @@
       try{ loadReleases(); }catch(e){ console.error("[ShuleBrain] loading releases after login failed", e); }
       try{ loadPosts(); }catch(e){ console.error("[ShuleBrain] loading posts after login failed", e); }
       try{ loadExams(); }catch(e){ console.error("[ShuleBrain] loading exams after login failed", e); }
+      try{ loadSchools(); }catch(e){ console.error("[ShuleBrain] loading schools after login failed", e); }
+      try{ loadPaidExams(); }catch(e){ console.error("[ShuleBrain] loading paid exams after login failed", e); }
     }catch(fatalErr){ console.error("[ShuleBrain] showLoggedIn fatal error", fatalErr); }
   }
 
@@ -681,7 +940,10 @@
         supabaseClient.auth.getSession().then(function(result){
           try{
             var session = result && result.data ? result.data.session : null;
-            if(session && session.user){ showLoggedIn(session.user); }
+            if(session && session.user){
+              isCurrentlyLoggedIn = true;
+              showLoggedIn(session.user);
+            }
             else { showLoggedOut(); }
           }catch(sessionErr){
             console.error("[ShuleBrain] processing getSession result failed", sessionErr);
@@ -699,8 +961,28 @@
       try{
         supabaseClient.auth.onAuthStateChange(function(event, session){
           try{
-            if(session && session.user){ showLoggedIn(session.user); }
-            else { showLoggedOut(); }
+            if(!session || !session.user){
+              isCurrentlyLoggedIn = false;
+              showLoggedOut();
+              return;
+            }
+
+            // A session exists. Only run the full "just signed in" sequence
+            // (which fires several data loads at once) on an actual
+            // logged-out -> logged-in transition. Supabase also fires this
+            // event on routine token refreshes (e.g. whenever the browser
+            // tab regains focus) — re-running every fetch each time causes
+            // needless request bursts, so for those we just keep the
+            // displayed session current instead of reloading everything.
+            if(!isCurrentlyLoggedIn){
+              isCurrentlyLoggedIn = true;
+              showLoggedIn(session.user);
+            } else {
+              try{
+                var emailEl = document.getElementById("adminUserEmail");
+                if(emailEl) emailEl.textContent = session.user.email || "";
+              }catch(e){ console.warn("[ShuleBrain] refreshing displayed admin email failed", e); }
+            }
           }catch(changeErr){
             console.error("[ShuleBrain] onAuthStateChange handler failed", changeErr);
           }
@@ -1059,11 +1341,16 @@
             if(!supabaseClient){ notify("error","Supabase isn't configured yet."); return; }
 
             try{
+              var urlResult = normalizeGithubDownloadUrl(document.getElementById("relDownloadUrl").value.trim());
+              if(urlResult.wasConverted){
+                notify("info", "Converted the GitHub 'blob' link to a direct download link automatically.");
+              }
+
               var payload = {
                 version: document.getElementById("relVersion").value.trim(),
                 file_name: document.getElementById("relFileName").value.trim(),
                 file_size_mb: parseFloat(document.getElementById("relSizeMb").value) || null,
-                download_url: document.getElementById("relDownloadUrl").value.trim(),
+                download_url: urlResult.url,
                 short_description: document.getElementById("relDescription").value.trim(),
                 features: linesToArray(document.getElementById("relFeatures").value),
                 requirements: linesToArray(document.getElementById("relRequirements").value),
@@ -1725,7 +2012,977 @@
     }
   }
 
+  /* ============================ SCHOOLS (view + stats + bulk delete) ============================ */
+  var allSchools = [];
+  var selectedSchoolIds = {};
+
+  function formatLocationCode(code){
+    try{
+      if(!code) return "";
+      return String(code).replace(/-/g, " ").toUpperCase();
+    }catch(e){ return code || ""; }
+  }
+
+  function loadSchools(){
+    try{
+      var listEl = document.getElementById("schoolList");
+      if(!listEl || !supabaseClient) return;
+
+      supabaseClient.from("schools").select("*").eq("category", "FACILITY").order("created_at", { ascending:false })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){ console.error("[ShuleBrain] loading schools failed", error); listEl.innerHTML = '<div class="empty-list">Could not load schools.</div>'; return; }
+            allSchools = data || [];
+            selectedSchoolIds = {};
+            renderSchoolStats(allSchools);
+            renderSchoolList(allSchools);
+            updateSchoolSelectionUi();
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing schools response failed", thenErr);
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] schools query rejected", err);
+          listEl.innerHTML = '<div class="empty-list">Could not load schools.</div>';
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] loadSchools fatal error", fatalErr);
+    }
+  }
+
+  function renderSchoolStats(schools){
+    try{
+      try{
+        var totalEl = document.getElementById("statTotalSchools");
+        if(totalEl) totalEl.textContent = String(schools.length);
+      }catch(e){ console.error("[ShuleBrain] updating total schools stat failed", e); }
+
+      try{
+        var paidEl = document.getElementById("statPaidSchools");
+        if(paidEl){
+          var paidCount = schools.filter(function(s){ return !!s.last_successful_payment; }).length;
+          paidEl.textContent = String(paidCount);
+        }
+      }catch(e){ console.error("[ShuleBrain] updating paid schools stat failed", e); }
+
+      try{
+        var newEl = document.getElementById("statNewSchools");
+        if(newEl){
+          var cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
+          var newCount = schools.filter(function(s){
+            try{ return s.created_at && (new Date(s.created_at).getTime() >= cutoff); }
+            catch(e){ return false; }
+          }).length;
+          newEl.textContent = String(newCount);
+        }
+      }catch(e){ console.error("[ShuleBrain] updating new schools stat failed", e); }
+
+      try{
+        var badgeEl = document.getElementById("schoolCountBadge");
+        if(badgeEl){
+          badgeEl.textContent = String(schools.length);
+          badgeEl.classList.toggle("hidden", !schools.length);
+        }
+      }catch(e){ console.error("[ShuleBrain] updating school sidebar badge failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderSchoolStats fatal error", fatalErr);
+    }
+  }
+
+  function renderSchoolList(schools){
+    try{
+      var listEl = document.getElementById("schoolList");
+      if(!listEl) return;
+
+      try{
+        var countEl = document.getElementById("schoolListCount");
+        if(countEl) countEl.textContent = String(allSchools.length);
+
+        if(!schools.length){ listEl.innerHTML = '<div class="empty-list">No schools have joined yet. They appear here once registered through ShuleBrain DSK.</div>'; return; }
+
+        listEl.innerHTML = schools.map(function(s){
+          try{
+            var joinedLabel = s.created_at ? new Date(s.created_at).toLocaleDateString() : "";
+            var paymentLabel = s.last_successful_payment ? new Date(s.last_successful_payment).toLocaleDateString() : "No payment recorded";
+            var checked = selectedSchoolIds[s.id] ? "checked" : "";
+            var isSelected = selectedSchoolIds[s.id] ? "selected" : "";
+            return '<div class="list-item with-checkbox ' + isSelected + '" data-school-row="' + escapeHtml(s.id) + '">' +
+              '<div class="list-item-checkbox">' +
+                '<input type="checkbox" class="form-check-input" data-school-checkbox="' + escapeHtml(s.id) + '" ' + checked + '>' +
+              '</div>' +
+              '<div class="list-item-body flex-grow-1">' +
+                '<h4>' + escapeHtml(s.centre_name) + (s.last_successful_payment ? ' <span class="badge-mini">Paid</span>' : ' <span class="badge-mini" style="background:#eef1f7;color:#4b5470;">No payment</span>') + '</h4>' +
+                '<p>' + escapeHtml(s.centre_number) + ' &middot; ' + escapeHtml(formatLocationCode(s.region)) + (s.district ? (", " + escapeHtml(formatLocationCode(s.district))) : '') + '</p>' +
+                '<div class="list-item-meta">' +
+                  (s.phone_number ? '<span>' + escapeHtml(s.phone_number) + '</span>' : '') +
+                  (s.email_address ? '<span>' + escapeHtml(s.email_address) + '</span>' : '') +
+                  '<span>Joined ' + escapeHtml(joinedLabel) + '</span>' +
+                  '<span>Last payment: ' + escapeHtml(paymentLabel) + '</span>' +
+                  (s.last_payment_ref ? '<span class="ref-chip" data-copy-ref="' + escapeHtml(s.last_payment_ref) + '" title="Click to copy">Ref: ' + escapeHtml(s.last_payment_ref) + ' <i class="bi bi-copy"></i></span>' : '') +
+                '</div>' +
+              '</div>' +
+              '<div class="list-item-actions">' +
+                '<button type="button" class="icon-btn danger" data-delete-school="' + escapeHtml(s.id) + '" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>' +
+              '</div>' +
+            '</div>';
+          }catch(itemErr){
+            console.error("[ShuleBrain] rendering a school list item failed", itemErr);
+            return "";
+          }
+        }).join("");
+
+        try{
+          listEl.querySelectorAll("[data-school-checkbox]").forEach(function(box){
+            box.addEventListener("change", function(){
+              try{
+                var id = box.getAttribute("data-school-checkbox");
+                if(box.checked){ selectedSchoolIds[id] = true; } else { delete selectedSchoolIds[id]; }
+                try{
+                  var row = listEl.querySelector('[data-school-row="' + id + '"]');
+                  if(row) row.classList.toggle("selected", !!box.checked);
+                }catch(rowErr){ console.warn("[ShuleBrain] toggling school row highlight failed", rowErr); }
+                updateSchoolSelectionUi();
+              }catch(e){ console.error("[ShuleBrain] school checkbox change handling failed", e); }
+            });
+          });
+        }catch(checkboxBindErr){
+          console.error("[ShuleBrain] binding school checkboxes failed", checkboxBindErr);
+        }
+
+        try{
+          listEl.querySelectorAll("[data-delete-school]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ handleDeleteSchool(btn.getAttribute("data-delete-school")); }
+              catch(e){ console.error("[ShuleBrain] handling school delete failed", e); }
+            });
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding school delete buttons failed", bindErr);
+        }
+      }catch(renderInnerErr){
+        console.error("[ShuleBrain] renderSchoolList inner failure", renderInnerErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderSchoolList fatal error", fatalErr);
+    }
+  }
+
+  function updateSchoolSelectionUi(){
+    try{
+      var ids = Object.keys(selectedSchoolIds);
+      var countEl = document.getElementById("schoolSelectedCount");
+      var bulkBtn = document.getElementById("schoolBulkDeleteBtn");
+      var selectAll = document.getElementById("schoolSelectAll");
+
+      try{ if(countEl) countEl.textContent = ids.length + " selected"; }
+      catch(e){ console.error("[ShuleBrain] updating school selected count failed", e); }
+
+      try{ if(bulkBtn) bulkBtn.disabled = ids.length === 0; }
+      catch(e){ console.error("[ShuleBrain] updating school bulk delete button failed", e); }
+
+      try{
+        if(selectAll){
+          var visibleCount = document.querySelectorAll("[data-school-checkbox]").length;
+          selectAll.checked = visibleCount > 0 && ids.length >= visibleCount;
+          selectAll.indeterminate = ids.length > 0 && ids.length < visibleCount;
+        }
+      }catch(e){ console.error("[ShuleBrain] updating school select-all state failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] updateSchoolSelectionUi fatal error", fatalErr);
+    }
+  }
+
+  function initSchoolSearch(){
+    try{
+      var input = document.getElementById("schoolSearchInput");
+      if(!input) return;
+      input.addEventListener("input", function(){
+        try{
+          var q = input.value.trim().toLowerCase();
+          if(!q){ renderSchoolList(allSchools); updateSchoolSelectionUi(); return; }
+          var filtered = allSchools.filter(function(s){
+            return (String(s.centre_number||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.centre_name||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.region||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.district||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.phone_number||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.email_address||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.last_payment_ref||"").toLowerCase().indexOf(q) !== -1);
+          });
+          renderSchoolList(filtered);
+          updateSchoolSelectionUi();
+        }catch(e){ console.error("[ShuleBrain] school search filtering failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initSchoolSearch fatal error", fatalErr);
+    }
+  }
+
+  function handleDeleteSchool(id){
+    try{
+      confirmDelete("this school").then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("schools").delete().eq("id", id)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] deleting school failed", result.error); notify("error","Could not delete this school."); return; }
+                notify("success", "School deleted.");
+                delete selectedSchoolIds[id];
+                loadSchools();
+              }catch(e){ console.error("[ShuleBrain] processing school delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] school delete rejected", err); notify("error","Could not delete this school."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleDeleteSchool confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleDeleteSchool fatal error", fatalErr);
+    }
+  }
+
+  function handleBulkDeleteSchools(){
+    try{
+      var ids = Object.keys(selectedSchoolIds);
+      if(!ids.length) return;
+
+      confirmDelete(ids.length + " selected school" + (ids.length > 1 ? "s" : "")).then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("schools").delete().in("id", ids)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] bulk deleting schools failed", result.error); notify("error","Could not delete the selected schools."); return; }
+                notify("success", ids.length + " school" + (ids.length > 1 ? "s" : "") + " deleted.");
+                selectedSchoolIds = {};
+                loadSchools();
+              }catch(e){ console.error("[ShuleBrain] processing school bulk delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] school bulk delete rejected", err); notify("error","Could not delete the selected schools."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleBulkDeleteSchools confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleBulkDeleteSchools fatal error", fatalErr);
+    }
+  }
+
+  function initSchoolSelection(){
+    try{
+      var selectAll = document.getElementById("schoolSelectAll");
+      var bulkBtn = document.getElementById("schoolBulkDeleteBtn");
+
+      if(selectAll){
+        selectAll.addEventListener("change", function(){
+          try{
+            var boxes = document.querySelectorAll("[data-school-checkbox]");
+            boxes.forEach(function(box){
+              try{
+                box.checked = selectAll.checked;
+                var id = box.getAttribute("data-school-checkbox");
+                if(selectAll.checked){ selectedSchoolIds[id] = true; } else { delete selectedSchoolIds[id]; }
+                var row = document.querySelector('[data-school-row="' + id + '"]');
+                if(row) row.classList.toggle("selected", selectAll.checked);
+              }catch(e){ console.error("[ShuleBrain] select-all applying to a school checkbox failed", e); }
+            });
+            updateSchoolSelectionUi();
+          }catch(e){ console.error("[ShuleBrain] school select-all change handling failed", e); }
+        });
+      }
+
+      if(bulkBtn){
+        bulkBtn.addEventListener("click", function(){
+          try{ handleBulkDeleteSchools(); }
+          catch(e){ console.error("[ShuleBrain] school bulk delete button click failed", e); }
+        });
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initSchoolSelection fatal error", fatalErr);
+    }
+  }
+
+  /* ============================ PAID EXAMS (schools with category=EXAM) ============================ */
+  var allPaidExams = [];
+  var selectedPaidExamIds = {};
+
+  function loadPaidExams(){
+    try{
+      var listEl = document.getElementById("paidExamList");
+      if(!listEl || !supabaseClient) return;
+
+      supabaseClient.from("schools").select("*").eq("category", "EXAM").order("created_at", { ascending:false })
+        .then(function(result){
+          try{
+            var data = result ? result.data : null;
+            var error = result ? result.error : null;
+            if(error){ console.error("[ShuleBrain] loading paid exams failed", error); listEl.innerHTML = '<div class="empty-list">Could not load paid exam registrations.</div>'; return; }
+            allPaidExams = data || [];
+            selectedPaidExamIds = {};
+            renderPaidExamStats(allPaidExams);
+            renderPaidExamList(allPaidExams);
+            updatePaidExamSelectionUi();
+          }catch(thenErr){
+            console.error("[ShuleBrain] processing paid exams response failed", thenErr);
+          }
+        })
+        .catch(function(err){
+          console.error("[ShuleBrain] paid exams query rejected", err);
+          listEl.innerHTML = '<div class="empty-list">Could not load paid exam registrations.</div>';
+        });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] loadPaidExams fatal error", fatalErr);
+    }
+  }
+
+  function renderPaidExamStats(rows){
+    try{
+      try{
+        var totalEl = document.getElementById("statTotalPaidExams");
+        if(totalEl) totalEl.textContent = String(rows.length);
+      }catch(e){ console.error("[ShuleBrain] updating total paid exams stat failed", e); }
+
+      try{
+        var paidEl = document.getElementById("statPaidPaidExams");
+        if(paidEl){
+          var paidCount = rows.filter(function(s){ return !!s.last_successful_payment; }).length;
+          paidEl.textContent = String(paidCount);
+        }
+      }catch(e){ console.error("[ShuleBrain] updating paid-count paid exams stat failed", e); }
+
+      try{
+        var newEl = document.getElementById("statNewPaidExams");
+        if(newEl){
+          var cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000);
+          var newCount = rows.filter(function(s){
+            try{ return s.created_at && (new Date(s.created_at).getTime() >= cutoff); }
+            catch(e){ return false; }
+          }).length;
+          newEl.textContent = String(newCount);
+        }
+      }catch(e){ console.error("[ShuleBrain] updating new paid exams stat failed", e); }
+
+      try{
+        var badgeEl = document.getElementById("paidExamCountBadge");
+        if(badgeEl){
+          badgeEl.textContent = String(rows.length);
+          badgeEl.classList.toggle("hidden", !rows.length);
+        }
+      }catch(e){ console.error("[ShuleBrain] updating paid exams sidebar badge failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderPaidExamStats fatal error", fatalErr);
+    }
+  }
+
+  function renderPaidExamList(rows){
+    try{
+      var listEl = document.getElementById("paidExamList");
+      if(!listEl) return;
+
+      try{
+        var countEl = document.getElementById("paidExamListCount");
+        if(countEl) countEl.textContent = String(allPaidExams.length);
+
+        if(!rows.length){ listEl.innerHTML = '<div class="empty-list">No paid exam registrations yet. They appear here once registered through ShuleBrain DSK.</div>'; return; }
+
+        listEl.innerHTML = rows.map(function(s){
+          try{
+            var joinedLabel = s.created_at ? new Date(s.created_at).toLocaleDateString() : "";
+            var paymentLabel = s.last_successful_payment ? new Date(s.last_successful_payment).toLocaleDateString() : "No payment recorded";
+            var checked = selectedPaidExamIds[s.id] ? "checked" : "";
+            var isSelected = selectedPaidExamIds[s.id] ? "selected" : "";
+            return '<div class="list-item with-checkbox ' + isSelected + '" data-paidexam-row="' + escapeHtml(s.id) + '">' +
+              '<div class="list-item-checkbox">' +
+                '<input type="checkbox" class="form-check-input" data-paidexam-checkbox="' + escapeHtml(s.id) + '" ' + checked + '>' +
+              '</div>' +
+              '<div class="list-item-body flex-grow-1">' +
+                '<h4>' + escapeHtml(s.centre_name) + (s.last_successful_payment ? ' <span class="badge-mini">Paid</span>' : ' <span class="badge-mini" style="background:#eef1f7;color:#4b5470;">No payment</span>') + '</h4>' +
+                '<p>' + escapeHtml(s.centre_number) + ' &middot; ' + escapeHtml(formatLocationCode(s.region)) + (s.district ? (", " + escapeHtml(formatLocationCode(s.district))) : '') + '</p>' +
+                '<div class="list-item-meta">' +
+                  (s.phone_number ? '<span>' + escapeHtml(s.phone_number) + '</span>' : '') +
+                  (s.email_address ? '<span>' + escapeHtml(s.email_address) + '</span>' : '') +
+                  '<span>Joined ' + escapeHtml(joinedLabel) + '</span>' +
+                  '<span>Last payment: ' + escapeHtml(paymentLabel) + '</span>' +
+                  (s.last_payment_ref ? '<span class="ref-chip" data-copy-ref="' + escapeHtml(s.last_payment_ref) + '" title="Click to copy">Ref: ' + escapeHtml(s.last_payment_ref) + ' <i class="bi bi-copy"></i></span>' : '') +
+                '</div>' +
+              '</div>' +
+              '<div class="list-item-actions">' +
+                '<button type="button" class="icon-btn danger" data-delete-paidexam="' + escapeHtml(s.id) + '" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>' +
+              '</div>' +
+            '</div>';
+          }catch(itemErr){
+            console.error("[ShuleBrain] rendering a paid exam list item failed", itemErr);
+            return "";
+          }
+        }).join("");
+
+        try{
+          listEl.querySelectorAll("[data-paidexam-checkbox]").forEach(function(box){
+            box.addEventListener("change", function(){
+              try{
+                var id = box.getAttribute("data-paidexam-checkbox");
+                if(box.checked){ selectedPaidExamIds[id] = true; } else { delete selectedPaidExamIds[id]; }
+                try{
+                  var row = listEl.querySelector('[data-paidexam-row="' + id + '"]');
+                  if(row) row.classList.toggle("selected", !!box.checked);
+                }catch(rowErr){ console.warn("[ShuleBrain] toggling paid exam row highlight failed", rowErr); }
+                updatePaidExamSelectionUi();
+              }catch(e){ console.error("[ShuleBrain] paid exam checkbox change handling failed", e); }
+            });
+          });
+        }catch(checkboxBindErr){
+          console.error("[ShuleBrain] binding paid exam checkboxes failed", checkboxBindErr);
+        }
+
+        try{
+          listEl.querySelectorAll("[data-delete-paidexam]").forEach(function(btn){
+            btn.addEventListener("click", function(){
+              try{ handleDeletePaidExam(btn.getAttribute("data-delete-paidexam")); }
+              catch(e){ console.error("[ShuleBrain] handling paid exam delete failed", e); }
+            });
+          });
+        }catch(bindErr){
+          console.error("[ShuleBrain] binding paid exam delete buttons failed", bindErr);
+        }
+      }catch(renderInnerErr){
+        console.error("[ShuleBrain] renderPaidExamList inner failure", renderInnerErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] renderPaidExamList fatal error", fatalErr);
+    }
+  }
+
+  function updatePaidExamSelectionUi(){
+    try{
+      var ids = Object.keys(selectedPaidExamIds);
+      var countEl = document.getElementById("paidExamSelectedCount");
+      var bulkBtn = document.getElementById("paidExamBulkDeleteBtn");
+      var selectAll = document.getElementById("paidExamSelectAll");
+
+      try{ if(countEl) countEl.textContent = ids.length + " selected"; }
+      catch(e){ console.error("[ShuleBrain] updating paid exam selected count failed", e); }
+
+      try{ if(bulkBtn) bulkBtn.disabled = ids.length === 0; }
+      catch(e){ console.error("[ShuleBrain] updating paid exam bulk delete button failed", e); }
+
+      try{
+        if(selectAll){
+          var visibleCount = document.querySelectorAll("[data-paidexam-checkbox]").length;
+          selectAll.checked = visibleCount > 0 && ids.length >= visibleCount;
+          selectAll.indeterminate = ids.length > 0 && ids.length < visibleCount;
+        }
+      }catch(e){ console.error("[ShuleBrain] updating paid exam select-all state failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] updatePaidExamSelectionUi fatal error", fatalErr);
+    }
+  }
+
+  function initPaidExamSearch(){
+    try{
+      var input = document.getElementById("paidExamSearchInput");
+      if(!input) return;
+      input.addEventListener("input", function(){
+        try{
+          var q = input.value.trim().toLowerCase();
+          if(!q){ renderPaidExamList(allPaidExams); updatePaidExamSelectionUi(); return; }
+          var filtered = allPaidExams.filter(function(s){
+            return (String(s.centre_number||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.centre_name||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.region||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.district||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.phone_number||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.email_address||"").toLowerCase().indexOf(q) !== -1) ||
+                   (String(s.last_payment_ref||"").toLowerCase().indexOf(q) !== -1);
+          });
+          renderPaidExamList(filtered);
+          updatePaidExamSelectionUi();
+        }catch(e){ console.error("[ShuleBrain] paid exam search filtering failed", e); }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initPaidExamSearch fatal error", fatalErr);
+    }
+  }
+
+  function handleDeletePaidExam(id){
+    try{
+      confirmDelete("this paid exam registration").then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("schools").delete().eq("id", id)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] deleting paid exam failed", result.error); notify("error","Could not delete this registration."); return; }
+                notify("success", "Registration deleted.");
+                delete selectedPaidExamIds[id];
+                loadPaidExams();
+              }catch(e){ console.error("[ShuleBrain] processing paid exam delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] paid exam delete rejected", err); notify("error","Could not delete this registration."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleDeletePaidExam confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleDeletePaidExam fatal error", fatalErr);
+    }
+  }
+
+  function handleBulkDeletePaidExams(){
+    try{
+      var ids = Object.keys(selectedPaidExamIds);
+      if(!ids.length) return;
+
+      confirmDelete(ids.length + " selected registration" + (ids.length > 1 ? "s" : "")).then(function(confirmed){
+        try{
+          if(!confirmed || !supabaseClient) return;
+          supabaseClient.from("schools").delete().in("id", ids)
+            .then(function(result){
+              try{
+                if(result && result.error){ console.error("[ShuleBrain] bulk deleting paid exams failed", result.error); notify("error","Could not delete the selected registrations."); return; }
+                notify("success", ids.length + " registration" + (ids.length > 1 ? "s" : "") + " deleted.");
+                selectedPaidExamIds = {};
+                loadPaidExams();
+              }catch(e){ console.error("[ShuleBrain] processing paid exam bulk delete response failed", e); }
+            })
+            .catch(function(err){ console.error("[ShuleBrain] paid exam bulk delete rejected", err); notify("error","Could not delete the selected registrations."); });
+        }catch(confirmedErr){
+          console.error("[ShuleBrain] handleBulkDeletePaidExams confirmed-branch failed", confirmedErr);
+        }
+      }).catch(function(e){ console.error("[ShuleBrain] confirmDelete promise rejected", e); });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] handleBulkDeletePaidExams fatal error", fatalErr);
+    }
+  }
+
+  function initPaidExamSelection(){
+    try{
+      var selectAll = document.getElementById("paidExamSelectAll");
+      var bulkBtn = document.getElementById("paidExamBulkDeleteBtn");
+
+      if(selectAll){
+        selectAll.addEventListener("change", function(){
+          try{
+            var boxes = document.querySelectorAll("[data-paidexam-checkbox]");
+            boxes.forEach(function(box){
+              try{
+                box.checked = selectAll.checked;
+                var id = box.getAttribute("data-paidexam-checkbox");
+                if(selectAll.checked){ selectedPaidExamIds[id] = true; } else { delete selectedPaidExamIds[id]; }
+                var row = document.querySelector('[data-paidexam-row="' + id + '"]');
+                if(row) row.classList.toggle("selected", selectAll.checked);
+              }catch(e){ console.error("[ShuleBrain] select-all applying to a paid exam checkbox failed", e); }
+            });
+            updatePaidExamSelectionUi();
+          }catch(e){ console.error("[ShuleBrain] paid exam select-all change handling failed", e); }
+        });
+      }
+
+      if(bulkBtn){
+        bulkBtn.addEventListener("click", function(){
+          try{ handleBulkDeletePaidExams(); }
+          catch(e){ console.error("[ShuleBrain] paid exam bulk delete button click failed", e); }
+        });
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initPaidExamSelection fatal error", fatalErr);
+    }
+  }
+
   /* -------------------------------- Boot -------------------------------- */
+
+  /* ============================ ADD SCHOOL (region/district data + insert) ============================ */
+  const TANZANIA_REGION_DATA = {
+
+        regions: {
+          "dodoma":"DODOMA","arusha":"ARUSHA","kilimanjaro":"KILIMANJARO","tanga":"TANGA","morogoro":"MOROGORO",
+          "pwani":"PWANI","dar-es-salaam":"DAR ES SALAAM","lindi":"LINDI","mtwara":"MTWARA","ruvuma":"RUVUMA",
+          "iringa":"IRINGA","mbeya":"MBEYA","singida":"SINGIDA","tabora":"TABORA","rukwa":"RUKWA","kigoma":"KIGOMA",
+          "shinyanga":"SHINYANGA","kagera":"KAGERA","mwanza":"MWANZA","mara":"MARA","manyara":"MANYARA",
+          "njombe":"NJOMBE","katavi":"KATAVI","simiyu":"SIMIYU","geita":"GEITA","songwe":"SONGWE",
+          "kaskazini-unguja":"KASKAZINI UNGUJA","kusini-unguja":"KUSINI UNGUJA","mjini-magharibi":"MJINI MAGHARIBI",
+          "kaskazini-pemba":"KASKAZINI PEMBA","kusini-pemba":"KUSINI PEMBA"
+        },
+
+districts: {
+
+          "dodoma":{
+          "kondoa-dc":"KONDOA DC","mpwapwa-dc":"MPWAPWA DC","kongwa-dc":"KONGWA DC","dodoma-mc":"DODOMA MC",
+          "bahi-dc":"BAHI DC","chemba-dc":"CHEMBA DC","kondoa-tc":"KONDOA TC","chamwino-dc":"CHAMWINO DC"
+          },
+
+          "arusha":{
+          "monduli-dc":"MONDULI DC","meru-dc":"MERU DC","arusha-city":"ARUSHA CITY","karatu-dc":"KARATU DC",
+          "ngorongoro-dc":"NGORONGORO DC","arusha-dc":"ARUSHA DC","longido-dc":"LONGIDO DC"
+          },
+
+          "kilimanjaro":{
+          "rombo-dc":"ROMBO DC","mwanga-dc":"MWANGA DC","same-dc":"SAME DC","moshi-dc":"MOSHI DC",
+          "hai-dc":"HAI DC","moshi-mc":"MOSHI MC","siha-dc":"SIHA DC"
+          },
+
+          "tanga":{
+          "lushoto-dc":"LUSHOTO DC","korogwe-dc":"KOROGWE DC","muheza-dc":"MUHEZA DC","tanga-city":"TANGA CITY",
+          "pangani-dc":"PANGANI DC","handeni-dc":"HANDENI DC","kilindi-dc":"KILINDI DC","mkinga-dc":"MKINGA DC",
+          "korogwe-tc":"KOROGWE TC","handeni-tc":"HANDENI TC","bumbuli-dc":"BUMBULI DC"
+          },
+
+          "morogoro":{
+          "kilosa-dc":"KILOSA DC","morogoro-dc":"MOROGORO DC","kilombero-dc":"KILOMBERO DC","ulanga-dc":"ULANGA DC",
+          "morogoro-mc":"MOROGORO MC","mvomero-dc":"MVOMERO DC","gairo-dc":"GAIRO DC","ifakara-tc":"IFAKARA TC",
+          "malinyi-dc":"MALINYI DC"
+          },
+
+          "pwani":{
+          "bagamoyo-dc":"BAGAMOYO DC","kibaha-dc":"KIBAHA DC","kisarawe-dc":"KISARAWE DC","mkuranga-dc":"MKURANGA DC",
+          "rufiji-dc":"RUFIJI DC","mafia-dc":"MAFIA DC","kibaha-tc":"KIBAHA TC","chalinze-dc":"CHALINZE DC",
+          "kibiti-tc":"KIBITI TC"
+          },
+
+          "dar-es-salaam":{
+          "kinondoni-mc":"KINONDONI MC","ilala-mc":"ILALA MC","temeke-mc":"TEMEKE MC",
+          "ubungo-mc":"UBUNGO MC","kigamboni-mc":"KIGAMBONI MC"
+          },
+
+          "lindi":{
+          "kilwa-dc":"KILWA DC","lindi-dc":"LINDI DC","nachingwea-dc":"NACHINGWEA DC",
+          "liwale-dc":"LIWALE DC","ruangwa-dc":"RUANGWA DC","lindi-mc":"LINDI MC"
+          },
+
+          "mtwara":{
+          "mtwara-dc":"MTWARA DC","newala-dc":"NEWALA DC","masasi-dc":"MASASI DC","tandahimba-dc":"TANDAHIMBA DC",
+          "mtwara-mc":"MTWARA MC","nanyumbu-dc":"NANYUMBU DC","masasi-tc":"MASASI TC",
+          "newala-tc":"NEWALA TC","nanyamba-dc":"NANYAMBA DC"
+          },
+
+          "ruvuma":{
+          "tunduru-dc":"TUNDURU DC","songea-dc":"SONGEA DC","mbinga-dc":"MBINGA DC","songea-mc":"SONGEA MC",
+          "namtumbo-dc":"NAMTUMBO DC","nyasa-dc":"NYASA DC","madaba-dc":"MADABA DC","mbinga-tc":"MBINGA TC"
+          },
+
+          "iringa":{
+          "iringa-dc":"IRINGA DC","mufindi-dc":"MUFINDI DC","iringa-mc":"IRINGA MC",
+          "kilolo-dc":"KILOLO DC","mafinga-tc":"MAFINGA TC"
+          },
+
+          "mbeya":{
+          "chunya-dc":"CHUNYA DC","mbeya-dc":"MBEYA DC","kyela-dc":"KYELA DC","rungwe-dc":"RUNGWE DC",
+          "busokelo-dc":"BUSOKELO DC","mbarali-dc":"MBARALI DC","mbeya-cc":"MBEYA CC"
+          },
+
+          "singida":{
+          "iramba-dc":"IRAMBA DC","singida-dc":"SINGIDA DC","manyoni-dc":"MANYONI DC",
+          "singida-mc":"SINGIDA MC","ikungi-dc":"IKUNGI DC","mkalama-dc":"MKALAMA DC",
+          "itigi-dc":"ITIGI DC","manyoni-tc":"MANYONI TC"
+          },
+
+          "tabora":{
+          "nzega-dc":"NZEGA DC","igunga-dc":"IGUNGA DC","uyui-dc":"UYUI DC","urambo-dc":"URAMBO DC",
+          "sikonge-dc":"SIKONGE DC","tabora-mc":"TABORA MC","kaliua-dc":"KALIUA DC","nzega-tc":"NZEGA TC"
+          },
+
+          "rukwa":{
+          "kalambo-dc":"KALAMBO DC","sumbawanga-dc":"SUMBAWANGA DC",
+          "nkasi-dc":"NKASI DC","sumbawanga-mc":"SUMBAWANGA MC"
+          },
+
+          "kigoma":{
+          "kibondo-dc":"KIBONDO DC","kasulu-dc":"KASULU DC","kigoma-dc":"KIGOMA DC",
+          "kigoma-ujiji-dc":"KIGOMA UJIJI DC","uvinza-dc":"UVINZA DC","buhingwe-dc":"BUHINGWE DC",
+          "kakonko-dc":"KAKONKO DC","kasulu-mjini-dc":"KASULU MJINI DC"
+          },
+
+          "shinyanga":{
+          "shinyanga-mc":"SHINYANGA MC","kishapu-dc":"KISHAPU DC","shinyanga-dc":"SHINYANGA DC",
+          "ushetu-dc":"USHETU DC","kahama-tc":"KAHAMA TC","msalala-dc":"MSALALA DC"
+          },
+
+          "kagera":{
+          "karagwe-dc":"KARAGWE DC","bukoba-dc":"BUKOBA DC","muleba-dc":"MULEBA DC","biharamulo-dc":"BIHARAMULO DC",
+          "ngara-dc":"NGARA DC","bukoba-mc":"BUKOBA MC","missenyi-dc":"MISSENYI DC","kyerwa-dc":"KYERWA DC"
+          },
+
+          "mwanza":{
+          "ukerewe-dc":"UKEREWE DC","magu-dc":"MAGU DC","nyamagana-mc":"NYAMAGANA MC","kwimba-dc":"KWIMBA DC",
+          "sengerema-dc":"SENGEREMA DC","ilemela-mc":"ILEMELA MC","misungwi-dc":"MISUNGWI DC","buchosa-dc":"BUCHOSA DC"
+          },
+
+          "mara":{
+          "tarime-dc":"TARIME DC","serengeti-dc":"SERENGETI DC","musoma-dc":"MUSOMA DC","bunda-dc":"BUNDA DC",
+          "musoma-mc":"MUSOMA MC","rorya-dc":"RORYA DC","butiama-dc":"BUTIAMA DC",
+          "tarime-tc":"TARIME TC","bunda-tc":"BUNDA TC"
+          },
+
+          "manyara":{
+          "babati-dc":"BABATI DC","hanang-dc":"HANANG DC","mbulu-dc":"MBULU DC","simanjiro-dc":"SIMANJIRO DC",
+          "kiteto-dc":"KITETO DC","babati-tc":"BABATI TC","mbulu-tc":"MBULU TC"
+          },
+
+          "njombe":{
+          "njombe-tc":"NJOMBE TC","wangingombe-dc":"WANGINGOMBE DC","makete-dc":"MAKETE DC",
+          "njombe-dc":"NJOMBE DC","ludewa-dc":"LUDEWA DC","makambako-tc":"MAKAMBAKO TC"
+          },
+
+          "katavi":{
+          "mpanda-mc":"MPANDA MC","mpanda-dc":"MPANDA DC","mlele-dc":"MLELE DC",
+          "mpimbwe-dc":"MPIMBWE DC","nsimbo-dc":"NSIMBO DC"
+          },
+
+          "simiyu":{
+          "bariadi-dc":"BARIADI DC","itilima-dc":"ITILIMA DC","meatu-dc":"MEATU DC",
+          "maswa-dc":"MASWA DC","busega-dc":"BUSEGA DC","bariadi-tc":"BARIADI TC"
+          },
+
+          "geita":{
+          "geita-dc":"GEITA DC","nyanghwale":"NYANGHWALE","mbogwe-dc":"MBOGWE DC",
+          "bukombe-dc":"BUKOMBE DC","chato-dc":"CHATO DC","geita-tc":"GEITA TC"
+          },
+
+          "songwe":{
+          "songwe-dc":"SONGWE DC","ileje-dc":"ILEJE DC","mbozi-dc":"MBOZI DC",
+          "momba-dc":"MOMBA DC","tunduma-tc":"TUNDUMA TC"
+          },
+
+          "kaskazini-unguja":{
+          "kaskazini-a":"KASKAZINI A","kaskazini-b":"KASKAZINI B"
+          },
+
+          "kusini-unguja":{
+          "kati":"KATI","kusini":"KUSINI"
+          },
+
+          "mjini-magharibi":{
+          "magharibi-a":"MAGHARIBI A","mjini":"MJINI","magharibi-b":"MAGHARIBI B"
+          },
+
+          "kaskazini-pemba":{
+          "wete":"WETE","micheweni":"MICHEWENI"
+          },
+
+          "kusini-pemba":{
+          "chake-chake":"CHAKE CHAKE","mkoani":"MKOANI"
+          }
+
+        }
+
+      };
+
+  function populateAddSchoolRegionSelect(){
+    try{
+      var regionSelect = document.getElementById("asRegion");
+      if(!regionSelect || regionSelect.options.length > 1) return;
+      for(var code in TANZANIA_REGION_DATA.regions){
+        if(!TANZANIA_REGION_DATA.regions.hasOwnProperty(code)) continue;
+        try{
+          var opt = document.createElement("option");
+          opt.value = code; opt.textContent = TANZANIA_REGION_DATA.regions[code];
+          regionSelect.appendChild(opt);
+        }catch(optErr){ console.error("[ShuleBrain] adding a region option failed", optErr); }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] populateAddSchoolRegionSelect fatal error", fatalErr);
+    }
+  }
+
+  function updateAddSchoolDistrictSelect(){
+    try{
+      var regionSelect = document.getElementById("asRegion");
+      var districtSelect = document.getElementById("asDistrict");
+      if(!regionSelect || !districtSelect) return;
+
+      districtSelect.innerHTML = '<option value="">Select district</option>';
+      var regionCode = regionSelect.value;
+      var group = regionCode ? TANZANIA_REGION_DATA.districts[regionCode] : null;
+      if(!group){
+        districtSelect.innerHTML = '<option value="">Select region first</option>';
+        return;
+      }
+
+      for(var code in group){
+        if(!group.hasOwnProperty(code)) continue;
+        try{
+          var opt = document.createElement("option");
+          opt.value = code; opt.textContent = group[code];
+          districtSelect.appendChild(opt);
+        }catch(optErr){ console.error("[ShuleBrain] adding a district option failed", optErr); }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] updateAddSchoolDistrictSelect fatal error", fatalErr);
+    }
+  }
+
+  function resetAddSchoolForm(){
+    try{
+      var form = document.getElementById("addSchoolForm");
+      if(form) form.reset();
+      try{
+        var districtSelect = document.getElementById("asDistrict");
+        if(districtSelect) districtSelect.innerHTML = '<option value="">Select region first</option>';
+      }catch(e){ console.error("[ShuleBrain] resetting district select failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] resetAddSchoolForm fatal error", fatalErr);
+    }
+  }
+
+  function initAddSchoolForm(){
+    try{
+      populateAddSchoolRegionSelect();
+
+      try{
+        var regionSelect = document.getElementById("asRegion");
+        if(regionSelect){
+          regionSelect.addEventListener("change", function(){
+            try{ updateAddSchoolDistrictSelect(); }
+            catch(e){ console.error("[ShuleBrain] add-school region change handling failed", e); }
+          });
+        }
+      }catch(e){ console.error("[ShuleBrain] binding add-school region select failed", e); }
+
+      try{
+        var resetBtn = document.getElementById("addSchoolResetBtn");
+        if(resetBtn){
+          resetBtn.addEventListener("click", function(){
+            try{ resetAddSchoolForm(); }
+            catch(e){ console.error("[ShuleBrain] add-school reset click failed", e); }
+          });
+        }
+      }catch(e){ console.error("[ShuleBrain] binding add-school reset button failed", e); }
+
+      try{
+        var form = document.getElementById("addSchoolForm");
+        if(form){
+          form.addEventListener("submit", function(e){
+            try{
+              e.preventDefault();
+              if(!supabaseClient){ notify("error","Supabase isn't configured yet."); return; }
+
+              try{
+                var saveBtn = document.getElementById("addSchoolSaveBtn");
+                var payload = {
+                  centre_number: document.getElementById("asCentreNumber").value.trim(),
+                  centre_name: document.getElementById("asCentreName").value.trim(),
+                  region: document.getElementById("asRegion").value,
+                  district: document.getElementById("asDistrict").value,
+                  category: document.getElementById("asCategory").value || "FACILITY",
+                  phone_number: document.getElementById("asPhone").value.trim() || null,
+                  email_address: document.getElementById("asEmail").value.trim() || null,
+                  last_payment_ref: document.getElementById("asPaymentRef").value.trim() || null
+                };
+
+                try{
+                  var dateVal = document.getElementById("asPaymentDate").value;
+                  if(dateVal) payload.last_successful_payment = new Date(dateVal).toISOString();
+                }catch(dateErr){
+                  console.error("[ShuleBrain] parsing payment date failed", dateErr);
+                }
+
+                try{ if(saveBtn){ saveBtn.disabled = true; saveBtn.textContent = "Adding..."; } }
+                catch(busyErr){ console.warn("[ShuleBrain] disabling add-school button failed", busyErr); }
+
+                supabaseClient.from("schools").insert(payload)
+                  .then(function(result){
+                    try{
+                      if(result && result.error){
+                        console.error("[ShuleBrain] adding school failed", result.error);
+                        var msg = "Could not add this school.";
+                        try{
+                          if(result.error.message && result.error.message.indexOf("duplicate") !== -1){
+                            msg = "That centre number or payment ref is already in use.";
+                          }
+                        }catch(msgErr){ /* keep default message */ }
+                        notify("error", msg);
+                        return;
+                      }
+                      notify("success", "School added.");
+                      resetAddSchoolForm();
+                      try{ loadSchools(); }catch(e){ console.error("[ShuleBrain] refreshing schools after add failed", e); }
+                      try{ loadPaidExams(); }catch(e){ console.error("[ShuleBrain] refreshing paid exams after add failed", e); }
+                    }catch(thenErr){
+                      console.error("[ShuleBrain] processing add-school response failed", thenErr);
+                    }finally{
+                      try{ if(saveBtn){ saveBtn.disabled = false; saveBtn.textContent = "Add school"; } }
+                      catch(resetErr){ console.warn("[ShuleBrain] resetting add-school button failed", resetErr); }
+                    }
+                  })
+                  .catch(function(err){
+                    console.error("[ShuleBrain] add-school insert rejected", err);
+                    notify("error", "Could not add this school.");
+                    try{ if(saveBtn){ saveBtn.disabled = false; saveBtn.textContent = "Add school"; } }
+                    catch(resetErr){ console.warn("[ShuleBrain] resetting add-school button after error failed", resetErr); }
+                  });
+              }catch(payloadErr){
+                console.error("[ShuleBrain] building add-school payload failed", payloadErr);
+                notify("error", "Could not read the form.");
+              }
+            }catch(submitFatalErr){
+              console.error("[ShuleBrain] add-school form submit fatal error", submitFatalErr);
+            }
+          });
+        }
+      }catch(e){ console.error("[ShuleBrain] binding add-school form failed", e); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initAddSchoolForm fatal error", fatalErr);
+    }
+  }
+
+  function initCopyRefChips(){
+    try{
+      document.addEventListener("click", function(e){
+        try{
+          var chip = e.target.closest ? e.target.closest("[data-copy-ref]") : null;
+          if(!chip) return;
+          try{
+            var refValue = chip.getAttribute("data-copy-ref") || "";
+            if(!refValue) return;
+
+            var doCopy = function(){
+              try{
+                notify("success", "Copied: " + refValue);
+              }catch(notifyErr){
+                console.error("[ShuleBrain] copy-ref success toast failed", notifyErr);
+              }
+            };
+
+            try{
+              if(navigator.clipboard && navigator.clipboard.writeText){
+                navigator.clipboard.writeText(refValue).then(doCopy).catch(function(clipErr){
+                  console.error("[ShuleBrain] clipboard.writeText failed", clipErr);
+                  notify("error", "Could not copy the reference.");
+                });
+              } else {
+                throw new Error("Clipboard API unavailable");
+              }
+            }catch(clipboardErr){
+              console.warn("[ShuleBrain] clipboard API unavailable, using fallback", clipboardErr);
+              try{
+                var tempInput = document.createElement("textarea");
+                tempInput.value = refValue;
+                tempInput.style.position = "fixed";
+                tempInput.style.opacity = "0";
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                doCopy();
+              }catch(fallbackErr){
+                console.error("[ShuleBrain] fallback copy failed", fallbackErr);
+                notify("error", "Could not copy the reference.");
+              }
+            }
+          }catch(clickInnerErr){
+            console.error("[ShuleBrain] copy-ref click handling failed", clickInnerErr);
+          }
+        }catch(clickFatalErr){
+          console.error("[ShuleBrain] copy-ref delegated click failed", clickFatalErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initCopyRefChips fatal error", fatalErr);
+    }
+  }
+
   function boot(){
     try{
       try{ initAuth(); }catch(e){ console.error("[ShuleBrain] boot: initAuth crashed", e); }
@@ -1737,6 +2994,12 @@
       try{ initPostSearch(); }catch(e){ console.error("[ShuleBrain] boot: initPostSearch crashed", e); }
       try{ initExamSearch(); }catch(e){ console.error("[ShuleBrain] boot: initExamSearch crashed", e); }
       try{ initExamSelection(); }catch(e){ console.error("[ShuleBrain] boot: initExamSelection crashed", e); }
+      try{ initSchoolSearch(); }catch(e){ console.error("[ShuleBrain] boot: initSchoolSearch crashed", e); }
+      try{ initSchoolSelection(); }catch(e){ console.error("[ShuleBrain] boot: initSchoolSelection crashed", e); }
+      try{ initPaidExamSearch(); }catch(e){ console.error("[ShuleBrain] boot: initPaidExamSearch crashed", e); }
+      try{ initPaidExamSelection(); }catch(e){ console.error("[ShuleBrain] boot: initPaidExamSelection crashed", e); }
+      try{ initCopyRefChips(); }catch(e){ console.error("[ShuleBrain] boot: initCopyRefChips crashed", e); }
+      try{ initAddSchoolForm(); }catch(e){ console.error("[ShuleBrain] boot: initAddSchoolForm crashed", e); }
     }catch(bootFatalErr){
       try{ console.error("[ShuleBrain] boot fatal error", bootFatalErr); }
       catch(consoleErr){ /* nothing more we can safely do */ }
