@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Download ShuleBrain DSK | Latest Releases</title>
 <meta name="description" content="Download ShuleBrain DSK, the advanced school and result management system. Browse every release with its size, upload date, features and OS requirements.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.shulebrain.co.tz/download.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ShuleBrain DSK">
+<meta property="og:title" content="Download ShuleBrain DSK | Latest Releases">
+<meta property="og:description" content="Download ShuleBrain DSK, the advanced school and result management system. Browse every release with its size, upload date, features and OS requirements.">
+<meta property="og:url" content="https://www.shulebrain.co.tz/download.html">
+<meta property="og:image" content="https://www.shulebrain.co.tz/og-image.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Download ShuleBrain DSK | Latest Releases">
+<meta name="twitter:description" content="Download ShuleBrain DSK, the advanced school and result management system. Browse every release with its size, upload date, features and OS requirements.">
+<meta name="twitter:image" content="https://www.shulebrain.co.tz/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -479,6 +492,19 @@
   .download-fab:hover{background:var(--teal-600);}
   .download-fab svg{width:15px;height:15px;flex-shrink:0;}
   .download-fab .fab-sub{display:none;}
+  .hidden{display:none !important;}
+
+  /* ============ SMART DOWNLOAD BUTTON STATES ============ */
+  .dl-icon-default{display:inline-flex;align-items:center;}
+  .dl-icon-default svg{width:inherit;height:inherit;}
+  .dl-spinner-ring{
+    width:15px;height:15px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;
+    border-radius:50%;display:inline-block;animation:dl-btn-spin .7s linear infinite;flex-shrink:0;
+  }
+  @keyframes dl-btn-spin{ to{transform:rotate(360deg);} }
+  .btn-sm-outline .dl-spinner-ring, .release-actions .dl-spinner-ring{
+    border-color:rgba(13,19,48,.18);border-top-color:var(--navy-900);
+  }
   @media (max-width:480px){
     .download-fab{right:12px;bottom:12px;padding:10px 14px;}
   }
@@ -576,6 +602,7 @@
 
 
 
+
 <!-- ============ DOWNLOAD HERO ============ -->
 <section class="download-hero">
   <div class="wrap">
@@ -656,8 +683,9 @@
 
 <!-- Floating download button — always reachable while scrolling -->
 <button id="downloadFab" class="download-fab" type="button" aria-label="Download latest ShuleBrain DSK release">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
-  <span>Download</span>
+  <span class="dl-icon-default"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg></span>
+  <span class="dl-spinner-ring hidden"></span>
+  <span class="dl-btn-label">Download</span>
   <span class="fab-sub" id="fabVersionLabel"></span>
 </button>
 <!-- ============ FOOTER ============ -->
@@ -680,11 +708,15 @@
         <p>Advanced School And Result Management System with a unique 24/7 friendly support approach — built for schools that want one dependable system.</p>
         <div class="footer-contact">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .8 3a2 2 0 01-.5 2.1L8 10.1a16 16 0 006 6l1.3-1.4a2 2 0 012.1-.5c1 .4 2 .7 3 .8a2 2 0 011.6 2z"/></svg>
-          <span>+255 700 000 000</span>
+          <a href="tel:+255656519591" style="color:inherit;">+255 656 519 591</a>
+        </div>
+        <div class="footer-contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg>
+          <a href="mailto:shulebrain@gmail.com" style="color:inherit;">shulebrain@gmail.com</a>
         </div>
         <div class="footer-contact">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.7-7-11a7 7 0 0114 0c0 5.3-7 11-7 11z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>Dar es Salaam, Tanzania</span>
+          <span>Kilimanjaro, Tanzania</span>
         </div>
         <div class="social-row">
           <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V9c0-.9.2-1.5 1.6-1.5h1.6V4.7c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.2H7.3V14h2.7v8z"/></svg></a>
@@ -724,10 +756,10 @@
     </div>
 
     <div class="footer-bottom">
-      <span>© 2024–2026 ShuleBrain DSK. Maintained by NewVemo Technology.</span>
+      <span>&copy; 2019&ndash;<span id="footerYearEnd">2026</span> ShuleBrain DSK. Maintained by NewVemo Technology.</span>
       <div class="legal-links">
-        <a href="#">Terms of Use</a>
-        <a href="#">Privacy Policy</a>
+        <a href="terms-of-use.html">Terms of Use</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
         <a href="contact.html">Contact Us</a>
       </div>
     </div>
@@ -1509,7 +1541,11 @@
               '<p class="spotlight-desc">' + escapeHtml(release.short_description || "") + '</p>' +
             '</div>' +
             '<div class="spotlight-actions">' +
-              '<a class="btn btn-primary" href="' + safeDownloadUrl + '" target="_blank" rel="noopener" data-download-link>' + iconDownload() + 'Download now</a>' +
+              '<button type="button" class="btn btn-primary" data-smart-download data-download-url="' + safeDownloadUrl + '" data-download-filename="' + escapeHtml(release.file_name || "shulebrain-dsk.zip") + '">' +
+                '<span class="dl-icon-default">' + iconDownload() + '</span>' +
+                '<span class="dl-spinner-ring hidden"></span>' +
+                '<span class="dl-btn-label">Download now</span>' +
+              '</button>' +
               '<button type="button" class="btn btn-outline-invert" data-view-details>View features &amp; requirements</button>' +
             '</div>' +
           '</div>';
@@ -1559,7 +1595,11 @@
             '<p class="release-desc">' + escapeHtml(release.short_description || "") + '</p>' +
           '</div>' +
           '<div class="release-actions">' +
-            '<a class="btn btn-primary" href="' + safeDownloadUrl + '" target="_blank" rel="noopener" data-download-link>' + iconDownload() + 'Download</a>' +
+            '<button type="button" class="btn btn-primary" data-smart-download data-download-url="' + safeDownloadUrl + '" data-download-filename="' + escapeHtml(release.file_name || "shulebrain-dsk.zip") + '">' +
+              '<span class="dl-icon-default">' + iconDownload() + '</span>' +
+              '<span class="dl-spinner-ring hidden"></span>' +
+              '<span class="dl-btn-label">Download</span>' +
+            '</button>' +
             '<button type="button" class="btn btn-sm-outline" data-view-details>View details</button>' +
           '</div>';
 
@@ -1625,6 +1665,260 @@
     }
   }
 
+  /* ------------------------------ Smart in-page download ------------------------------ */
+  function normalizeDownloadUrl(url){
+    try{
+      try{
+        if(!url) return url;
+        // GitHub "blob" URLs are the human-facing file *preview* page (github.com/.../blob/branch/path),
+        // not a direct file — fetching or navigating to them returns an HTML page, not the file itself.
+        // Rewrite them to the raw content host, which serves the actual file with proper download headers.
+        var blobPattern = /^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^\/]+)\/(.+)$/i;
+        var match = url.match(blobPattern);
+        if(match){
+          var owner = match[1], repo = match[2], branch = match[3], path = match[4];
+          var rawUrl = "https://raw.githubusercontent.com/" + owner + "/" + repo + "/" + branch + "/" + path;
+          console.warn("[ShuleBrain] Rewrote GitHub blob URL to a direct raw download URL:", url, "->", rawUrl);
+          return rawUrl;
+        }
+        return url;
+      }catch(innerErr){
+        console.error("[ShuleBrain] normalizeDownloadUrl inner failure", innerErr);
+        return url;
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] normalizeDownloadUrl fatal error", fatalErr);
+      return url;
+    }
+  }
+
+  function notifyDownload(icon, title){
+    try{
+      try{
+        if(typeof Swal !== "undefined" && Swal && typeof Swal.fire === "function"){
+          Swal.fire({ icon:icon, title:title, toast:true, position:"top-end", showConfirmButton:false, timer:3600, timerProgressBar:true });
+          return;
+        }
+      }catch(swalErr){
+        console.error("[ShuleBrain] download toast via SweetAlert2 failed", swalErr);
+      }
+      try{ if(icon === "error") window.alert(title); }
+      catch(alertErr){ console.error("[ShuleBrain] download alert fallback failed", alertErr); }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] notifyDownload fatal error", fatalErr);
+    }
+  }
+
+  function setDownloadBtnState(btn, state, extra){
+    try{
+      try{
+        if(!btn) return;
+        var icon = btn.querySelector(".dl-icon-default");
+        var spinner = btn.querySelector(".dl-spinner-ring");
+        var label = btn.querySelector(".dl-btn-label");
+        var busy = (state === "preparing" || state === "downloading");
+
+        btn.disabled = busy;
+        if(icon) icon.classList.toggle("hidden", busy);
+        if(spinner) spinner.classList.toggle("hidden", !busy);
+
+        if(label){
+          if(state === "preparing"){ label.textContent = "Preparing download..."; }
+          else if(state === "downloading"){ label.textContent = extra ? ("Downloading... " + extra) : "Downloading..."; }
+          else if(state === "idle"){ label.textContent = extra || "Download"; }
+        }
+      }catch(applyErr){
+        console.error("[ShuleBrain] setDownloadBtnState failed to apply", applyErr);
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] setDownloadBtnState fatal error", fatalErr);
+    }
+  }
+
+  function saveBlobAsFile(blob, filename){
+    try{
+      try{
+        var objectUrl = URL.createObjectURL(blob);
+        try{
+          var link = document.createElement("a");
+          link.href = objectUrl;
+          link.download = filename || "shulebrain-dsk.zip";
+          document.body.appendChild(link);
+          link.click();
+          try{ document.body.removeChild(link); }
+          catch(removeErr){ console.warn("[ShuleBrain] removing temporary download link failed", removeErr); }
+        }finally{
+          try{ setTimeout(function(){ URL.revokeObjectURL(objectUrl); }, 4000); }
+          catch(revokeErr){ console.warn("[ShuleBrain] scheduling object URL revoke failed", revokeErr); }
+        }
+        return true;
+      }catch(innerErr){
+        console.error("[ShuleBrain] saveBlobAsFile inner failure", innerErr);
+        return false;
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] saveBlobAsFile fatal error", fatalErr);
+      return false;
+    }
+  }
+
+  function startSmartDownload(url, filename, btn, idleLabel){
+    try{
+      if(!url){
+        notifyDownload("error", "This release doesn't have a download link yet.");
+        return;
+      }
+
+      url = normalizeDownloadUrl(url);
+
+      try{
+        setDownloadBtnState(btn, "preparing");
+
+        fetch(url)
+          .then(function(response){
+            try{
+              if(!response || !response.ok){
+                throw new Error("Bad response status: " + (response ? response.status : "unknown"));
+              }
+
+              var totalBytes = 0;
+              try{
+                var lenHeader = response.headers.get("content-length");
+                totalBytes = lenHeader ? parseInt(lenHeader, 10) : 0;
+              }catch(headerErr){
+                console.warn("[ShuleBrain] reading content-length failed", headerErr);
+              }
+
+              if(!response.body || typeof response.body.getReader !== "function"){
+                // Streaming not supported — fall back to a single blob() read.
+                setDownloadBtnState(btn, "downloading");
+                return response.blob();
+              }
+
+              var reader = response.body.getReader();
+              var receivedBytes = 0;
+              var chunks = [];
+
+              function pump(){
+                return reader.read().then(function(res){
+                  try{
+                    if(res.done){
+                      return new Blob(chunks);
+                    }
+                    chunks.push(res.value);
+                    receivedBytes += res.value.length;
+
+                    try{
+                      if(totalBytes > 0){
+                        var pct = Math.min(100, Math.round((receivedBytes / totalBytes) * 100));
+                        setDownloadBtnState(btn, "downloading", pct + "%");
+                      } else {
+                        var mb = (receivedBytes / (1024 * 1024)).toFixed(1);
+                        setDownloadBtnState(btn, "downloading", mb + " MB");
+                      }
+                    }catch(progressErr){
+                      console.warn("[ShuleBrain] updating download progress failed", progressErr);
+                    }
+
+                    return pump();
+                  }catch(pumpInnerErr){
+                    console.error("[ShuleBrain] reading download stream chunk failed", pumpInnerErr);
+                    throw pumpInnerErr;
+                  }
+                });
+              }
+
+              setDownloadBtnState(btn, "downloading");
+              return pump();
+            }catch(responseErr){
+              console.error("[ShuleBrain] processing download response failed", responseErr);
+              throw responseErr;
+            }
+          })
+          .then(function(blob){
+            try{
+              if(!blob){ throw new Error("No file data received"); }
+              var saved = saveBlobAsFile(blob, filename);
+              setDownloadBtnState(btn, "idle", idleLabel);
+              if(saved){
+                notifyDownload("success", "Your download has started — check your browser's downloads.");
+              } else {
+                throw new Error("Could not hand the file to the browser");
+              }
+            }catch(saveErr){
+              console.error("[ShuleBrain] saving downloaded file failed", saveErr);
+              try{ fallbackDirectDownload(url, btn, idleLabel); }
+              catch(fbErr){ console.error("[ShuleBrain] fallback direct download failed", fbErr); }
+            }
+          })
+          .catch(function(err){
+            try{
+              console.error("[ShuleBrain] smart download failed, falling back to direct navigation", err);
+              fallbackDirectDownload(url, btn, idleLabel);
+            }catch(catchErr){
+              console.error("[ShuleBrain] handling smart download failure failed", catchErr);
+              setDownloadBtnState(btn, "idle", idleLabel);
+            }
+          });
+      }catch(setupErr){
+        console.error("[ShuleBrain] starting smart download failed", setupErr);
+        try{ fallbackDirectDownload(url, btn, idleLabel); }
+        catch(fbErr){ console.error("[ShuleBrain] fallback direct download failed", fbErr); }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] startSmartDownload fatal error", fatalErr);
+    }
+  }
+
+  function fallbackDirectDownload(url, btn, idleLabel){
+    try{
+      try{
+        notifyDownload("info", "Starting your download...");
+        var link = document.createElement("a");
+        link.href = url;
+        link.rel = "noopener";
+        document.body.appendChild(link);
+        link.click();
+        try{ document.body.removeChild(link); }
+        catch(removeErr){ console.warn("[ShuleBrain] removing fallback link failed", removeErr); }
+      }catch(innerErr){
+        console.error("[ShuleBrain] fallbackDirectDownload inner failure, opening in place", innerErr);
+        try{ window.location.href = url; }
+        catch(navErr){ console.error("[ShuleBrain] direct navigation fallback failed", navErr); }
+      }
+    }catch(fatalErr){
+      console.error("[ShuleBrain] fallbackDirectDownload fatal error", fatalErr);
+    }finally{
+      try{ setDownloadBtnState(btn, "idle", idleLabel); }
+      catch(resetErr){ console.error("[ShuleBrain] resetting download button after fallback failed", resetErr); }
+    }
+  }
+
+  function initSmartDownloads(){
+    try{
+      document.addEventListener("click", function(e){
+        try{
+          var btn = e.target.closest ? e.target.closest("[data-smart-download]") : null;
+          if(!btn) return;
+          try{
+            e.preventDefault();
+            var url = btn.getAttribute("data-download-url");
+            var filename = btn.getAttribute("data-download-filename") || "shulebrain-dsk.zip";
+            var labelEl = btn.querySelector(".dl-btn-label");
+            var idleLabel = labelEl ? labelEl.textContent : "Download";
+            startSmartDownload(url, filename, btn, idleLabel);
+          }catch(clickInnerErr){
+            console.error("[ShuleBrain] smart download click handling failed", clickInnerErr);
+          }
+        }catch(clickFatalErr){
+          console.error("[ShuleBrain] smart download delegated click failed", clickFatalErr);
+        }
+      });
+    }catch(fatalErr){
+      console.error("[ShuleBrain] initSmartDownloads fatal error", fatalErr);
+    }
+  }
+
   /* ------------------------------ Floating FAB ------------------------------ */
   function initFab(latest){
     try{
@@ -1645,7 +1939,9 @@
           try{
             try{
               if(latest && latest.download_url){
-                window.open(latest.download_url, "_blank", "noopener");
+                var fabLabel = fab.querySelector(".dl-btn-label");
+                var fabIdleLabel = fabLabel ? fabLabel.textContent : "Download";
+                startSmartDownload(latest.download_url, latest.file_name || "shulebrain-dsk.zip", fab, fabIdleLabel);
               } else {
                 try{
                   var spotlight = document.getElementById("spotlightContainer");
@@ -1655,7 +1951,7 @@
                 }
               }
             }catch(openErr){
-              console.error("[ShuleBrain] opening latest download from FAB failed", openErr);
+              console.error("[ShuleBrain] starting download from FAB failed", openErr);
             }
           }catch(clickFatalErr){
             console.error("[ShuleBrain] FAB click handler fatal error", clickFatalErr);
@@ -1694,6 +1990,9 @@
   /* -------------------------------- Boot -------------------------------- */
   function boot(){
     try{
+      try{ initSmartDownloads(); }
+      catch(e){ console.error("[ShuleBrain] boot: initSmartDownloads crashed", e); }
+
       fetchReleases()
         .then(function(releases){
           try{
