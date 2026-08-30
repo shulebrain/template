@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Joint Examination Results | ShuleBrain DSK</title>
 <meta name="description" content="Browse Joint examination results by class and year, then view a school's full results.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.shulebrain.co.tz/joint.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ShuleBrain DSK">
+<meta property="og:title" content="Joint Examination Results | ShuleBrain DSK">
+<meta property="og:description" content="Browse Joint examination results by class and year, then view a school's full results.">
+<meta property="og:url" content="https://www.shulebrain.co.tz/joint.html">
+<meta property="og:image" content="https://www.shulebrain.co.tz/og-image.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Joint Examination Results | ShuleBrain DSK">
+<meta name="twitter:description" content="Browse Joint examination results by class and year, then view a school's full results.">
+<meta name="twitter:image" content="https://www.shulebrain.co.tz/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -588,6 +601,7 @@
 </div>
 <div id="drawerOverlay" style="position:fixed;inset:0;background:rgba(7,12,34,.5);z-index:150;opacity:0;visibility:hidden;transition:opacity .25s ease;"></div>
 
+
 <!-- ============ EXAM BROWSER HERO ============ -->
 <section class="exam-hero">
   <div class="wrap">
@@ -738,11 +752,15 @@
         <p>Advanced School And Result Management System with a unique 24/7 friendly support approach — built for schools that want one dependable system.</p>
         <div class="footer-contact">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .8 3a2 2 0 01-.5 2.1L8 10.1a16 16 0 006 6l1.3-1.4a2 2 0 012.1-.5c1 .4 2 .7 3 .8a2 2 0 011.6 2z"/></svg>
-          <span>+255 700 000 000</span>
+          <a href="tel:+255656519591" style="color:inherit;">+255 656 519 591</a>
+        </div>
+        <div class="footer-contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg>
+          <a href="mailto:shulebrain@gmail.com" style="color:inherit;">shulebrain@gmail.com</a>
         </div>
         <div class="footer-contact">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.7-7-11a7 7 0 0114 0c0 5.3-7 11-7 11z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>Dar es Salaam, Tanzania</span>
+          <span>Kilimanjaro, Tanzania</span>
         </div>
         <div class="social-row">
           <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V9c0-.9.2-1.5 1.6-1.5h1.6V4.7c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.2H7.3V14h2.7v8z"/></svg></a>
@@ -782,10 +800,10 @@
     </div>
 
     <div class="footer-bottom">
-      <span>© 2024–2026 ShuleBrain DSK. Maintained by NewVemo Technology.</span>
+      <span>&copy; 2019&ndash;<span id="footerYearEnd">2026</span> ShuleBrain DSK. Maintained by NewVemo Technology.</span>
       <div class="legal-links">
-        <a href="#">Terms of Use</a>
-        <a href="#">Privacy Policy</a>
+        <a href="terms-of-use.html">Terms of Use</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
         <a href="contact.html">Contact Us</a>
       </div>
     </div>
@@ -1186,7 +1204,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
 <script>
 /* =======================================================================
    ShuleBrain examination results browser (shared engine).
@@ -1910,6 +1927,7 @@ districts: {
         if(!html){
           frameWrap.innerHTML = '<div class="results-error">No results document was found for this school yet.</div>';
         } else {
+          currentSchool.__resultsHtml = html;
           frameWrap.innerHTML = "";
           var iframe = document.createElement("iframe");
           iframe.setAttribute("sandbox", "allow-same-origin allow-popups");
@@ -2004,78 +2022,61 @@ districts: {
     }
   }
 
+  var PDF_SERVICE_URL = "https://shulebrain-pdf-service.vercel.app/api/pdf";
+
   function handleDownloadPdf(){
     try{
       var btn = document.getElementById("downloadPdfBtn");
 
-      try{
-        if(typeof window.html2pdf === "undefined"){
-          console.error("[ShuleBrain] html2pdf library unavailable");
-          notifyPdf("error", "The PDF tool didn't load. Please check your connection and try again.");
-          return;
-        }
-      }catch(libErr){
-        console.error("[ShuleBrain] checking html2pdf availability failed", libErr);
-        notifyPdf("error", "Could not start PDF generation.");
-        return;
-      }
-
-      var iframe = null;
-      try{
-        iframe = document.querySelector("#resultsFrameWrap iframe");
-      }catch(queryErr){
-        console.error("[ShuleBrain] locating results iframe failed", queryErr);
-      }
-
-      if(!iframe){
+      if(!currentSchool || !currentSchool.__resultsHtml){
         notifyPdf("error", "There are no results loaded to download yet.");
         return;
       }
 
-      var doc = null;
-      try{
-        doc = iframe.contentDocument || (iframe.contentWindow ? iframe.contentWindow.document : null);
-      }catch(accessErr){
-        console.error("[ShuleBrain] accessing results iframe document failed", accessErr);
-      }
-
-      if(!doc || !doc.body){
-        notifyPdf("error", "The results document isn't ready yet — please wait a moment and try again.");
-        return;
-      }
+      var filename = buildPdfFilename();
 
       try{
         setPdfBtnBusy(btn, true);
 
-        var opt = {
-          margin: [8, 8, 8, 8],
-          filename: buildPdfFilename(),
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-          jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-          pagebreak: { mode: ["css", "legacy"] }
-        };
-
-        try{
-          window.html2pdf().set(opt).from(doc.body).save()
-            .then(function(){
-              try{ setPdfBtnBusy(btn, false); }
-              catch(e){ console.error("[ShuleBrain] resetting PDF button after success failed", e); }
-            })
-            .catch(function(genErr){
-              try{
-                console.error("[ShuleBrain] html2pdf generation failed", genErr);
-                notifyPdf("error", "Could not generate the PDF. Please try again.");
-              }catch(e){ console.error("[ShuleBrain] handling html2pdf error failed", e); }
-              try{ setPdfBtnBusy(btn, false); }
-              catch(e){ console.error("[ShuleBrain] resetting PDF button after failure failed", e); }
-            });
-        }catch(genSyncErr){
-          console.error("[ShuleBrain] html2pdf threw synchronously", genSyncErr);
-          notifyPdf("error", "Could not generate the PDF. Please try again.");
+        fetch(PDF_SERVICE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            html: currentSchool.__resultsHtml,
+            filename: filename
+          })
+        })
+        .then(function(response){
+          if(!response.ok){
+            throw new Error("PDF service returned status " + response.status);
+          }
+          return response.blob();
+        })
+        .then(function(blob){
+          try{
+            var blobUrl = window.URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(blobUrl);
+          }catch(downloadErr){
+            console.error("[ShuleBrain] triggering PDF download failed", downloadErr);
+            notifyPdf("error", "The PDF was generated but couldn't be downloaded. Please try again.");
+          }
           try{ setPdfBtnBusy(btn, false); }
-          catch(e){ console.error("[ShuleBrain] resetting PDF button after sync error failed", e); }
-        }
+          catch(e){ console.error("[ShuleBrain] resetting PDF button after success failed", e); }
+        })
+        .catch(function(genErr){
+          try{
+            console.error("[ShuleBrain] PDF service generation failed", genErr);
+            notifyPdf("error", "Could not generate the PDF. Please try again.");
+          }catch(e){ console.error("[ShuleBrain] handling PDF service error failed", e); }
+          try{ setPdfBtnBusy(btn, false); }
+          catch(e){ console.error("[ShuleBrain] resetting PDF button after failure failed", e); }
+        });
       }catch(setupErr){
         console.error("[ShuleBrain] setting up PDF generation failed", setupErr);
         notifyPdf("error", "Could not generate the PDF. Please try again.");
