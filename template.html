@@ -702,16 +702,16 @@
 
 <div class="tpl-wrap">
 
-  <!-- ===================== ADVANCED LEVEL QUESTION ===================== -->
+  <!-- ===================== SCHOOL LEVEL QUESTION ===================== -->
   <div class="tpl-section">
     <div class="al-question">
-      <p>Is this template for Advanced Level (Form 5 &amp; 6)?</p>
+      <p>Choose Level</p>
       <div class="switch-wrap">
-        <span id="alStatusLabel" class="badge">NO</span>
-        <label class="switch">
-          <input type="checkbox" id="isAdvancedLevel">
-          <span class="slider"></span>
-        </label>
+        <select id="schoolLevel" style="min-width:220px;">
+          <option value="PRIMARY">PRIMARY LEVEL</option>
+          <option value="ORDINARY">ORDINARY LEVEL</option>
+          <option value="ADVANCED">ADVANCED LEVEL</option>
+        </select>
       </div>
     </div>
   </div>
@@ -1409,7 +1409,7 @@
 				CENTRE: "sb_centreData",
 				HOS: "sb_hosData",
 				SUBJECTS: "sb_subjects",
-				ADVANCED: "sb_isAdvancedLevel",
+				LEVEL: "sb_schoolLevel",
 				COMBINATIONS: "sb_combinations",
 				TEMPLATE: "sb_templateSettings",
 				REGION: "sb_selectedRegion",
@@ -1864,7 +1864,10 @@
 			===================================================================== */
 			let subjects = safeGet(STORAGE_KEYS.SUBJECTS, []);
 			let combinations = safeGet(STORAGE_KEYS.COMBINATIONS, []);
-			let isAdvancedLevel = Boolean(safeGet(STORAGE_KEYS.ADVANCED, false));
+			let schoolLevel = safeGet(STORAGE_KEYS.LEVEL, "ORDINARY");
+			if(schoolLevel !== "PRIMARY" && schoolLevel !== "ORDINARY" && schoolLevel !== "ADVANCED"){
+				schoolLevel = "ORDINARY";
+			}
 
 			/* =====================================================================
 			   SECTION 3 : REGION / DISTRICT CASCADE
@@ -2275,7 +2278,7 @@
 
 
 			/* =====================================================================
-			   SECTION 8 : ADVANCED LEVEL TOGGLE
+			   SECTION 8 : SCHOOL LEVEL SELECTION
 			===================================================================== */
 			let pendingSubsidiarySelection = new Set();
 
@@ -2283,13 +2286,12 @@
 				try{
 					try{
 						const combCard = safeQuery("combinationCard");
-						const badge = safeQuery("alStatusLabel");
-						const checkbox = safeQuery("isAdvancedLevel");
+						const select = safeQuery("schoolLevel");
+						const isAdvancedLevel = (schoolLevel === "ADVANCED");
 
 						try{
+							if(select) select.value = schoolLevel;
 							if(combCard) combCard.classList.toggle("hidden", !isAdvancedLevel);
-							if(badge) badge.textContent = isAdvancedLevel ? "YES" : "NO";
-							if(checkbox) checkbox.checked = isAdvancedLevel;
 						}catch(applyErr){
 							console.error("[ShuleBrain] applyAdvancedLevelUI apply failure:", applyErr);
 						}
@@ -2313,9 +2315,10 @@
 			function toggleAdvancedLevel(){
 				try{
 					try{
-						const checkbox = safeQuery("isAdvancedLevel");
-						isAdvancedLevel = checkbox ? Boolean(checkbox.checked) : !isAdvancedLevel;
-						safeSet(STORAGE_KEYS.ADVANCED, isAdvancedLevel);
+						const select = safeQuery("schoolLevel");
+						const value = select ? select.value : schoolLevel;
+						schoolLevel = (value === "PRIMARY" || value === "ADVANCED") ? value : "ORDINARY";
+						safeSet(STORAGE_KEYS.LEVEL, schoolLevel);
 						applyAdvancedLevelUI();
 					}catch(innerErr){
 						console.error("[ShuleBrain] toggleAdvancedLevel inner failure:", innerErr);
@@ -2625,7 +2628,9 @@
 						const hos = safeGet(STORAGE_KEYS.HOS, {});
 						const subjectList = safeGet(STORAGE_KEYS.SUBJECTS, []);
 						const combos = safeGet(STORAGE_KEYS.COMBINATIONS, []);
-						const advanced = Boolean(safeGet(STORAGE_KEYS.ADVANCED, false));
+						let level = safeGet(STORAGE_KEYS.LEVEL, "ORDINARY");
+						if(level !== "PRIMARY" && level !== "ORDINARY" && level !== "ADVANCED") level = "ORDINARY";
+						const advanced = (level === "ADVANCED");
 						const template = safeGet(STORAGE_KEYS.TEMPLATE, {});
 
 						try{
@@ -2639,6 +2644,7 @@
 								hos: hos,
 								subjects: subjectList,
 								combinations: combos,
+								level: level,
 								isAdvanced: advanced,
 								femaleCount: femaleCount,
 								maleCount: maleCount,
@@ -2647,15 +2653,15 @@
 							};
 						}catch(computeErr){
 							console.error("[ShuleBrain] getStoredData compute failure:", computeErr);
-							return { centre: {}, hos: {}, subjects: [], combinations: [], isAdvanced: false, femaleCount: 0, maleCount: 0, numStudents: 0, startIndex: 1 };
+							return { centre: {}, hos: {}, subjects: [], combinations: [], level: "ORDINARY", isAdvanced: false, femaleCount: 0, maleCount: 0, numStudents: 0, startIndex: 1 };
 						}
 					}catch(innerErr){
 						console.error("[ShuleBrain] getStoredData inner failure:", innerErr);
-						return { centre: {}, hos: {}, subjects: [], combinations: [], isAdvanced: false, femaleCount: 0, maleCount: 0, numStudents: 0, startIndex: 1 };
+						return { centre: {}, hos: {}, subjects: [], combinations: [], level: "ORDINARY", isAdvanced: false, femaleCount: 0, maleCount: 0, numStudents: 0, startIndex: 1 };
 					}
 				}catch(fatalErr){
 					console.error("[ShuleBrain] getStoredData fatal failure:", fatalErr);
-					return { centre: {}, hos: {}, subjects: [], combinations: [], isAdvanced: false, femaleCount: 0, maleCount: 0, numStudents: 0, startIndex: 1 };
+					return { centre: {}, hos: {}, subjects: [], combinations: [], level: "ORDINARY", isAdvanced: false, femaleCount: 0, maleCount: 0, numStudents: 0, startIndex: 1 };
 				}
 			}
 
@@ -2820,7 +2826,7 @@
 								"Ownership": data.centre.ownership,
 								"Centre Name": data.centre.centreName,
 								"Centre No": data.centre.centreNumber,
-								"Level": data.isAdvanced ? "ADVANCED LEVEL (FORM 5 & 6)" : "ORDINARY LEVEL / PRIMARY"
+								"Level": data.level === "ADVANCED" ? "ADVANCED LEVEL (FORM 5 & 6)" : (data.level === "PRIMARY" ? "PRIMARY LEVEL" : "ORDINARY LEVEL")
 							});
 							writeSection("PART 2.0 HOS / ACADEMIC OFFICER DETAILS", {
 								"Name": data.hos.name,
@@ -3725,9 +3731,9 @@
 					}catch(e){ console.error("[ShuleBrain] subjectTable wiring failure:", e); }
 
 					try{
-						const isAdvancedCheckbox = safeQuery("isAdvancedLevel");
-						if(isAdvancedCheckbox) isAdvancedCheckbox.addEventListener("change", toggleAdvancedLevel);
-					}catch(e){ console.error("[ShuleBrain] isAdvancedLevel wiring failure:", e); }
+						const schoolLevelSelect = safeQuery("schoolLevel");
+						if(schoolLevelSelect) schoolLevelSelect.addEventListener("change", toggleAdvancedLevel);
+					}catch(e){ console.error("[ShuleBrain] schoolLevel wiring failure:", e); }
 
 					try{
 						["combSubject1", "combSubject2", "combSubject3"].forEach(function(id){
