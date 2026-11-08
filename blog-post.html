@@ -1286,7 +1286,7 @@
             return;
           }
           try{
-            client.from(SUPABASE_TABLE).select("*").eq("slug", slug).eq("is_published", true).limit(1)
+            client.from(SUPABASE_TABLE).select("*").eq("slug", slug).eq("is_published", true).in("site",["shulebrain","both"]).limit(1)
               .then(function(result){
                 try{
                   var data = result ? result.data : null;
@@ -1331,7 +1331,7 @@
             return;
           }
           try{
-            client.from(SUPABASE_TABLE).select("*").eq("category", category).eq("is_published", true).neq("slug", excludeSlug).order("published_at",{ascending:false}).limit(3)
+            client.from(SUPABASE_TABLE).select("*").eq("category", category).eq("is_published", true).in("site",["shulebrain","both"]).neq("slug", excludeSlug).order("published_at",{ascending:false}).limit(3)
               .then(function(result){
                 try{
                   var data = (result && result.data) ? result.data : [];

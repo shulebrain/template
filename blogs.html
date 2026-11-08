@@ -1287,6 +1287,7 @@
               .from(SUPABASE_TABLE)
               .select("*")
               .eq("is_published", true)
+              .in("site",["shulebrain","both"])
               .order("published_at", { ascending:false })
               .then(function(result){
                 try{
